@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrabble</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body class="gamePage">
+    <!-- make the let's play title stick while scrolling -->
+
+<div class="gamePageHeader">
+    <h1 id="title">&#8200Scrabble!</h1>
+        <div class="playerTileGrid">
+            <div class="playerTiles", id="0"></div>
+            <div class="playerTiles", id="1"></div>
+            <div class="playerTiles", id="2"></div>
+            <div class="playerTiles", id="3"></div>
+            <div class="playerTiles", id="4"></div>
+            <div class="playerTiles", id="5"></div>
+            <div class="playerTiles", id="6"></div>
+        </div>
+
+<!-- Vertical Input Field -->
+        <div class="answerRowGrid">
+            <div class="answerInput" id="inputField" style="text-align: center">
+                <input type="text" id="verticalInput" placeholder="Play Vertical Word" >
+                <button id="verticalSubmitButton">Submit Vertical</button>
+            </div>
+
+<!-- Horizontal Input Field -->
+            <div class="answerInput" id="inputField" style="text-align: center">&#8200
+                <input type="text" id="horizontalInput" placeholder="Play Horizontal Word" >&#8200&#8200
+                <button id="horizontalSubmitButton">Submit Horizontal</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 
+    ! To Do List
+    * use css positioning to fix the title scrolling issue
+    * Letter Distribution List (display # of points per letter)
+    * Create a scoreboard for at two players (human & computer)
+    * Create a key for board colors: double letter, etc.
+    * Add player name to the scoreboard
+    * Click on a starting location on the grid, change color of tile, and enter text into a horizontal input text box, or a vertical input text box
+    * Points for using all letters
+    * When entering a word, check for existing characters on the game grid to allow or disallow the word
+    * Change the points amounts column to be a table nested in the grid.
+    * Create check that the only letters able to be played are contained in the playable letters array (use an event listener and a promise)
+    * Potential api https://www.programmableweb.com/api/word-game-dictionary
+
+
+    Done
+        Create a 15x15 gameboard grid for typing in letters.
+    The grid needs squares for
+            Double Letter,
+            Double word,
+            Triple Word etc
+            Star (Double Word)
+    Create a display of letters obtained from the letterBag.
+    Deal with blank tiles
+-->
+    <div class="gameBoard">
+        <div class="letterPoints" id="columnLeft">
+                A - 1 point <br>
+                B - 3 points <br>
+                C - 3 points <br>
+                D - 2 points <br> 
+                E - 1 point <br> 
+                F - 4 points <br>
+                G - 2 points <br>
+                H - 4 points <br>
+                I - 1 point <br>
+                J - 8 points <br>
+                K - 5 points <br>
+                L - 1 point <br>
+                M - 3 points <br>
+                N - 1 point <br>
+        </div>
+        <div class="letterPoints" id="columnRight">
+                O - 1 point <br>
+                P - 3 points <br>
+                Q - 10 points <br>
+                R - 1 point <br>
+                S - 1 point <br>
+                T - 1 point <br>
+                U - 1 point <br>
+                V - 4 points <br>
+                W - 4 points <br>
+                X - 8 points <br>
+                Y - 4 points <br>
+                Z - 10 points <br>
+                <br>
+                Play 7 - 50!
+            </div>
+        <div class="gameGrid">
+            <!-- Row 0 -->
+            <div class="gameGridBox tripleWord", id="0000"></div> 
+            <div class="gameGridBox standardSquare standardSquare", id="0001"> </div>
+            <div class="gameGridBox standardSquare", id="0002"> </div>
+            <div class="gameGridBox doubleLetter", id="0003"> </div>
+            <div class="gameGridBox standardSquare", id="0004"> </div>
+            <div class="gameGridBox standardSquare", id="0005"> </div>
+            <div class="gameGridBox standardSquare", id="0006"> </div>
+            <div class="gameGridBox tripleWord", id="0007"> </div>
+            <div class="gameGridBox standardSquare", id="0008"> </div>
+            <div class="gameGridBox standardSquare", id="0009"> </div>
+            <div class="gameGridBox standardSquare", id="0010"> </div>
+            <div class="gameGridBox doubleLetter", id="0011"> </div>
+            <div class="gameGridBox standardSquare", id="0012"> </div>
+            <div class="gameGridBox standardSquare", id="0013"> </div>
+            <div class="gameGridBox tripleWord", id="0014"> </div>
+            <!-- Row 1-->
+            <div class="gameGridBox standardSquare", id="0100"></div>
+            <div class="gameGridBox doubleWord", id="0101"> </div>
+            <div class="gameGridBox standardSquare", id="0102"> </div>
+            <div class="gameGridBox standardSquare", id="0103"> </div>
+            <div class="gameGridBox standardSquare", id="0104"> </div>
+            <div class="gameGridBox tripleLetter", id="0105"> </div>
+            <div class="gameGridBox standardSquare", id="0106"> </div>
+            <div class="gameGridBox standardSquare", id="0107"> </div>
+            <div class="gameGridBox standardSquare", id="0108"> </div>
+            <div class="gameGridBox tripleLetter", id="0109"> </div>
+            <div class="gameGridBox standardSquare", id="0110"> </div>
+            <div class="gameGridBox standardSquare", id="0111"> </div>
+            <div class="gameGridBox standardSquare", id="0112"> </div>
+            <div class="gameGridBox doubleWord", id="0113"> </div>
+            <div class="gameGridBox standardSquare", id="0114"></div>
+            <!-- Row 2-->
+            <div class="gameGridBox standardSquare", id="0200"></div>
+            <div class="gameGridBox standardSquare", id="0201"></div>
+            <div class="gameGridBox doubleWord", id="0202"></div>
+            <div class="gameGridBox standardSquare", id="0203"></div>
+            <div class="gameGridBox standardSquare", id="0204"></div>
+            <div class="gameGridBox standardSquare", id="0205"></div>
+            <div class="gameGridBox doubleLetter", id="0206"></div>
+            <div class="gameGridBox standardSquare", id="0207"></div>
+            <div class="gameGridBox doubleLetter", id="0208"></div>
+            <div class="gameGridBox standardSquare", id="0209"> </div>
+            <div class="gameGridBox standardSquare", id="0210"> </div>
+            <div class="gameGridBox standardSquare", id="0211"> </div>
+            <div class="gameGridBox doubleWord", id="0212"> </div>
+            <div class="gameGridBox standardSquare", id="0213"> </div>
+            <div class="gameGridBox standardSquare", id="0214"> </div>
+            <!-- Row 3-->
+            <div class="gameGridBox standardSquare", id="0300"> </div>
+            <div class="gameGridBox standardSquare", id="0301"> </div>
+            <div class="gameGridBox standardSquare", id="0302"> </div>
+            <div class="gameGridBox doubleWord", id="0303"> </div>
+            <div class="gameGridBox standardSquare", id="0304"> </div>
+            <div class="gameGridBox standardSquare", id="0305"> </div>
+            <div class="gameGridBox standardSquare", id="0306"> </div>
+            <div class="gameGridBox doubleLetter", id="0307"> </div>
+            <div class="gameGridBox standardSquare", id="0308"> </div>
+            <div class="gameGridBox standardSquare", id="0309"> </div>
+            <div class="gameGridBox standardSquare", id="0310"> </div>
+            <div class="gameGridBox doubleWord", id="0311"> </div>
+            <div class="gameGridBox standardSquare", id="0312"> </div>
+            <div class="gameGridBox standardSquare", id="0313"> </div>
+            <div class="gameGridBox standardSquare", id="0314"> </div>
+            <!-- Row 4-->
+            <div class="gameGridBox standardSquare", id="0400"> </div>
+            <div class="gameGridBox standardSquare", id="0401"> </div>
+            <div class="gameGridBox standardSquare", id="0402"> </div>
+            <div class="gameGridBox standardSquare", id="0403"> </div>
+            <div class="gameGridBox doubleWord", id="0404"> </div>
+            <div class="gameGridBox standardSquare", id="0405"> </div>
+            <div class="gameGridBox standardSquare", id="0406"> </div>
+            <div class="gameGridBox standardSquare", id="0407"> </div>
+            <div class="gameGridBox standardSquare", id="0408"> </div>
+            <div class="gameGridBox standardSquare", id="0409"> </div>
+            <div class="gameGridBox doubleWord", id="0410"> </div>
+            <div class="gameGridBox standardSquare", id="0411"> </div>
+            <div class="gameGridBox standardSquare", id="0412"> </div>
+            <div class="gameGridBox standardSquare", id="0413"> </div>
+            <div class="gameGridBox standardSquare", id="0414"> </div>
+            <!-- Row 5-->
+            <div class="gameGridBox standardSquare", id="0500"> </div>
+            <div class="gameGridBox tripleLetter", id="0501"> </div>
+            <div class="gameGridBox standardSquare", id="0502"> </div>
+            <div class="gameGridBox standardSquare", id="0503"> </div>
+            <div class="gameGridBox standardSquare", id="0504"> </div>
+            <div class="gameGridBox tripleLetter", id="0505"> </div>
+            <div class="gameGridBox standardSquare", id="0506"> </div>
+            <div class="gameGridBox standardSquare", id="0507"> </div>
+            <div class="gameGridBox standardSquare", id="0508"> </div>
+            <div class="gameGridBox tripleLetter", id="0509"> </div>
+            <div class="gameGridBox standardSquare", id="0510"> </div>
+            <div class="gameGridBox standardSquare", id="0511"> </div>
+            <div class="gameGridBox standardSquare", id="0512"> </div>
+            <div class="gameGridBox tripleLetter", id="0513"> </div>
+            <div class="gameGridBox standardSquare", id="0514"> </div>
+            <!-- Row 6-->
+            <div class="gameGridBox standardSquare", id="0600"> </div>
+            <div class="gameGridBox standardSquare", id="0601"> </div>
+            <div class="gameGridBox doubleLetter", id="0602"> </div>
+            <div class="gameGridBox standardSquare", id="0603"> </div>
+            <div class="gameGridBox standardSquare", id="0604"> </div>
+            <div class="gameGridBox standardSquare", id="0605"> </div>
+            <div class="gameGridBox doubleLetter", id="0606"> </div>
+            <div class="gameGridBox standardSquare", id="0607"> </div>
+            <div class="gameGridBox doubleLetter", id="0608"> </div>
+            <div class="gameGridBox standardSquare", id="0609"> </div>
+            <div class="gameGridBox standardSquare", id="0610"> </div>
+            <div class="gameGridBox standardSquare", id="0611"> </div>
+            <div class="gameGridBox doubleLetter", id="0612"> </div>
+            <div class="gameGridBox standardSquare", id="0613"> </div>
+            <div class="gameGridBox standardSquare", id="0614"> </div>
+            <!-- Row 7-->
+            <div class="gameGridBox tripleWord", id="0700"> </div>
+            <div class="gameGridBox standardSquare", id="0701"> </div>
+            <div class="gameGridBox standardSquare", id="0702"> </div>
+            <div class="gameGridBox doubleLetter", id="0703"> </div>
+            <div class="gameGridBox standardSquare", id="0704"> </div>
+            <div class="gameGridBox standardSquare", id="0705"> </div>
+            <div class="gameGridBox standardSquare", id="0706"> </div>
+            <div class="gameGridBox star", id="0707"> <!-- <img src="./star.jpg" alt=""> Can't get this to scale down to fill the grid box without changing the grid dimensions. Consider setting static sizes for the cells. --></div>        
+            <div class="gameGridBox standardSquare", id="0708"> </div> 
+            <div class="gameGridBox standardSquare", id="0709"> </div>
+            <div class="gameGridBox standardSquare", id="0710"> </div>
+            <div class="gameGridBox doubleLetter", id="0711"> </div>
+            <div class="gameGridBox standardSquare", id="0712"> </div>
+            <div class="gameGridBox standardSquare", id="0713"> </div>
+            <div class="gameGridBox tripleWord", id="0714"> </div>
+            <!-- Row 8-->
+            <div class="gameGridBox standardSquare", id="0800"> </div>
+            <div class="gameGridBox standardSquare", id="0801"> </div>
+            <div class="gameGridBox doubleLetter", id="0802"> </div>
+            <div class="gameGridBox standardSquare", id="0803"> </div>
+            <div class="gameGridBox standardSquare", id="0804"> </div>
+            <div class="gameGridBox standardSquare", id="0805"> </div>
+            <div class="gameGridBox doubleLetter", id="0806"> </div>
+            <div class="gameGridBox standardSquare", id="0807"> </div>
+            <div class="gameGridBox doubleLetter", id="0808"> </div>
+            <div class="gameGridBox standardSquare", id="0809"> </div>
+            <div class="gameGridBox standardSquare", id="0810"> </div>
+            <div class="gameGridBox standardSquare", id="0811"> </div>
+            <div class="gameGridBox doubleLetter", id="0812"> </div>
+            <div class="gameGridBox standardSquare", id="0813"> </div>
+            <div class="gameGridBox standardSquare", id="0814"> </div>
+            <!-- Row 9-->
+            <div class="gameGridBox standardSquare", id="0900"> </div>
+            <div class="gameGridBox tripleLetter", id="0901"> </div>
+            <div class="gameGridBox standardSquare", id="0902"> </div>
+            <div class="gameGridBox standardSquare", id="0903"> </div>
+            <div class="gameGridBox standardSquare", id="0904"> </div>
+            <div class="gameGridBox tripleLetter", id="0905"> </div>
+            <div class="gameGridBox standardSquare", id="0906"> </div>
+            <div class="gameGridBox standardSquare", id="0907"> </div>
+            <div class="gameGridBox standardSquare", id="0908"> </div>
+            <div class="gameGridBox tripleLetter", id="0909"> </div>
+            <div class="gameGridBox standardSquare", id="0910"> </div>
+            <div class="gameGridBox standardSquare", id="0911"> </div>
+            <div class="gameGridBox standardSquare", id="0912"> </div>
+            <div class="gameGridBox tripleLetter", id="0913"> </div>
+            <div class="gameGridBox standardSquare", id="0914"> </div>
+            <!-- Row 10-->
+            <div class="gameGridBox standardSquare", id="1000"> </div>
+            <div class="gameGridBox standardSquare", id="1001"> </div>
+            <div class="gameGridBox standardSquare", id="1002"> </div>
+            <div class="gameGridBox standardSquare", id="1003"> </div>
+            <div class="gameGridBox doubleWord", id="1004"> </div>
+            <div class="gameGridBox standardSquare", id="1005"> </div>
+            <div class="gameGridBox standardSquare", id="1006"> </div>
+            <div class="gameGridBox standardSquare", id="1007"> </div>
+            <div class="gameGridBox standardSquare", id="1008"> </div>
+            <div class="gameGridBox standardSquare", id="1009"> </div>
+            <div class="gameGridBox doubleWord", id="1010"> </div>
+            <div class="gameGridBox standardSquare", id="1011"> </div>
+            <div class="gameGridBox standardSquare", id="1012"> </div>
+            <div class="gameGridBox standardSquare", id="1013"> </div>
+            <div class="gameGridBox standardSquare", id="1014"> </div>
+            <!-- Row 11-->
+            <div class="gameGridBox doubleLetter", id="1100"> </div>
+            <div class="gameGridBox standardSquare", id="1101"> </div>
+            <div class="gameGridBox standardSquare", id="1102"> </div>
+            <div class="gameGridBox doubleWord", id="1103"> </div>
+            <div class="gameGridBox standardSquare", id="1104"> </div>
+            <div class="gameGridBox standardSquare", id="1105"> </div>
+            <div class="gameGridBox standardSquare", id="1106"> </div>
+            <div class="gameGridBox doubleLetter", id="1107"> </div>
+            <div class="gameGridBox standardSquare", id="1108"> </div>
+            <div class="gameGridBox standardSquare", id="1109"> </div>
+            <div class="gameGridBox standardSquare", id="1110"> </div>
+            <div class="gameGridBox doubleWord", id="1111"> </div>
+            <div class="gameGridBox standardSquare", id="1112"> </div>
+            <div class="gameGridBox standardSquare", id="1113"> </div>
+            <div class="gameGridBox doubleLetter", id="1114"> </div>
+            <!-- Row 12-->
+            <div class="gameGridBox standardSquare", id="1200"> </div>
+            <div class="gameGridBox standardSquare", id="1201"> </div>
+            <div class="gameGridBox doubleWord", id="1202"> </div>
+            <div class="gameGridBox standardSquare", id="1203"> </div>
+            <div class="gameGridBox standardSquare", id="1204"> </div>
+            <div class="gameGridBox standardSquare", id="1205"> </div>
+            <div class="gameGridBox doubleLetter", id="1206"> </div>
+            <div class="gameGridBox standardSquare", id="1207"> </div>
+            <div class="gameGridBox doubleLetter", id="1208"> </div>
+            <div class="gameGridBox standardSquare", id="1209"> </div>
+            <div class="gameGridBox standardSquare", id="1210"> </div>
+            <div class="gameGridBox standardSquare", id="1211"> </div>
+            <div class="gameGridBox doubleWord", id="1212"> </div>
+            <div class="gameGridBox standardSquare", id="1213"> </div>
+            <div class="gameGridBox standardSquare", id="1214"> </div>
+            <!-- Row 13-->
+            <div class="gameGridBox standardSquare", id="1300"> </div>
+            <div class="gameGridBox doubleWord", id="1301"> </div>
+            <div class="gameGridBox standardSquare", id="1302"> </div>
+            <div class="gameGridBox standardSquare", id="1303"> </div>
+            <div class="gameGridBox standardSquare", id="1304"> </div>
+            <div class="gameGridBox tripleLetter", id="1305"> </div>
+            <div class="gameGridBox standardSquare", id="1306"> </div>
+            <div class="gameGridBox standardSquare", id="1307"> </div>
+            <div class="gameGridBox standardSquare", id="1308"> </div>
+            <div class="gameGridBox tripleLetter", id="1309"> </div>
+            <div class="gameGridBox standardSquare", id="1310"> </div>
+            <div class="gameGridBox standardSquare", id="1311"> </div>
+            <div class="gameGridBox standardSquare", id="1312"> </div>
+            <div class="gameGridBox doubleWord", id="1313"> </div>
+            <div class="gameGridBox standardSquare", id="1314"> </div>
+            <!-- Row 14-->
+            <div class="gameGridBox tripleWord", id="1400"> </div>
+            <div class="gameGridBox standardSquare", id="1401"> </div>
+            <div class="gameGridBox standardSquare", id="1402"> </div>
+            <div class="gameGridBox doubleLetter", id="1403"> </div>
+            <div class="gameGridBox standardSquare", id="1404"> </div>
+            <div class="gameGridBox standardSquare", id="1405"> </div>
+            <div class="gameGridBox standardSquare", id="1406"> </div>
+            <div class="gameGridBox tripleWord", id="1407"> </div>
+            <div class="gameGridBox standardSquare", id="1408"> </div>
+            <div class="gameGridBox standardSquare", id="1409"> </div>
+            <div class="gameGridBox standardSquare", id="1410"> </div>
+            <div class="gameGridBox doubleLetter", id="1411"> </div>
+            <div class="gameGridBox standardSquare", id="1412"> </div>
+            <div class="gameGridBox standardSquare", id="1413"> </div>
+            <div class="gameGridBox tripleWord", id="1414"> </div>
+        </div>
+    </div>
+</div>
+
+<div class="scoreBoard"> Scoreboard
+
+        <div id="p1Name">Player 1 Score</div>
+      <div id="p1Score">$00,000</div>
+      <hr>
+      <div id="p2Name">Player 2 Score</div>
+        <div id="p2Score">$00,000</div>
+</div>
+
+<div>
+    <button id="tradeInLetters">Trade in Letters</button>
+</div>
+<div style="padding-bottom: 1em;">
+    <button class="btn" id="returnButton">
+        <a href="index.html">Return to Title</a>
+    </button>
+</div>
+<script src="./gameBoard.js"></script>
+</body>
+</html>
