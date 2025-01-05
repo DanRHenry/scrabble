@@ -8,7 +8,7 @@ let playableLetters = [];
 let activeBox = 112; // Gameboard Starting Position
 let activeWord; // The value of either vertical or horizontal word input
 let gameBoardWord;
-let direction = "vertical";
+let direction = "horizontal";
 //!---------------------------------------------------- DOM Variables -------------------------------------------------------------
 const playerTiles = document.getElementsByClassName("playerTiles");
 let tradeInLettersButton = document.getElementById("tradeInLetters");
@@ -251,6 +251,7 @@ function checkVerticalWord() {
 //!---------------------------------------------- Event Listeners ----------------------------------------------------
 
 reorientBtn.addEventListener("click", () => {
+
   if (direction === "horizontal") {
     direction = "vertical";
   } else {
@@ -259,6 +260,7 @@ reorientBtn.addEventListener("click", () => {
 });
 
 for (let i = 0; i < playerTiles.length; i++) {
+
   playerTiles[i].addEventListener("click", () => {
     inputField.textContent += playerTiles[i].textContent;
 
@@ -267,7 +269,7 @@ for (let i = 0; i < playerTiles.length; i++) {
       horizontal: 1
     }
       let offsetForExistingLetters = 0;
-
+    
       for (
         let inputFieldIndex = 0;
         inputFieldIndex <
@@ -278,15 +280,35 @@ for (let i = 0; i < playerTiles.length; i++) {
           document.getElementsByClassName("gameGridBox")[
             activeBox + inputFieldIndex * directions[direction] + offsetForExistingLetters * directions[direction]
           ];
+          if (
+            (direction === "vertical" && activeBoxLocation === undefined) ) {
+
+            const temp = inputField.textContent.slice([inputField.textContent.length-1])
+            playerTiles[i].textContent = temp
+
+            break
+          } 
+          else if (direction === "horizontal" && +(activeBoxLocation.id[activeBoxLocation.id.length-1] == 0 && activeBoxLocation.id[activeBoxLocation.id.length-2] == 0 && tempCoordinates.length > 0)) {
+            console.log(activeBoxLocation.id)
+
+            console.log("horizConflict")
+            console.log(tempCoordinates)
+
+            const temp = inputField.textContent.slice([inputField.textContent.length-1])
+
+            playerTiles[i].innerText = temp
+            break
+          }
 
         if (
           inputFieldIndex ===
           tempCoordinates.length - offsetForExistingLetters
         ) {
-          if (activeBoxLocation === undefined) {
-            alert("Ya can't place there!");
-          }
 
+
+console.log(+(activeBoxLocation.id[activeBoxLocation.id.length-2]+(activeBoxLocation.id[activeBoxLocation.id.length-1])) )
+          // console.log(activeBoxLocation.id[activeBoxLocation.id.length-2])
+          // console.log(activeBoxLocation.id[activeBoxLocation.id.length-1])
           if (activeBoxLocation.textContent.length > 0) {
             offsetForExistingLetters++;
 
@@ -305,8 +327,8 @@ for (let i = 0; i < playerTiles.length; i++) {
             tempCoordinates.push(activeBoxLocation.id);
           }
         }
+        playerTiles[i].textContent = "";
       }
-    playerTiles[i].textContent = "";
   });
 }
 
