@@ -8,13 +8,15 @@ let playableLetters = [];
 let activeBox = 112; // Gameboard Starting Position
 let activeWord; // The value of either vertical or horizontal word input
 let gameBoardWord;
-let direction = "horizontal";
+let direction = "vertical";
 //!---------------------------------------------------- DOM Variables -------------------------------------------------------------
 const playerTiles = document.getElementsByClassName("playerTiles");
 let tradeInLettersButton = document.getElementById("tradeInLetters");
 const inputField = document.getElementById("inputField");
 const inputFieldBtn = document.getElementById("inputFieldBtn");
 const inputClearBtn = document.getElementById("inputClearBtn");
+const reorientBtn = document.getElementById("reorientBtn");
+const tempCoordinates = [];
 let verticalInput = document.getElementById("verticalInput");
 let verticalSubmitBTN = document.getElementById("verticalSubmitButton");
 let horizontalInput = document.getElementById("horizontalInput");
@@ -158,8 +160,7 @@ function putLettersInTheGameGridBoxes() {
   }
 }
 
-
-  /* 
+/* 
   Submitting words
   For this section, create an array of objects.
   Each object should contain the orientation and the word found
@@ -178,9 +179,7 @@ function submitVerticalAnswer() {
   checkVerticalWord();
 }
 
-function submitHorizontalAnswer() {
-
-}
+function submitHorizontalAnswer() {}
 
 function gameGridBoxAddEventListeners() {
   for (let i = 0; i < gameGridBox.length; i++) {
@@ -220,7 +219,7 @@ function gameGridBoxAddEventListeners() {
 
 //! Work on this section...
 function checkVerticalWord() {
-    /*
+  /*
   initial placement of letters
   1 - Check orientation 
   2 - start at the active tile position
@@ -251,9 +250,51 @@ function checkVerticalWord() {
 
 //!---------------------------------------------- Event Listeners ----------------------------------------------------
 
+reorientBtn.addEventListener("click", () => {
+  if (direction === "horizontal") {
+    direction = "vertical";
+  } else {
+    direction = "horizontal";
+  }
+  // console.log("current direction: ",direction)
+});
+
 for (let i = 0; i < playerTiles.length; i++) {
   playerTiles[i].addEventListener("click", () => {
     inputField.textContent += playerTiles[i].textContent;
+
+    if (direction === "vertical") {
+      let offsetForExistingLetters = 0;
+
+      for (
+        let inputFieldIndex = 0;
+        inputFieldIndex < inputField.textContent.length + offsetForExistingLetters;
+        inputFieldIndex++
+      ) {
+        const activeBoxLocation =
+          document.getElementsByClassName("gameGridBox")[activeBox + inputFieldIndex * 15];
+
+        if ((inputFieldIndex === inputField.textContent.length + offsetForExistingLetters)) {
+          console.log("activeBoxLocation", activeBoxLocation);
+        } 
+
+        if (inputFieldIndex === tempCoordinates.length) {
+          if (activeBoxLocation === undefined) {
+            alert("Ya can't place there!");
+          }
+
+          if (activeBoxLocation.textContent.length > 0) {
+            offsetForExistingLetters++;
+            console.log("inputFieldIndex: ", inputFieldIndex);
+            console.log("offset: ", offsetForExistingLetters);
+          } else {
+            activeBoxLocation.textContent = inputField.textContent[inputFieldIndex];
+
+            tempCoordinates.push(activeBoxLocation.id);
+          }
+        }
+      }
+    }
     playerTiles[i].textContent = "";
   });
 }
@@ -261,29 +302,36 @@ for (let i = 0; i < playerTiles.length; i++) {
 inputClearBtn.addEventListener("click", () => {
   let inputArray = inputField.textContent.split("");
 
-  console.log(inputArray);
-
   for (let i = 0; i < playerTiles.length; i++) {
     if (playerTiles[i].textContent === "") {
       playerTiles[i].textContent = inputArray[0];
       inputArray.shift();
     }
   }
-  inputField.textContent = "";
+  inputField.textContent = null;
+  // console.log("tempCoordinates: ",tempCoordinates)
+  for (let i = 0; i < tempCoordinates.length; i++) {
+    // console.log(tempCoordinates[i])
+    // console.log(document.getElementById(tempCoordinates[i]))
+    document.getElementById(tempCoordinates[i]).style = "";
+    document.getElementById(tempCoordinates[i]).textContent = "";
+    // document.getElementById(tempCoordinates[i].id).textContent = ""
+  }
+  tempCoordinates.length = 0;
+  console.log("tempCoordinates: ", tempCoordinates);
 });
 
 inputFieldBtn.addEventListener("click", () => {
   console.log(inputField.textContent);
   if (direction === "horizontal") {
-    console.log(direction)
-  }
-  else if (direction === "vertical") {
-    console.log(direction)
+    console.log(direction);
+  } else if (direction === "vertical") {
+    console.log(direction);
   }
 });
 
 verticalSubmitBTN.addEventListener("click", submitVerticalAnswer);
-horizontalSubmitBTN.addEventListener("click", submitHorizontalAnswer);
+// horizontalSubmitBTN.addEventListener("click", submitHorizontalAnswer);
 
 getNamesAndScoreboardInfo();
 fillLetterBag();
