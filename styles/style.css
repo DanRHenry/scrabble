@@ -1,0 +1,187 @@
+body {
+    background-color: gray;
+    color: rgb(6, 3, 27);
+    text-shadow: 2px 2px 2px antiquewhite;
+    /* font-size: 3em; */
+    text-align: center;
+    margin: 0;
+    min-width: 100vw;
+}
+
+
+.gamePageHeader {
+    margin: 0;
+    width: 100vw;
+    position:sticky;
+    top: 0;
+    /* padding-bottom: .5em; */
+    background-color: rgb(188, 162, 98);
+    ;
+}
+#title {
+    justify-content: center;
+    /* border: 1px black solid; */
+    margin-bottom: .25em;
+    margin-top: 0;
+    /* padding-top: 0; */
+    /* border-top: 0; */
+}
+.answerRowGrid {
+    margin-top: 1em;
+    display: flex;
+    justify-content: center;
+    /* border: 1px black solid; */
+}
+#verticalInput::placeholder {
+    text-align: center;
+}
+#horizontalInput::placeholder {
+    text-align: center;
+}
+
+#submit {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+#tileGridHolder {
+    /* width: 50vw; */
+    margin-left: 10vw;
+    margin-right: 10vw;
+}
+
+.playerTileGrid {
+    margin: 0;
+    /* margin-left: 10vw;
+    margin-right: 10vw; */
+    display: grid;
+    /* justify-content: center; */
+    /* margin-left: 30%;
+    margin-right: 30%; */
+    grid-template-columns: repeat(7, 1fr);
+    /* column-gap: .5em; */
+    grid-template-rows: repeat(1, 1fr);
+}
+
+.playerTiles {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 2px solid black;
+    background-color: white;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    /* width: 5vw;
+    height: 5vw; */
+    /* min-height: 1.5em;
+    max-height: 1.5em;
+    min-width: 1.5em;
+    max-width: 1.5em; */
+}
+
+.gamePage {
+    background-color: rgb(188, 162, 98);
+    color: rgb(75, 58, 185);
+    text-shadow: 2px 2px 2px antiquewhite;
+    /* font-size: 3em; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.gameBoard {
+    margin-top: 1em;
+}
+
+.letterPoints {
+
+    min-width: fit-content;
+    max-width: fit-content;
+    max-height: 60vh;
+    color: black;
+    font-size: larger;
+    text-align: left;
+    font-size: 3.5vh;
+}
+
+#columnLeft {
+margin-left: 10vw;
+}
+#columnRight {
+padding-left: 3vw;
+padding-right: 3vw;
+}
+
+.scoreBoard {
+}
+
+.standardSquare {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: white;
+}
+
+.doubleLetter {
+    background-color: rgb(129, 239, 239);
+}
+
+.tripleLetter {
+    background-color: rgb(81, 135, 135);
+}
+
+.doubleWord {
+    background-color: pink;
+}
+
+.tripleWord {
+    background-color: red;
+}
+.star {
+    max-width: 100%;
+    max-height: 100%;
+    background-color: yellow;
+}
+
+#playButton {
+    margin-top: 2em;
+    font-size: 1em;
+    padding-top: .25em;
+    padding-bottom: .25em;
+    padding-left: .5em;
+    padding-right: .5em;
+}
+
+.tradeInLetters {
+    font-size: .5em;
+    padding: .15em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+#returnButton {
+    font-size: .75em;
+    position: static;
+    margin-top: 2em;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    padding: .5em;
+}
+
+
+
+.gameGrid {
+    display: grid;
+    grid-template-columns: repeat(15, clamp(12.2px, 5vw, 60px));
+    grid-template-rows: repeat(15, clamp(12.2px, 5vw, 60px));
+    /* width: 100vw;
+    height: 100vw; */
+}
+
+.gameGridBox {
+    display: flex;
+    flex-direction: column;
+    /* background-color: red;   */
+    border: 2px solid black;
+}

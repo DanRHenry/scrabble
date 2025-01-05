@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scrabble</title>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./styles/style.css">
 </head>
 
 <body class="gamePage">
@@ -13,6 +13,7 @@
 
 <div class="gamePageHeader">
     <h1 id="title">&#8200Scrabble!</h1>
+        <div id="tileGridHolder">
         <div class="playerTileGrid">
             <div class="playerTiles", id="0"></div>
             <div class="playerTiles", id="1"></div>
@@ -21,6 +22,13 @@
             <div class="playerTiles", id="4"></div>
             <div class="playerTiles", id="5"></div>
             <div class="playerTiles", id="6"></div>
+        </div>
+        </div>
+
+        <div id="inputFieldRow">
+            <div type="text" id="inputField"></div>
+            <button id="inputFieldBtn">Submit</button>
+            <button id="inputClearBtn">Cancel</button>
         </div>
 
 <!-- Vertical Input Field -->
@@ -64,7 +72,7 @@
     Deal with blank tiles
 -->
     <div class="gameBoard">
-        <div class="letterPoints" id="columnLeft">
+        <!-- <div class="letterPoints" id="columnLeft">
                 A - 1 point <br>
                 B - 3 points <br>
                 C - 3 points <br>
@@ -95,7 +103,7 @@
                 Z - 10 points <br>
                 <br>
                 Play 7 - 50!
-            </div>
+            </div> -->
         <div class="gameGrid">
             <!-- Row 0 -->
             <div class="gameGridBox tripleWord", id="0000"></div> 
@@ -358,6 +366,6 @@
         <a href="index.html">Return to Title</a>
     </button>
 </div>
-<script src="./gameBoard.js"></script>
+<script src="./scripts//gameBoard.js"></script>
 </body>
 </html>
