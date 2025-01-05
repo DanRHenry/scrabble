@@ -256,45 +256,56 @@ reorientBtn.addEventListener("click", () => {
   } else {
     direction = "horizontal";
   }
-  // console.log("current direction: ",direction)
 });
 
 for (let i = 0; i < playerTiles.length; i++) {
   playerTiles[i].addEventListener("click", () => {
     inputField.textContent += playerTiles[i].textContent;
 
-    if (direction === "vertical") {
+    const directions = {
+      vertical: 15,
+      horizontal: 1
+    }
       let offsetForExistingLetters = 0;
 
       for (
         let inputFieldIndex = 0;
-        inputFieldIndex < inputField.textContent.length + offsetForExistingLetters;
+        inputFieldIndex <
+        inputField.textContent.length + offsetForExistingLetters;
         inputFieldIndex++
       ) {
-        const activeBoxLocation =
-          document.getElementsByClassName("gameGridBox")[activeBox + inputFieldIndex * 15];
+        let activeBoxLocation =
+          document.getElementsByClassName("gameGridBox")[
+            activeBox + inputFieldIndex * directions[direction] + offsetForExistingLetters * directions[direction]
+          ];
 
-        if ((inputFieldIndex === inputField.textContent.length + offsetForExistingLetters)) {
-          console.log("activeBoxLocation", activeBoxLocation);
-        } 
-
-        if (inputFieldIndex === tempCoordinates.length) {
+        if (
+          inputFieldIndex ===
+          tempCoordinates.length - offsetForExistingLetters
+        ) {
           if (activeBoxLocation === undefined) {
             alert("Ya can't place there!");
           }
 
           if (activeBoxLocation.textContent.length > 0) {
             offsetForExistingLetters++;
-            console.log("inputFieldIndex: ", inputFieldIndex);
-            console.log("offset: ", offsetForExistingLetters);
+
+            activeBoxLocation =
+              document.getElementsByClassName("gameGridBox")[
+                activeBox + inputFieldIndex * directions[direction] + offsetForExistingLetters * directions[direction]
+              ];
+
+            activeBoxLocation.textContent =
+              inputField.textContent[inputFieldIndex];
+            tempCoordinates.push(activeBoxLocation.id);
           } else {
-            activeBoxLocation.textContent = inputField.textContent[inputFieldIndex];
+            activeBoxLocation.textContent =
+              inputField.textContent[inputFieldIndex];
 
             tempCoordinates.push(activeBoxLocation.id);
           }
         }
       }
-    }
     playerTiles[i].textContent = "";
   });
 }
