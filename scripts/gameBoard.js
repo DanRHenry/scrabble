@@ -8,15 +8,30 @@ let playableLetters = [];
 let activeBox = 112; // Gameboard Starting Position
 let activeWord; // The value of either vertical or horizontal word input
 let gameBoardWord;
-let direction = "horizontal";
+
 //!---------------------------------------------------- DOM Variables -------------------------------------------------------------
 const playerTiles = document.getElementsByClassName("playerTiles");
 let tradeInLettersButton = document.getElementById("tradeInLetters");
 const inputField = document.getElementById("inputField");
-const inputFieldBtn = document.getElementById("inputFieldBtn");
+const submitBtn = document.getElementById("submitBtn");
 const inputClearBtn = document.getElementById("inputClearBtn");
-const reorientBtn = document.getElementById("reorientBtn");
+// const reorientBtn = document.getElementById("reorientBtn");
+const horizontalBtn = document.getElementById("horizontalBtn");
+const verticalBtn = document.getElementById("verticalBtn");
 const tempCoordinates = [];
+let wordInPlayArray = [];
+
+const squareTypes = {
+  standardSquare: 1,
+  doubleWord: 1,
+  star: 1,
+  tripleWord: 1,
+  doubleLetter: 2,
+  tripleLetter: 3,
+};
+
+//stars are doubleWord
+// const existingSquares = [];
 let verticalInput = document.getElementById("verticalInput");
 let verticalSubmitBTN = document.getElementById("verticalSubmitButton");
 let horizontalInput = document.getElementById("horizontalInput");
@@ -26,7 +41,8 @@ let playerOneScoreName = document.getElementById("p1Name");
 let playerTwoScoreName = document.getElementById("p2Name");
 let p1Score = document.getElementById("p1Score");
 let p2Score = document.getElementById("p2Score");
-
+let direction = "horizontal";
+horizontalBtn.style.backgroundColor = "lightgray";
 //! ----------------------------------------------------- Functions ---------------------------------------------------------------
 
 // Put all letters into an array, letterbag
@@ -187,29 +203,20 @@ function gameGridBoxAddEventListeners() {
     gameGridBox[i].addEventListener(
       "click",
       () => {
-        const squareTypes = {
-          standardSquare: 1,
-          doubleWord: 1,
-          star: 1,
-          tripleWord: 1,
-          doubleLetter: 2,
-          tripleLetter: 3,
-        };
-        //stars are doubleWord
-        console.log(
-          gameGridBox[i].classList[1] + ":",
-          squareTypes[gameGridBox[i].classList[1]]
-        );
+        // console.log(
+        //   gameGridBox[i].classList[1] + ":",
+        //   squareTypes[gameGridBox[i].classList[1]]
+        // );
 
         activeBox = i;
-        console.log("ActiveBoxisNow", activeBox);
-        if (!gameGridBox[i].style.backgroundColor) {
+        // console.log("ActiveBoxisNow", activeBox);
+        if (!gameGridBox[i].style.opacity) {
           for (let i = 0; i < gameGridBox.length; i++) {
-            gameGridBox[i].style.backgroundColor = "";
+            gameGridBox[i].style.opacity = "";
           }
-          gameGridBox[i].style.backgroundColor = "black";
+          gameGridBox[i].style.opacity = ".5";
         } else {
-          gameGridBox[i].style.backgroundColor = "";
+          gameGridBox[i].style.opacity = "";
         }
       },
       false
@@ -250,89 +257,102 @@ function checkVerticalWord() {
 
 //!---------------------------------------------- Event Listeners ----------------------------------------------------
 
-reorientBtn.addEventListener("click", () => {
+horizontalBtn.addEventListener("click", () => {
+  direction = "horizontal";
+  horizontalBtn.style.backgroundColor = "lightgray";
+  verticalBtn.style.backgroundColor = "";
+});
 
-  if (direction === "horizontal") {
-    direction = "vertical";
-  } else {
-    direction = "horizontal";
-  }
+verticalBtn.addEventListener("click", () => {
+  direction = "vertical";
+  horizontalBtn.style.backgroundColor = "";
+  verticalBtn.style.backgroundColor = "lightgray";
 });
 
 for (let i = 0; i < playerTiles.length; i++) {
-
   playerTiles[i].addEventListener("click", () => {
     inputField.textContent += playerTiles[i].textContent;
 
     const directions = {
       vertical: 15,
-      horizontal: 1
-    }
-      let offsetForExistingLetters = 0;
-    
-      for (
-        let inputFieldIndex = 0;
-        inputFieldIndex <
-        inputField.textContent.length + offsetForExistingLetters;
-        inputFieldIndex++
+      horizontal: 1,
+    };
+    let offsetForExistingLetters = 0;
+
+    for (
+      let inputFieldIndex = 0;
+      inputFieldIndex <
+      inputField.textContent.length + offsetForExistingLetters;
+      inputFieldIndex++
+    ) {
+      let activeBoxLocation =
+        document.getElementsByClassName("gameGridBox")[
+          activeBox +
+            inputFieldIndex * directions[direction] +
+            offsetForExistingLetters * directions[direction]
+        ];
+      if (direction === "vertical" && activeBoxLocation === undefined) {
+        const temp = inputField.textContent.slice([
+          inputField.textContent.length - 1,
+        ]);
+        playerTiles[i].textContent = temp;
+
+        inputField.textContent = inputField.textContent.slice(0, -1);
+
+        break;
+      } else if (
+        direction === "horizontal" &&
+        +(
+          activeBoxLocation.id[activeBoxLocation.id.length - 1] == 0 &&
+          activeBoxLocation.id[activeBoxLocation.id.length - 2] == 0 &&
+          tempCoordinates.length > 0
+        )
       ) {
-        let activeBoxLocation =
-          document.getElementsByClassName("gameGridBox")[
-            activeBox + inputFieldIndex * directions[direction] + offsetForExistingLetters * directions[direction]
-          ];
-          if (
-            (direction === "vertical" && activeBoxLocation === undefined) ) {
+        const temp = inputField.textContent.slice([
+          inputField.textContent.length - 1,
+        ]);
 
-            const temp = inputField.textContent.slice([inputField.textContent.length-1])
-            playerTiles[i].textContent = temp
+        playerTiles[i].innerText = temp;
 
-            break
-          } 
-          else if (direction === "horizontal" && +(activeBoxLocation.id[activeBoxLocation.id.length-1] == 0 && activeBoxLocation.id[activeBoxLocation.id.length-2] == 0 && tempCoordinates.length > 0)) {
-            console.log(activeBoxLocation.id)
+        inputField.textContent = inputField.textContent.slice(0, -1);
 
-            console.log("horizConflict")
-            console.log(tempCoordinates)
-
-            const temp = inputField.textContent.slice([inputField.textContent.length-1])
-
-            playerTiles[i].innerText = temp
-            break
-          }
-
-        if (
-          inputFieldIndex ===
-          tempCoordinates.length - offsetForExistingLetters
-        ) {
-
-
-console.log(+(activeBoxLocation.id[activeBoxLocation.id.length-2]+(activeBoxLocation.id[activeBoxLocation.id.length-1])) )
-          // console.log(activeBoxLocation.id[activeBoxLocation.id.length-2])
-          // console.log(activeBoxLocation.id[activeBoxLocation.id.length-1])
-          if (activeBoxLocation.textContent.length > 0) {
-            offsetForExistingLetters++;
-
-            activeBoxLocation =
-              document.getElementsByClassName("gameGridBox")[
-                activeBox + inputFieldIndex * directions[direction] + offsetForExistingLetters * directions[direction]
-              ];
-
-            activeBoxLocation.textContent =
-              inputField.textContent[inputFieldIndex];
-            tempCoordinates.push(activeBoxLocation.id);
-          } else {
-            activeBoxLocation.textContent =
-              inputField.textContent[inputFieldIndex];
-
-            tempCoordinates.push(activeBoxLocation.id);
-          }
-        }
-        playerTiles[i].textContent = "";
+        break;
       }
+
+      if (
+        inputFieldIndex ===
+        tempCoordinates.length - offsetForExistingLetters
+      ) {
+        if (activeBoxLocation.textContent.length > 0) {
+          offsetForExistingLetters++;
+          wordInPlayArray.push(activeBoxLocation.id);
+
+          activeBoxLocation =
+            document.getElementsByClassName("gameGridBox")[
+              activeBox +
+                inputFieldIndex * directions[direction] +
+                offsetForExistingLetters * directions[direction]
+            ];
+          wordInPlayArray.push(activeBoxLocation.id);
+
+          activeBoxLocation.textContent =
+            inputField.textContent[inputFieldIndex];
+          tempCoordinates.push(activeBoxLocation.id);
+        } else {
+          activeBoxLocation.textContent =
+            inputField.textContent[inputFieldIndex];
+
+          tempCoordinates.push(activeBoxLocation.id);
+          wordInPlayArray.push(activeBoxLocation.id);
+        }
+      }
+      playerTiles[i].textContent = "";
+    }
   });
 }
 
 inputClearBtn.addEventListener("click", () => {
+  wordInPlayArray = [];
   let inputArray = inputField.textContent.split("");
 
   for (let i = 0; i < playerTiles.length; i++) {
@@ -342,25 +362,30 @@ inputClearBtn.addEventListener("click", () => {
     }
   }
   inputField.textContent = null;
-  // console.log("tempCoordinates: ",tempCoordinates)
   for (let i = 0; i < tempCoordinates.length; i++) {
-    // console.log(tempCoordinates[i])
-    // console.log(document.getElementById(tempCoordinates[i]))
     document.getElementById(tempCoordinates[i]).style = "";
     document.getElementById(tempCoordinates[i]).textContent = "";
-    // document.getElementById(tempCoordinates[i].id).textContent = ""
   }
   tempCoordinates.length = 0;
   console.log("tempCoordinates: ", tempCoordinates);
 });
 
-inputFieldBtn.addEventListener("click", () => {
-  console.log(inputField.textContent);
+submitBtn.addEventListener("click", () => {
+  // console.log(inputField.textContent);
   if (direction === "horizontal") {
     console.log(direction);
   } else if (direction === "vertical") {
     console.log(direction);
   }
+
+  let wordInPlay = "";
+  for (let i = 0; i < wordInPlayArray.length; i++) {
+    const locationToAdd = document.getElementById(wordInPlayArray[i]);
+
+    console.log(locationToAdd);
+    wordInPlay += locationToAdd.textContent;
+  }
+  console.log(wordInPlay);
 });
 
 verticalSubmitBTN.addEventListener("click", submitVerticalAnswer);

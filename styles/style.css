@@ -21,11 +21,9 @@ body {
 
 #title {
     justify-content: center;
-    /* border: 1px black solid; */
     margin-bottom: .25em;
     margin-top: 0;
-    /* padding-top: 0; */
-    /* border-top: 0; */
+    font-size: 55px
 }
 
 #inputField {
@@ -35,6 +33,7 @@ body {
 .answerRowGrid {
     margin-top: 1em;
     display: flex;
+    display: none;
     justify-content: center;
     /* border: 1px black solid; */
 }
@@ -58,12 +57,9 @@ body {
 
 .playerTileGrid {
     margin: 0;
-    /* margin-left: 10vw;
-    margin-right: 10vw; */
+    margin-left: 10vw;
+    margin-right: 10vw;
     display: grid;
-    /* justify-content: center; */
-    /* margin-left: 30%;
-    margin-right: 30%; */
     grid-template-columns: repeat(7, 1fr);
     /* column-gap: .5em; */
     grid-template-rows: repeat(1, 1fr);
@@ -123,9 +119,6 @@ padding-right: 3vw;
 }
 
 .standardSquare {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     background-color: white;
 }
 
@@ -148,6 +141,10 @@ padding-right: 3vw;
     max-width: 100%;
     max-height: 100%;
     background-color: yellow;
+}
+
+button {
+    font-size: large;
 }
 
 #playButton {
@@ -189,6 +186,9 @@ padding-right: 3vw;
 .gameGridBox {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     /* background-color: red;   */
+    font-size: 20px;
+    font-weight: bold;
     border: 2px solid black;
 }
