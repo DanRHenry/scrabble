@@ -209,7 +209,7 @@ function gameGridBoxAddEventListeners() {
         // );
 
         activeBox = i;
-        // console.log("ActiveBoxisNow", activeBox);
+        console.log("ActiveBoxisNow", gameGridBox[i].id);
         if (!gameGridBox[i].style.opacity) {
           for (let i = 0; i < gameGridBox.length; i++) {
             gameGridBox[i].style.opacity = "";
@@ -389,11 +389,38 @@ submitBtn.addEventListener("click", () => {
 
   for (let i = 0; i < wordInPlayArray.length; i++) {
     console.log(wordInPlayArray[i])
-    checkSurroundingLetter(wordInPlayArray[i])
+    checkLeftDirection(wordInPlayArray[i])
   }
 });
 
-function checkSurroundingLetter (square) {
+function checkLeftDirection (square) {
+let leftAdjacentSquare;
+  if (direction === "vertical") {
+    square = +square
+
+    if (square.toString().length < 4) {
+
+      leftAdjacentSquare = document.getElementById("0"+(square-1).toString())
+      
+      // console.log("square: ",square)
+      // console.log("square-minus-1: ",square-1)
+      if (leftAdjacentSquare.id[leftAdjacentSquare.id.length - 1] == 0 &&
+        leftAdjacentSquare.id[leftAdjacentSquare.id.length - 2] == 0) {
+
+
+      if (leftAdjacentSquare.textContent.length > 0){
+        console.log("leftAdjacentSquare: ",leftAdjacentSquare.id)
+        // checkLeftDirection(leftAdjacentSquare.id)
+        checkLeftDirection(square-1)
+      }
+    }
+  }
+
+    // console.log("main square: ",square)
+  } 
+}
+
+function checkRightDirection(square) {
   console.log("square: ",+square, typeof +square)
 let leftAdjacentSquare;
 let rightAdjacentSquare;
@@ -426,6 +453,8 @@ let rightAdjacentSquare;
     console.log("lowerAdjacentSquare: ", lowerAdjacentSquare)
   }
 }
+
+
 verticalSubmitBTN.addEventListener("click", submitVerticalAnswer);
 // horizontalSubmitBTN.addEventListener("click", submitHorizontalAnswer);
 
