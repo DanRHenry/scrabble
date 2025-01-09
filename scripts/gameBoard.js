@@ -371,7 +371,6 @@ inputClearBtn.addEventListener("click", () => {
 });
 
 submitBtn.addEventListener("click", () => {
-  // console.log(inputField.textContent);
   if (direction === "horizontal") {
     console.log(direction);
   } else if (direction === "vertical") {
@@ -379,15 +378,54 @@ submitBtn.addEventListener("click", () => {
   }
 
   let wordInPlay = "";
+
   for (let i = 0; i < wordInPlayArray.length; i++) {
     const locationToAdd = document.getElementById(wordInPlayArray[i]);
 
-    console.log(locationToAdd);
+    // console.log(locationToAdd);
     wordInPlay += locationToAdd.textContent;
   }
   console.log(wordInPlay);
+
+  for (let i = 0; i < wordInPlayArray.length; i++) {
+    console.log(wordInPlayArray[i])
+    checkSurroundingLetter(wordInPlayArray[i])
+  }
 });
 
+function checkSurroundingLetter (square) {
+  console.log("square: ",+square, typeof +square)
+let leftAdjacentSquare;
+let rightAdjacentSquare;
+  if (direction === "vertical") {
+    square = +square
+
+    if (square.toString().length < 4) {
+
+      leftAdjacentSquare = document.getElementById("0"+(+square-1).toString())
+      rightAdjacentSquare = document.getElementById("0"+(+square+1).toString())
+      if (leftAdjacentSquare.textContent.length > 0){
+        console.log("leftAdjacentSquare: ",leftAdjacentSquare)
+        checkSurroundingLetter(leftAdjacentSquare.id)
+      }
+
+      if (rightAdjacentSquare.textContent.length >0) {
+        console.log("rightAdjacentSquare: ",rightAdjacentSquare)
+        checkSurroundingLetter(rightAdjacentSquare.id)
+      }
+    }
+
+
+    console.log("main square: ",square)
+  } else if (direction === "horizontal") {
+
+    const upperAdjacentSquare = document.getElementById(+square-15)
+    const lowerAdjacentSquare = document.getElementById(+square+15);
+
+    console.log("upperAdjacentSquare: ", upperAdjacentSquare)
+    console.log("lowerAdjacentSquare: ", lowerAdjacentSquare)
+  }
+}
 verticalSubmitBTN.addEventListener("click", submitVerticalAnswer);
 // horizontalSubmitBTN.addEventListener("click", submitHorizontalAnswer);
 
