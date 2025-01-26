@@ -56,8 +56,8 @@ let playerOneScoreName = document.getElementById("p1Name");
 let playerTwoScoreName = document.getElementById("p2Name");
 let p1Score = document.getElementById("p1Score");
 let p2Score = document.getElementById("p2Score");
-// let direction = "horizontal";
-let direction = "vertical";
+let direction = "horizontal";
+// let direction = "vertical";
 
 //! ----------------------------------------------------- Functions ---------------------------------------------------------------
 
@@ -366,43 +366,50 @@ function checkAdjacentBoxes(wordInPlayArray, direction) {
 
   console.log("wordInPlayArray: ", wordInPlayArray);
 
-  console.log("directions: ",directions)
+  console.log("directions: ", directions);
   // console.log("direction: ",direction)
 
-  let startingLocation = wordInPlayArray[0]
-  console.log("startingLocation: ",startingLocation)
-  const gameGridBox = document.getElementsByClassName("gameGridBox")
-  
-  console.log("checking previous vertical letter: ", )
-  if (gameGridBox[startingLocation - directions.vertical].textContent >0) {
-    console.log(gameGridBox[startingLocation - directions.vertical].textContent)
+  let startingLocation = wordInPlayArray[0];
+  console.log("startingLocation: ", startingLocation);
+  const gameGridBox = document.getElementsByClassName("gameGridBox");
+
+  console.log("checking previous vertical letter: ");
+  if (gameGridBox[startingLocation - directions.vertical].textContent > 0) {
+    console.log(gameGridBox[startingLocation - directions.vertical]);
   }
 
-  console.log("checking next vertical letter: ")
-  if (gameGridBox[startingLocation + directions.vertical].textContent >0) {
-    console.log(gameGridBox[startingLocation +directions.vertical].textContent)
+  console.log("checking next vertical letter: ");
+  if (gameGridBox[startingLocation + directions.vertical].textContent > 0) {
+    console.log(
+      gameGridBox[startingLocation + directions.vertical].textContent
+    );
   }
 
   let leftLetterSquare = gameGridBox[startingLocation - directions.horizontal];
 
-  let leftCheckLetters = []
+  let leftCheckLetters = [];
   if (leftLetterSquare.textContent.length > 0) {
-    console.log("checking left: ",checkLeftDirection(startingLocation, leftCheckLetters))
+    console.log(
+      "checking left: ",
+      checkLeftDirection(startingLocation, leftCheckLetters)
+    );
   }
   // console.log("checking previous horizontal letter: ", )
   // console.log("left horizontal letter: ",)
   // console.log(directions.horizontal)
 
-  
-  if (gameGridBox[startingLocation - directions.horizontal].textContent >0) {
-    console.log(gameGridBox[startingLocation - directions.horizontal].textContent)
+  if (gameGridBox[startingLocation - directions.horizontal].textContent > 0) {
+    console.log(
+      gameGridBox[startingLocation - directions.horizontal].textContent
+    );
   }
 
-  console.log("checking previous horizontal letter: ", )
-  if (gameGridBox[startingLocation + directions.horizontal].textContent >0) {
-    console.log(gameGridBox[startingLocation + directions.horizontal].textContent)
+  console.log("checking previous horizontal letter: ");
+  if (gameGridBox[startingLocation + directions.horizontal].textContent > 0) {
+    console.log(
+      gameGridBox[startingLocation + directions.horizontal].textContent
+    );
   }
-
 
   let wordInPlay = "";
   wordInPlayArray.map((letter) => {
@@ -428,26 +435,26 @@ function checkAdjacentBoxes(wordInPlayArray, direction) {
       down = checkDownDirection(wordInPlayArray[i], downwardWord);
 
       if (up.length > 1) {
-        console.log("up: ",up)
+        console.log("up: ", up);
         for (let i = 0; i < up.length; i++) {
           console.log(gameGrid[up[i]]);
         }
       }
 
       if (down.length > 1) {
-        console.log("down: ",down)
+        console.log("down: ", down);
         for (let i = 0; i < down.length; i++) {
-          console.log(gameGrid[down[i]]);
+          console.log(gameGrid[down[i]].textContent);
         }
       }
     } else if (direction === "vertical") {
       let leftwardWord = [];
       let rightwardWord = [];
 
-      leftwardWord.unshift(wordInPlayArray[i]);
+      // leftwardWord.unshift(wordInPlayArray[i]);
       rightwardWord.push(wordInPlayArray[i]);
 
-      left = checkLeftDirection(wordInPlayArray[i], leftwardWord);
+      left = checkLeftDirection(wordInPlayArray[i], leftwardWord, wordInPlay[i]);
 
       right = checkRightDirection(wordInPlayArray[i], rightwardWord);
 
@@ -475,11 +482,12 @@ function checkAdjacentBoxes(wordInPlayArray, direction) {
   };
 }
 
-const checkLeftDirection = function (position, leftwardWord) {
+const checkLeftDirection = function (position, leftwardWord, startingPosition) {
+  if (leftwardWord.length === 0) {
+    leftwardWord.push(position)
+  }
   const leftwardPosition = position + adjacentDirections.left;
-  console.log("position: ",position)
-  console.log("leftwardWord: ",leftwardWord)
-  // console.log(gameGrid[position].textContent);
+
   if (position === 0) {
     return console.log(
       "starting square...",
@@ -491,9 +499,12 @@ const checkLeftDirection = function (position, leftwardWord) {
     leftwardPosition % 15 < position % 15 &&
     gameGrid[leftwardPosition].textContent.length > 0
   ) {
-    // leftwardWord.unshift(leftwardPosition);
-    leftwardWord.unshift(checkLeftDirection(position, leftwardWord));
-    // checkLeftDirection(position, leftwardWord);
+    const next = gameGrid[leftwardPosition];
+    
+    if (next.textContent.length > 0) {
+      leftwardWord.unshift(leftwardPosition);
+      checkLeftDirection(leftwardPosition, leftwardWord);
+    } 
   }
   return leftwardWord;
 };
