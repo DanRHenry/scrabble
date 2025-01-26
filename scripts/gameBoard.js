@@ -454,7 +454,7 @@ function checkAdjacentBoxes(wordInPlayArray, direction) {
       // leftwardWord.unshift(wordInPlayArray[i]);
       rightwardWord.push(wordInPlayArray[i]);
 
-      left = checkLeftDirection(wordInPlayArray[i], leftwardWord, wordInPlay[i]);
+      left = checkLeftDirection(wordInPlayArray[i], leftwardWord);
 
       right = checkRightDirection(wordInPlayArray[i], rightwardWord);
 
@@ -482,7 +482,7 @@ function checkAdjacentBoxes(wordInPlayArray, direction) {
   };
 }
 
-const checkLeftDirection = function (position, leftwardWord, startingPosition) {
+const checkLeftDirection = function (position, leftwardWord) {
   if (leftwardWord.length === 0) {
     leftwardWord.push(position)
   }
@@ -510,6 +510,9 @@ const checkLeftDirection = function (position, leftwardWord, startingPosition) {
 };
 
 const checkRightDirection = function (position, rightwardWord) {
+  if (rightwardWord.length === 0) {
+    rightwardWord.push(position)
+  }
   const rightwardPosition = position + adjacentDirections.right;
 
   if (position === gameGrid.length - 1) {
@@ -521,11 +524,14 @@ const checkRightDirection = function (position, rightwardWord) {
     );
   } else if (
     rightwardPosition % 15 > position % 15 &&
-    gameGrid[rightwardPosition] < gameGrid.length - 1 &&
     gameGrid[rightwardPosition].textContent.length > 0
   ) {
-    rightwardWord.push(rightwardPosition);
-    checkRightDirection(rightwardPosition, rightwardWord);
+    const next = gameGrid[rightwardPosition]
+
+    if (next.textContent.length >0) {
+      rightwardWord.push(rightwardPosition);
+      checkRightDirection(rightwardPosition, rightwardWord);
+    }
   }
   return rightwardWord;
 };
