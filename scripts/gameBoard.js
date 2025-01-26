@@ -214,13 +214,8 @@ function gameGridBoxAddEventListeners() {
     gameGridBox[i].addEventListener(
       "click",
       () => {
-        // console.log(
-        //   gameGridBox[i].classList[1] + ":",
-        //   squareTypes[gameGridBox[i].classList[1]]
-        // );
-
         activeBox = i;
-        console.log("ActiveBoxisNow", gameGridBox[i].id);
+        console.log("ActiveBoxisNow", gameGridBox[i]);
         if (!gameGridBox[i].style.opacity) {
           for (let i = 0; i < gameGridBox.length; i++) {
             gameGridBox[i].style.opacity = "";
@@ -287,6 +282,7 @@ for (let i = 0; i < playerTiles.length; i++) {
     // inputField.textContent += playerTiles[i].textContent;
 
     function skipFullBoxes(activeBox) {
+      console.log("activeBox: ", activeBox);
       let activeBoxLocation =
         document.getElementsByClassName("gameGridBox")[activeBox];
 
@@ -320,6 +316,55 @@ for (let i = 0; i < playerTiles.length; i++) {
   });
 }
 
+// for (let i = 0; i < playerTiles.length; i++) {
+//   playerTiles[i].addEventListener("click", () => {
+
+//     function skipFullBoxes(activeBox) {
+//       console.log("activeBox: ",activeBox)
+
+//       const gameGrid = document.getElementsByClassName("gameGridBox")
+//       console.log(gameGrid[activeBox +1].textContent.length)
+//       if (activeBox +1 % 15 < 15 && gameGrid[activeBox +1].textContent) {
+//         console.log("there's something here")
+//         console.log(gameGrid[activeBox +1].textContent)
+//       } else {
+//         console.log("nothing ahead, sir")
+//         console.log(gameGrid[activeBox +1].textContent)
+//       }
+
+//       // let activeBoxLocation =
+//       //   document.getElementsByClassName("gameGridBox")[activeBox];
+
+//       // if (!activeBoxLocation) {
+//       //   console.log("undefined square");
+//       // } else if (activeBoxLocation.textContent.length > 0) {
+//       //   let activeLocationGridIndex;
+//       //   for (let i = 0; i < gameGrid.length; i++) {
+//       //     if (activeBoxLocation.id === gameGrid[i].id) {
+//       //       activeLocationGridIndex = i;
+//       //     }
+//       //   }
+//       //   if (!wordInPlayArray.includes(activeLocationGridIndex)) {
+//       //     wordInPlayArray.push(activeLocationGridIndex);
+//       //     console.log(wordInPlayArray);
+//       //   }
+
+//       //   activeBox += directions[direction];
+//       //   skipFullBoxes(activeBox);
+//       // } else {
+//       //   activeBoxLocation.textContent = playerTiles[i].textContent;
+//       //   for (let i = 0; i < gameGrid.length; i++) {
+//       //     if (gameGrid[i].id === activeBoxLocation.id) {
+//       //       wordInPlayArray.push(i);
+//       //       for (let i = 0; i < wordInPlayArray.length; i++) {}
+//       //     }
+//       //   }
+//       // }
+//     }
+//     skipFullBoxes(activeBox);
+//   });
+// }
+
 inputClearBtn.addEventListener("click", () => {
   wordInPlayArray = [];
   let inputArray = inputField.textContent.split("");
@@ -345,13 +390,13 @@ submitBtn.addEventListener("click", () => {
   let words = Object.values(wordsInPlay);
 
   for (let word of words) {
-    // if (word.length > 1) {
-    let wordInPlay = "";
-    word.map((space) => {
-      wordInPlay +=
-        document.getElementsByClassName("gameGridBox")[space].textContent;
-    });
-    // }
+    if (word) {
+      let wordInPlay = "";
+      word.map((space) => {
+        wordInPlay +=
+          document.getElementsByClassName("gameGridBox")[space].textContent;
+      });
+    }
   }
   wordInPlayArray = [];
 });
@@ -374,12 +419,18 @@ function checkAdjacentBoxes(wordInPlayArray, direction) {
   const gameGridBox = document.getElementsByClassName("gameGridBox");
 
   console.log("checking previous vertical letter: ");
-  if (gameGridBox[startingLocation - directions.vertical].textContent > 0) {
+  if (
+    startingLocation > 14 &&
+    gameGridBox[startingLocation - directions.vertical].textContent > 0
+  ) {
     console.log(gameGridBox[startingLocation - directions.vertical]);
   }
 
   console.log("checking next vertical letter: ");
-  if (gameGridBox[startingLocation + directions.vertical].textContent > 0) {
+  if (
+    startingLocation + directions.vertical < gameGridBox.length &&
+    gameGridBox[startingLocation + directions.vertical].textContent > 0
+  ) {
     console.log(
       gameGridBox[startingLocation + directions.vertical].textContent
     );
@@ -388,7 +439,7 @@ function checkAdjacentBoxes(wordInPlayArray, direction) {
   let leftLetterSquare = gameGridBox[startingLocation - directions.horizontal];
 
   let leftCheckLetters = [];
-  if (leftLetterSquare.textContent.length > 0) {
+  if (startingLocation > 0 && leftLetterSquare.textContent.length > 0) {
     console.log(
       "checking left: ",
       checkLeftDirection(startingLocation, leftCheckLetters)
@@ -398,14 +449,20 @@ function checkAdjacentBoxes(wordInPlayArray, direction) {
   // console.log("left horizontal letter: ",)
   // console.log(directions.horizontal)
 
-  if (gameGridBox[startingLocation - directions.horizontal].textContent > 0) {
+  if (
+    gameGridBox[startingLocation] > 0 &&
+    gameGridBox[startingLocation - directions.horizontal].textContent > 0
+  ) {
     console.log(
       gameGridBox[startingLocation - directions.horizontal].textContent
     );
   }
 
   console.log("checking previous horizontal letter: ");
-  if (gameGridBox[startingLocation + directions.horizontal].textContent > 0) {
+  if (
+    startingLocation + directions.horizontal > 0 &&
+    gameGridBox[startingLocation + directions.horizontal].textContent > 0
+  ) {
     console.log(
       gameGridBox[startingLocation + directions.horizontal].textContent
     );
@@ -434,14 +491,14 @@ function checkAdjacentBoxes(wordInPlayArray, direction) {
 
       down = checkDownDirection(wordInPlayArray[i], downwardWord);
 
-      if (up.length > 1) {
+      if (up !== undefined && up.length > 1) {
         console.log("up: ", up);
         for (let i = 0; i < up.length; i++) {
           console.log(gameGrid[up[i]]);
         }
       }
 
-      if (down.length > 1) {
+      if (down !== undefined && down.length > 1) {
         console.log("down: ", down);
         for (let i = 0; i < down.length; i++) {
           console.log(gameGrid[down[i]].textContent);
@@ -484,7 +541,7 @@ function checkAdjacentBoxes(wordInPlayArray, direction) {
 
 const checkLeftDirection = function (position, leftwardWord) {
   if (leftwardWord.length === 0) {
-    leftwardWord.push(position)
+    leftwardWord.push(position);
   }
   const leftwardPosition = position + adjacentDirections.left;
 
@@ -500,18 +557,18 @@ const checkLeftDirection = function (position, leftwardWord) {
     gameGrid[leftwardPosition].textContent.length > 0
   ) {
     const next = gameGrid[leftwardPosition];
-    
+
     if (next.textContent.length > 0) {
       leftwardWord.unshift(leftwardPosition);
       checkLeftDirection(leftwardPosition, leftwardWord);
-    } 
+    }
   }
   return leftwardWord;
 };
 
 const checkRightDirection = function (position, rightwardWord) {
   if (rightwardWord.length === 0) {
-    rightwardWord.push(position)
+    rightwardWord.push(position);
   }
   const rightwardPosition = position + adjacentDirections.right;
 
@@ -526,13 +583,17 @@ const checkRightDirection = function (position, rightwardWord) {
     rightwardPosition % 15 > position % 15 &&
     gameGrid[rightwardPosition].textContent.length > 0
   ) {
-    const next = gameGrid[rightwardPosition]
+    const next = gameGrid[rightwardPosition];
 
-    if (next.textContent.length >0) {
+    if (next.textContent.length > 0) {
       rightwardWord.push(rightwardPosition);
       checkRightDirection(rightwardPosition, rightwardWord);
     }
   }
+  // const firstPosition = rightwardWord[0]
+  const leftPosition = rightwardWord[0] + adjacentDirections.left;
+  console.log(leftPosition);
+  console.log("rightwardWord: ", rightwardWord);
   return rightwardWord;
 };
 
@@ -590,7 +651,7 @@ tradeInLetters();
 putLettersInTheGameGridBoxes();
 gameGridBoxAddEventListeners();
 
-//! When using getElementsByClassName, what is returned is an array that needs to be indexed through to access the given location.
+//! When using getElementsByClassName, what is returned is an array that needs to be indexed through to access the given location. Actually, this is an html collection that can be indexed, but does not support array prototypes such as map()
 
 // TODO: Upon clicking on a box, add the id value to the current location, and change the styling of the square to a different color or border.
 // TODO: Reference that currentlocation upon submission of vertical or horizontal answers as the starting point of the word to be played
