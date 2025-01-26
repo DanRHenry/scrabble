@@ -33,8 +33,8 @@ let adjacentDirections = {
   up: -15,
   down: 15,
   left: -1,
-  right: 1
-}
+  right: 1,
+};
 
 const squareTypes = {
   standardSquare: 1,
@@ -57,9 +57,8 @@ let playerTwoScoreName = document.getElementById("p2Name");
 let p1Score = document.getElementById("p1Score");
 let p2Score = document.getElementById("p2Score");
 // let direction = "horizontal";
-let direction = "horizontal";
+let direction = "vertical";
 
-horizontalBtn.style.backgroundColor = "lightgray";
 //! ----------------------------------------------------- Functions ---------------------------------------------------------------
 
 // Put all letters into an array, letterbag
@@ -157,10 +156,10 @@ function getNamesAndScoreboardInfo() {
 
 // Populate Playable Letter Array with randomLetter from letterBag and remove letters used from the letterBag
 function pullLettersFromLetterBag() {
-  while (playableLetters.length < 7) {
-    let randomLetterNumber = Math.floor(Math.random() * letterBag.length);
-    playableLetters.push(letterBag[randomLetterNumber]);
-    letterBag.splice(randomLetterNumber, 1);
+  while (letterBag.length > 0 && playableLetters.length < 7) {
+    let randomLetterIndex = Math.floor(Math.random() * letterBag.length);
+    playableLetters.push(letterBag[randomLetterIndex]);
+    letterBag.splice(randomLetterIndex, 1);
   }
   for (let i = 0; i <= 6; i++) {
     let id = document.getElementById(i);
@@ -170,12 +169,9 @@ function pullLettersFromLetterBag() {
 }
 
 function tradeInLetters() {
-  tradeInLettersButton.addEventListener("click", returnLettersToLetterbag);
-  function returnLettersToLetterbag() {
-    letterBag.push(...playableLetters);
-    playableLetters = [];
-    pullLettersFromLetterBag();
-  }
+  letterBag.push(...playableLetters);
+  playableLetters = ["t", "e", "s", "t", "c", "a", "t"];
+  pullLettersFromLetterBag();
 }
 
 function putLettersInTheGameGridBoxes() {
@@ -272,6 +268,20 @@ function checkVerticalWord() {
 
 //!---------------------------------------------- Event Listeners ----------------------------------------------------
 
+tradeInLettersButton.addEventListener("click", tradeInLetters);
+
+verticalBtn.addEventListener("click", () => {
+  verticalBtn.textContent = "active";
+  horizontalBtn.textContent = "Horizontal";
+  direction = "vertical";
+});
+
+horizontalBtn.addEventListener("click", () => {
+  horizontalBtn.textContent = "active";
+  verticalBtn.textContent = "Vertical";
+  direction = "horizontal";
+});
+
 for (let i = 0; i < playerTiles.length; i++) {
   playerTiles[i].addEventListener("click", () => {
     // inputField.textContent += playerTiles[i].textContent;
@@ -285,30 +295,23 @@ for (let i = 0; i < playerTiles.length; i++) {
       } else if (activeBoxLocation.textContent.length > 0) {
         let activeLocationGridIndex;
         for (let i = 0; i < gameGrid.length; i++) {
-
           if (activeBoxLocation.id === gameGrid[i].id) {
-            activeLocationGridIndex = i
+            activeLocationGridIndex = i;
           }
         }
         if (!wordInPlayArray.includes(activeLocationGridIndex)) {
-          wordInPlayArray.push(activeLocationGridIndex)
-          console.log(wordInPlayArray)
+          wordInPlayArray.push(activeLocationGridIndex);
+          console.log(wordInPlayArray);
         }
 
         activeBox += directions[direction];
         skipFullBoxes(activeBox);
-      } 
-      
-      else {
+      } else {
         activeBoxLocation.textContent = playerTiles[i].textContent;
         for (let i = 0; i < gameGrid.length; i++) {
           if (gameGrid[i].id === activeBoxLocation.id) {
-
-            wordInPlayArray.push(i)
-            // console.log(wordInPlayArray)
-            for (let i = 0; i < wordInPlayArray.length; i++) {
-              // console.log(wordInPlayArray[i] % 15)
-            }
+            wordInPlayArray.push(i);
+            for (let i = 0; i < wordInPlayArray.length; i++) {}
           }
         }
       }
@@ -337,114 +340,230 @@ inputClearBtn.addEventListener("click", () => {
 });
 
 submitBtn.addEventListener("click", () => {
-  const turnWords = []
-  checkAdjacentBoxes(wordInPlayArray, direction,turnWords);
+  const wordsInPlay = checkAdjacentBoxes(wordInPlayArray, direction);
+
+  let words = Object.values(wordsInPlay);
+
+  for (let word of words) {
+    // if (word.length > 1) {
+    let wordInPlay = "";
+    word.map((space) => {
+      wordInPlay +=
+        document.getElementsByClassName("gameGridBox")[space].textContent;
+    });
+    // }
+  }
+  wordInPlayArray = [];
 });
 
-function checkAdjacentBoxes(wordInPlayArray, direction,turnWords) {
-  console.log("wordInPlayArray: ",wordInPlayArray)
+function checkAdjacentBoxes(wordInPlayArray, direction) {
+  // start with an array of all the tiles that have just been placed, wordInPlayArray
+
+  // for each index, check perpendicular directions for existing letters and add them to directions arrays, upwardWord, downwardWord, etc...
+
+  // when there are no more existing letters, check each direction (upwardWord, downwardWord, etc...) and concatenate
+  // check the concatenated array against a dictionary of accepted words.
+
+  console.log("wordInPlayArray: ", wordInPlayArray);
+
+  console.log("directions: ",directions)
+  // console.log("direction: ",direction)
+
+  let startingLocation = wordInPlayArray[0]
+  console.log("startingLocation: ",startingLocation)
+  const gameGridBox = document.getElementsByClassName("gameGridBox")
+  
+  console.log("checking previous vertical letter: ", )
+  if (gameGridBox[startingLocation - directions.vertical].textContent >0) {
+    console.log(gameGridBox[startingLocation - directions.vertical].textContent)
+  }
+
+  console.log("checking next vertical letter: ")
+  if (gameGridBox[startingLocation + directions.vertical].textContent >0) {
+    console.log(gameGridBox[startingLocation +directions.vertical].textContent)
+  }
+
+  let leftLetterSquare = gameGridBox[startingLocation - directions.horizontal];
+
+  let leftCheckLetters = []
+  if (leftLetterSquare.textContent.length > 0) {
+    console.log("checking left: ",checkLeftDirection(startingLocation, leftCheckLetters))
+  }
+  // console.log("checking previous horizontal letter: ", )
+  // console.log("left horizontal letter: ",)
+  // console.log(directions.horizontal)
+
+  
+  if (gameGridBox[startingLocation - directions.horizontal].textContent >0) {
+    console.log(gameGridBox[startingLocation - directions.horizontal].textContent)
+  }
+
+  console.log("checking previous horizontal letter: ", )
+  if (gameGridBox[startingLocation + directions.horizontal].textContent >0) {
+    console.log(gameGridBox[startingLocation + directions.horizontal].textContent)
+  }
+
+
+  let wordInPlay = "";
+  wordInPlayArray.map((letter) => {
+    wordInPlay +=
+      document.getElementsByClassName("gameGridBox")[letter].textContent;
+  });
+  console.log("wordInPlay: ", wordInPlay);
+  let up = [];
+  let down = [];
+  let left = [];
+  let right = [];
+
   for (let i = 0; i < wordInPlayArray.length; i++) {
     if (direction === "horizontal") {
+      let upwardWord = [];
+      let downwardWord = [];
 
-      console.log(direction)
+      upwardWord.unshift(wordInPlayArray[i]);
+      downwardWord.push(wordInPlayArray[i]);
 
-      let upwardWord = []
-      let downwardWord = []
+      up = checkUpDirection(wordInPlayArray[i], upwardWord);
 
-      upwardWord.unshift(wordInPlayArray[i])
-      downwardWord.push(wordInPlayArray[i])
+      down = checkDownDirection(wordInPlayArray[i], downwardWord);
 
-      let up = checkUpDirection(wordInPlayArray[i],turnWords, upwardWord)
+      if (up.length > 1) {
+        console.log("up: ",up)
+        for (let i = 0; i < up.length; i++) {
+          console.log(gameGrid[up[i]]);
+        }
+      }
 
-      console.log("up: ",up)
-      up.map ((element) => {
-        console.log(gameGrid[element].textContent)
-      })
-      turnWords.push(upwardWord)
-
-      console.log("turnwords: ",turnWords)
+      if (down.length > 1) {
+        console.log("down: ",down)
+        for (let i = 0; i < down.length; i++) {
+          console.log(gameGrid[down[i]]);
+        }
+      }
     } else if (direction === "vertical") {
+      let leftwardWord = [];
+      let rightwardWord = [];
 
-      console.log(direction)
+      leftwardWord.unshift(wordInPlayArray[i]);
+      rightwardWord.push(wordInPlayArray[i]);
 
-      let leftwardWord = []
-      let rightwardWord = []
+      left = checkLeftDirection(wordInPlayArray[i], leftwardWord);
 
+      right = checkRightDirection(wordInPlayArray[i], rightwardWord);
 
-      leftwardWord.unshift(wordInPlayArray[i])
-      rightwardWord.push(wordInPlayArray[i])
+      if (left.length > 1) {
+        console.log("left: ", left);
+        for (let i = 0; i < left.length; i++) {
+          console.log(gameGrid[left[i]]);
+        }
+      }
 
-
-      let left = checkLeftDirection(wordInPlayArray[i], turnWords, leftwardWord)
-
-      let right = checkRightDirection(wordInPlayArray[i],turnWords, rightwardWord)
-
-
-
-      // let down = checkDownDirection(wordInPlayArray[i],turnWords, downwardWord)
-
-      console.log("left: ",left)
-      console.log("right: ",right)
-
-      // right.map ((element) => {
-      //   console.log(gameGrid[element].textContent)
-      // })
-      // console.log("left: ",checkLeftDirection(wordInPlayArray[i], turnWords, leftwardWord))
-
-      turnWords.push(leftwardWord)
-
-      console.log("turnwords: ",turnWords)
+      if (right.length > 1) {
+        console.log("right: ", right);
+        for (let i = 0; i < right.length; i++) {
+          console.log(gameGrid[right[i]]);
+        }
+      }
     }
   }
+
+  return {
+    up: up,
+    down: down,
+    left: left,
+    right: right,
+  };
 }
 
-const checkLeftDirection = function (position, turnWords, leftwardWord) {
-  const leftwardPosition = (position + adjacentDirections.left)
-
-console.log(position)
-if (position === 0) {
-  
-  return console.log("starting square...", position,": ", gameGrid[position].textContent)
-}
-  else if (leftwardPosition % 15 < position % 15 && gameGrid[leftwardPosition].textContent.length > 0) {
-    leftwardWord.unshift (leftwardPosition)
-    checkLeftDirection(leftwardPosition, turnWords, leftwardWord)
+const checkLeftDirection = function (position, leftwardWord) {
+  const leftwardPosition = position + adjacentDirections.left;
+  console.log("position: ",position)
+  console.log("leftwardWord: ",leftwardWord)
+  // console.log(gameGrid[position].textContent);
+  if (position === 0) {
+    return console.log(
+      "starting square...",
+      position,
+      ": ",
+      gameGrid[position].textContent
+    );
+  } else if (
+    leftwardPosition % 15 < position % 15 &&
+    gameGrid[leftwardPosition].textContent.length > 0
+  ) {
+    // leftwardWord.unshift(leftwardPosition);
+    leftwardWord.unshift(checkLeftDirection(position, leftwardWord));
+    // checkLeftDirection(position, leftwardWord);
   }
-  return leftwardWord
+  return leftwardWord;
 };
 
-const checkRightDirection = function (position, turnWords, rightwardWord) {
-  const rightwardPosition = (position + adjacentDirections.right)
+const checkRightDirection = function (position, rightwardWord) {
+  const rightwardPosition = position + adjacentDirections.right;
 
-// console.log(rightwardPosition %15)
-// console.log(position %15)
-if (position === gameGrid.length -1) {
-  
-  return console.log("ending square...", position,": ", gameGrid[position].textContent)
-}
-  else if (rightwardPosition % 15 > position % 15 && gameGrid[rightwardPosition].textContent.length < gameGrid.length -1) {
-    rightwardWord.push (rightwardPosition)
-    checkRightDirection(rightwardPosition, turnWords, rightwardWord)
+  if (position === gameGrid.length - 1) {
+    return console.log(
+      "ending square...",
+      position,
+      ": ",
+      gameGrid[position].textContent
+    );
+  } else if (
+    rightwardPosition % 15 > position % 15 &&
+    gameGrid[rightwardPosition] < gameGrid.length - 1 &&
+    gameGrid[rightwardPosition].textContent.length > 0
+  ) {
+    rightwardWord.push(rightwardPosition);
+    checkRightDirection(rightwardPosition, rightwardWord);
   }
-  return rightwardWord
+  return rightwardWord;
 };
 
-const checkUpDirection = function (position, turnWords, upwardWord) {
-  // console.log(position, typeof position)
-  // console.log(adjacentDirections.up, typeof adjacentDirections.up)
-  const upwardPosition = (position + adjacentDirections.up)
-  console.log("upwardPosition: ", gameGrid[upwardPosition]?.textContent)
-// console.log(position % 15)
-// console.log(upwardPosition % 15)
-if (position - 15 < 0) {
-  
-  return console.log("top row...", position,": ", gameGrid[position]?.textContent)
-}
-  else if (upwardPosition >= 0 && gameGrid[upwardPosition].textContent.length > 0) {
-    upwardWord.unshift (upwardPosition)
-    checkUpDirection(upwardPosition, turnWords, upwardWord)
+const checkUpDirection = function (position, upwardWord) {
+  const upwardPosition = position + adjacentDirections.up;
+  if (gameGrid[upwardPosition]?.textContent.length > 0) {
+    // console.log("upwardPosition: ", gameGrid[upwardPosition]?.textContent);
   }
-  return upwardWord
+
+  if (position - 15 < 0) {
+    return console.log(
+      "top row...",
+      position,
+      ": ",
+      gameGrid[position]?.textContent
+    );
+  } else if (
+    upwardPosition >= 0 &&
+    gameGrid[upwardPosition].textContent.length > 0
+  ) {
+    upwardWord.unshift(upwardPosition);
+    checkUpDirection(upwardPosition, upwardWord);
+  }
+  return upwardWord;
+};
+
+const checkDownDirection = function (position, downwardWord) {
+  const downwardPosition = position + adjacentDirections.down;
+
+  if (gameGrid[downwardPosition]?.textContent.length > 0) {
+    // console.log("downwardPosition: ", gameGrid[downwardPosition]?.textContent);
+  }
+
+  if (position + 15 > gameGrid.length) {
+    return console.log(
+      "bottom row...",
+      position,
+      ": ",
+      gameGrid[position]?.textContent
+    );
+  } else if (
+    downwardPosition >= 0 &&
+    gameGrid[downwardPosition].textContent.length > 0
+  ) {
+    downwardWord.push(downwardPosition);
+    checkDownDirection(downwardPosition, downwardWord);
+  }
+  return downwardWord;
 };
 
 getNamesAndScoreboardInfo();
