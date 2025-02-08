@@ -1,3 +1,8 @@
+import {dictionary} from "../Dictionary/dictionary.js"
+
+console.log(dictionary.length)
+localStorage.setItem("dictionary",dictionary)
+
 let inputFieldForP1Name = document.getElementById("inputFieldForP1Name");
 let inputFieldForP2Name = document.getElementById("inputFieldForP2Name");
 let submitNameButton = document.getElementById("submitNameButton");

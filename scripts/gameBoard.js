@@ -1,7 +1,9 @@
-import dictionary from '../JSON/dictionary.json'
+// import { dictionary } from "../Dictionary/dictionary";
 
+const dictionary = sessionStorage.dictionary
 console.log(dictionary.length)
-// console.log(dictionary)
+
+
 //!-------------------------------------------------- Global Variables ------------------------------------------------------------
 //? Replaced on Desktop Put all letters into an array, letterBag
 // let letterBag = [
@@ -130,14 +132,14 @@ function getNamesAndScoreboardInfo() {
       ] == "s"
     ) {
       playerOneScoreName.innerText = `${localStorage.scrabblePlayerOneName}' Score:`;
-      playerOnesName = `${localStorage.scrabblePlayerOneName}'`;
+      scrabblePlayerOneName = `${localStorage.scrabblePlayerOneName}'`;
     } else {
       playerOneScoreName.innerText = `${localStorage.scrabblePlayerOneName}'s Score:`;
-      playerOnesName = `${localStorage.scrabblePlayerOneName}'s`;
+      scrabblePlayerOneName = `${localStorage.scrabblePlayerOneName}'s`;
     }
   } else {
     playerOneScoreName.innerText = "Player 1's Score";
-    playerOnesName = "Player 1's";
+    scrabblePlayerOneName = "Player 1's";
   }
 
   if (localStorage.scrabblePlayerTwoName != "") {
@@ -147,17 +149,17 @@ function getNamesAndScoreboardInfo() {
       ] == "s"
     ) {
       playerTwoScoreName.innerText = `${localStorage.scrabblePlayerTwoName}' Score:`;
-      playerTwosName = `${localStorage.scrabblePlayerTwoName}'`;
+      scrabblePlayerTwoName = `${localStorage.scrabblePlayerTwoName}'`;
     } else {
       playerTwoScoreName.innerText = `${localStorage.scrabblePlayerTwoName}'s Score:`;
-      playerTwosName = `${localStorage.scrabblePlayerTwoName}'s`;
+      scrabblePlayerTwoName = `${localStorage.scrabblePlayerTwoName}'s`;
     }
   } else {
     playerTwoScoreName.innerText = "Player 2's Score";
-    playerTwosName = "Player 2's";
+    scrabblePlayerTwoName = "Player 2's";
   }
 
-  activePlayer = playerOnesName;
+  activePlayer = scrabblePlayerOneName;
 }
 
 // Populate Playable Letter Array with randomLetter from letterBag and remove letters used from the letterBag
