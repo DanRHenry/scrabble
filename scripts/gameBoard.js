@@ -24,6 +24,7 @@ let scrabblePlayerOneName;
 let scrabblePlayerTwoName;
 let activePlayer;
 
+
 //!---------------------------------------------------- DOM Variables -------------------------------------------------------------
 const playerTiles = document.getElementsByClassName("playerTiles");
 let tradeInLettersButton = document.getElementById("tradeInLetters");
@@ -31,20 +32,15 @@ const inputField = document.getElementById("inputField");
 const submitBtn = document.getElementById("submitBtn");
 const inputClearBtn = document.getElementById("inputClearBtn");
 // const reorientBtn = document.getElementById("reorientBtn");
-const horizontalBtn = document.getElementById("horizontalBtn");
-const verticalBtn = document.getElementById("verticalBtn");
 const gameGrid = document.getElementsByClassName("gameGridBox");
+const horizontalBtn = document.getElementById("horizontalBtn")
+const verticalBtn = document.getElementById("verticalBtn")
 
 gameGrid[activeBox].style.opacity = ".5";
 
 const tempCoordinates = [];
 let wordInPlayArray = [];
 let wordToTestArray = [];
-
-const directions = {
-  vertical: 15,
-  horizontal: 1,
-};
 
 let adjacentDirections = {
   up: -15,
@@ -66,17 +62,33 @@ const squareTypes = {
 
 //stars are doubleWord
 // const existingSquares = [];
-let verticalInput = document.getElementById("verticalInput");
-let verticalSubmitBTN = document.getElementById("verticalSubmitButton");
-let horizontalInput = document.getElementById("horizontalInput");
-let horizontalSubmitBTN = document.getElementById("horizontalSubmitButton");
-// let gameGridBox = document.getElementsByClassName("gameGridBox");
+
 let playerOneScoreName = document.getElementById("p1Name");
 let playerTwoScoreName = document.getElementById("p2Name");
 let p1Score = document.getElementById("p1Score");
 let p2Score = document.getElementById("p2Score");
 let direction = "horizontal";
+
+
 // let direction = "vertical";
+
+function setDirectionalBtnStyling() {
+  
+  if (direction === "horizontal") {
+    horizontalBtn.style.backgroundColor = "gray"
+    horizontalBtn.style.color = "white"
+    verticalBtn.style.backgroundColor = "white"
+    verticalBtn.style.color = "initial"
+  }
+  if (direction === "vertical") {
+    horizontalBtn.style.backgroundColor = "white"
+    horizontalBtn.style.color = "initial"
+    verticalBtn.style.backgroundColor = "gray"
+    verticalBtn.style.color = "white"
+  }
+}
+
+setDirectionalBtnStyling()
 
 //! ----------------------------------------------------- Functions ---------------------------------------------------------------
 
@@ -84,52 +96,52 @@ let direction = "horizontal";
 function fillLetterBag() {
   letterBag = [];
   for (let i = 0; i < 1; i++) {
-    letterBag.push("J");
-    letterBag.push("K");
-    letterBag.push("Q");
-    letterBag.push("X");
-    letterBag.push("Z");
+    letterBag.push("j");
+    letterBag.push("k");
+    letterBag.push("1");
+    letterBag.push("x");
+    letterBag.push("z");
   }
 
   for (let i = 0; i < 2; i++) {
-    letterBag.push("B");
-    letterBag.push("C");
-    letterBag.push("F");
-    letterBag.push("H");
-    letterBag.push("M");
-    letterBag.push("P");
-    letterBag.push("V");
-    letterBag.push("W");
-    letterBag.push("Y");
+    letterBag.push("b");
+    letterBag.push("c");
+    letterBag.push("f");
+    letterBag.push("h");
+    letterBag.push("m");
+    letterBag.push("p");
+    letterBag.push("v");
+    letterBag.push("w");
+    letterBag.push("y");
     letterBag.push("*");
   }
 
   for (let i = 0; i < 3; i++) {
-    letterBag.push("G");
+    letterBag.push("g");
   }
 
   for (let i = 0; i < 4; i++) {
-    letterBag.push("D");
-    letterBag.push("L");
-    letterBag.push("S");
-    letterBag.push("U");
+    letterBag.push("d");
+    letterBag.push("l");
+    letterBag.push("s");
+    letterBag.push("u");
   }
   for (let i = 0; i < 6; i++) {
-    letterBag.push("N");
-    letterBag.push("R");
-    letterBag.push("T");
+    letterBag.push("n");
+    letterBag.push("r");
+    letterBag.push("t");
   }
   for (let i = 0; i < 8; i++) {
-    letterBag.push("O");
+    letterBag.push("o");
   }
 
   for (let i = 0; i < 9; i++) {
-    letterBag.push("A");
-    letterBag.push("I");
+    letterBag.push("a");
+    letterBag.push("i");
   }
 
   for (let i = 0; i < 12; i++) {
-    letterBag.push("E");
+    letterBag.push("e");
   }
 }
 
@@ -190,6 +202,7 @@ function pullLettersFromLetterBag() {
 function tradeInLetters() {
   letterBag.push(...playableLetters);
   playableLetters = ["t", "e", "s", "t", "c", "a", "t"];
+  // playableLetters = []
   pullLettersFromLetterBag();
 }
 
@@ -243,92 +256,61 @@ function gameGridBoxAddEventListeners() {
   }
 }
 
-//! Work on this section...
-function checkVerticalWord() {
-  /*
-  initial placement of letters
-  1 - Check orientation 
-  2 - start at the active tile position
-  3 - iterate through the inputfield.textContent
-  4 - check that the current square is empty
-  5 - if it is empty, add the current letter
-  6 - if it is full, skip over the square and move onto the next one
-  */
-
-  let gameBoardPosition = activeBox; // added to maintain the original activeBox location while placing letters
-  if (activeBox + activeWord.length * 15 < 224) {
-    let tempWord = "";
-    for (let i = 0; i < activeWord.length; i++) {
-      if (
-        activeWord[i] != gameBoardPosition ||
-        activeWord[i] != "*" ||
-        gameGrid.value != undefined
-      )
-        return false;
-      else {
-        tempWord += activeWord[i];
-        gameBoardPosition + 15;
-      }
-    }
-    console.log(tempWord);
-  }
-}
-
 //!---------------------------------------------- Event Listeners ----------------------------------------------------
+
+horizontalBtn.addEventListener("click", () => {
+  direction = "horizontal"
+  setDirectionalBtnStyling()
+})
+
+verticalBtn.addEventListener("click", () => {
+  direction = "vertical"
+  setDirectionalBtnStyling()
+})
+
 
 tradeInLettersButton.addEventListener("click", tradeInLetters);
 
-verticalBtn.addEventListener("click", () => {
-  verticalBtn.textContent = "active";
-  horizontalBtn.textContent = "Horizontal";
-  direction = "vertical";
-});
-
-horizontalBtn.addEventListener("click", () => {
-  horizontalBtn.textContent = "active";
-  verticalBtn.textContent = "Vertical";
-  direction = "horizontal";
-});
-
 for (let i = 0; i < playerTiles.length; i++) {
   wordInPlayArray = [];
-  playerTiles[i].addEventListener("click", () => {
-    function skipFullBoxes(activeBox) {
-      let activeBoxLocation =
-        document.getElementsByClassName("gameGridBox")[activeBox];
-      const nextBox = activeBox + adjacentDirections[direction];
-      if (activeBox % 15 < nextBox % 15 || activeBox % 15 === nextBox % 15) {
-        if (!activeBoxLocation) {
-          console.log("undefined square");
-        } else if (activeBoxLocation.textContent.length > 0) {
-          if (wordInPlayArray.includes(activeBox)) {
-          } else {
-            wordInPlayArray.push(activeBox);
-          }
-          skipFullBoxes(nextBox);
+  playerTiles[i].addEventListener("click", () => clickedTile(i));
+}
+
+function clickedTile (i) {
+  function skipFullBoxes(activeBox) {
+    let activeBoxLocation =
+      document.getElementsByClassName("gameGridBox")[activeBox];
+    const nextBox = activeBox + adjacentDirections[direction];
+    if (activeBox % 15 < nextBox % 15 || activeBox % 15 === nextBox % 15) {
+      if (!activeBoxLocation) {
+        console.log("undefined square");
+      } else if (activeBoxLocation.textContent.length > 0) {
+        if (wordInPlayArray.includes(activeBox)) {
         } else {
-          activeBoxLocation.textContent = playerTiles[i].textContent;
-          for (let i = 0; i < gameGrid.length; i++) {
-            if (gameGrid[i].id === activeBoxLocation.id) {
-              if (wordInPlayArray.includes(i)) {
-                console.log(i, "is already here");
-              }
-              wordInPlayArray.push(i);
-            }
-          }
-        }
-      } else if (activeBox % 15 === 14) {
-        console.log("hello?");
-        console.log(activeBox);
-        if (activeBoxLocation.textContent.length < 1) {
-          activeBoxLocation.textContent = playerTiles[i].textContent;
           wordInPlayArray.push(activeBox);
         }
+        skipFullBoxes(nextBox);
+      } else {
+        activeBoxLocation.textContent = playerTiles[i].textContent;
+        for (let i = 0; i < gameGrid.length; i++) {
+          if (gameGrid[i].id === activeBoxLocation.id) {
+            if (wordInPlayArray.includes(i)) {
+              console.log(i, "is already here");
+            }
+            wordInPlayArray.push(i);
+          }
+        }
+      }
+    } else if (activeBox % 15 === 14) {
+      console.log("hello?");
+      console.log(activeBox);
+      if (activeBoxLocation.textContent.length < 1) {
+        activeBoxLocation.textContent = playerTiles[i].textContent;
+        wordInPlayArray.push(activeBox);
       }
     }
-
-    skipFullBoxes(activeBox);
-  });
+  }
+  skipFullBoxes(activeBox);
 }
 
 inputClearBtn.addEventListener("click", () => {
@@ -350,10 +332,29 @@ inputClearBtn.addEventListener("click", () => {
   console.log("tempCoordinates: ", tempCoordinates);
 });
 
-submitBtn.addEventListener("click", () => {
+submitBtn.addEventListener("click", clickedSubmitBtn);
+
+function clickedSubmitBtn() {
   checkAdjacentBoxes(wordInPlayArray);
   wordInPlayArray = [];
-});
+}
+document.addEventListener("keydown", function(event){
+  let key = event.key || event.keyCode
+  // console.log("key: ",key)
+  const tiles = []
+  for (let i = 0; i < playerTiles.length; i++) {
+    tiles.push(playerTiles[i].textContent)
+  }
+  if (tiles.includes(key.toLowerCase())) {
+    clickedTile (tiles.indexOf(key.toLowerCase()))
+  }
+  if (key === "Enter") {
+    clickedSubmitBtn()
+  }
+  if (key === ' ') {
+    console.log('space')
+  }
+})
 
 function checkAdjacentBoxes(wordInPlayArray) {
   console.log("wordInPlayArray: ", wordInPlayArray);
