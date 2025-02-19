@@ -483,112 +483,84 @@ function checkAdjacentBoxes(wordInPlayArray) {
 
     function checkForHorizontalOrVerticalWord(array) {
       array = array.filter((x) => x !== "");
-      // console.log("array: ", array);
-
       if (array.length > 0) {
         return array.every((val) => val === array[0]);
       } else {
         return false;
       }
     }
+
     console.log("wordsInPlay: ", wordsInPlay);
-    console.log(
-      "horizontal direction: ",
-      horizontalStringsArray,
-      checkForHorizontalOrVerticalWord(horizontalStringsArray)
-    );
-    console.log(
-      "vertical direction: ",
-      verticalStringsArray,
-      checkForHorizontalOrVerticalWord(verticalStringsArray)
-    );
+
+    // console.log(
+    //   "horizontal direction: ",
+    //   horizontalStringsArray,
+    //   checkForHorizontalOrVerticalWord(horizontalStringsArray)
+    // );
+
+    // console.log(
+    //   "vertical direction: ",
+    //   verticalStringsArray,
+    //   checkForHorizontalOrVerticalWord(verticalStringsArray)
+    // );
 
     wordsInPlay.map((location) => {
-      console.log("current location: ", location);
+      // console.log("current location: ", location);
+      // console.log("verticalStringsArray: ",verticalStringsArray)
+      // console.log("horizontalStringsArray: ", horizontalStringsArray)
 
       if (checkForHorizontalOrVerticalWord(verticalStringsArray)) {
-        let temp = "";
-        for (let i = 0; i < location.vertical.length; i++) {
-          temp += gameGrid[location.vertical[i]].textContent;
-        }
-        checkDictionary(temp);
+        console.log("vertical...")
+        // console.log(checkDictionary(lookAtDirectionForWords("vertical", location)));
       }
+
       if (checkForHorizontalOrVerticalWord(horizontalStringsArray)) {
-        // let temp = "";
-        // for (let i = 0; i < location.horizontal.length; i++) {
-        //   temp += gameGrid[location.horizontal[i]].textContent;
-        // }
-        checkDictionary(lookAtDirectionForWords("horizontal"));
-        // }
-
-        // let temp = "";
-        // for (let i = 0; i < location.vertical.length; i++) {
-        //   temp += gameGrid[location.vertical[i]].textContent;
-        // }
-        // checkDictionary(temp)
-
-        checkDictionary(lookAtDirectionForWords("vertical"));
-
-        // temp = ""
-        // for (let i = 0; i < location.horizontal.length; i++) {
-        //   temp += gameGrid[location.horizontal[i]].textContent;
-        // }
-        // checkDictionary(temp)
-        // checkDictionary(lookAtDirectionForWords("horizontal"));
+        console.log("horizontal...")
+        // console.log("horizontalStringsArray: ",horizontalStringsArray)
+        console.log(checkDictionary(lookAtDirectionForWords("horizontal", location)));
 
         if (
           !location.vertical.length > 0 &&
           (location.up.length > 1 || location.down.length > 1)
         ) {
-          //   temp = ""
-          //   for (let i = 0; i< location.up.length; i++) {
-          //     temp += gameGrid[location.up[i]].textContent;
-          //   }
-          //   checkDictionary(temp)
-          checkDictionary(lookAtDirectionForWords("up"));
-
-          // temp = ""
-          // for (let i = 0; i < location.down.length; i++) {
-          //   temp += gameGrid[location.down[i]].textContent;
-          // }
-          // checkDictionary(temp)
-          checkDictionary(lookAtDirectionForWords("down"));
+          console.log("checking Up & Down...")
+          console.log(checkDictionary(lookAtDirectionForWords("up", location)));
+          console.log(checkDictionary(lookAtDirectionForWords("down", location)));
         }
 
-        if (
-          !location.horizontal.length > 0 &&
-          (location.left.length > 1 || location.right.length > 1)
-        ) {
-          // temp = ""
-          // for (let i = 0; i < location.left.length; i++) {
-          //   temp += gameGrid[location.left[i]].textContent;
-          // }
-          // checkDictionary(temp)
-          checkDictionary(lookAtDirectionForWords("left"));
-
-          // temp = ""
-          // for (let i = 0; i < location.right.length; i++) {
-          //   temp += gameGrid[location.right[i]].textContent;
-          // }
-          // checkDictionary(temp)
-          checkDictionary(lookAtDirectionForWords("right"));
-        }
+        // if (
+        //   !location.horizontal.length > 0 &&
+        //   (location.left.length > 1 || location.right.length > 1)
+        // ) {
+        //   console.log("checking Left & Right...")
+        //   console.log(checkDictionary(lookAtDirectionForWords("left", location)));
+        //   console.log(checkDictionary(lookAtDirectionForWords("right", location)));
+        // }
       }
     });
 
-    function lookAtDirectionForWords(direction) {
-      let temp = "";
-      for (let i = 0; i < location[direction].length; i++) {
-        temp += gameGrid[location[direction][i]].textContent;
+    function lookAtDirectionForWords(direction, location) {
+      console.log(direction)
+      console.log(location)
+      console.log(location[direction])
+      if (location[direction]) {
+        let temp = "";
+        console.log("location[direction]: ", location[direction]);
+        for (let i = 0; i < location[direction].length; i++) {
+          temp += gameGrid[location[direction][i]].textContent;
+        }
+        console.log(temp)
+        return temp;
       }
-      return temp;
     }
 
     function checkDictionary(word) {
-      if (!searchDictionary(word)) {
-        console.log(word, "not found");
-      } else {
-        console.log(word, "was found in the dictionary!");
+      if (word) {
+        if (!searchDictionary(word)) {
+          console.log(word, "not found");
+        } else {
+          console.log(word, "was found in the dictionary!");
+        }
       }
     }
   })();
