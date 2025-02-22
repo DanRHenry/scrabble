@@ -411,12 +411,12 @@ document.addEventListener("keydown", function (event) {
 });
 
 function checkAdjacentBoxes(wordInPlayArray) {
-  console.log("wordInPlayArray: ", wordInPlayArray);
+  // console.log("wordInPlayArray: ", wordInPlayArray);
   let temp = "";
   for (let i of wordInPlayArray) {
     temp += gameGrid[i].textContent;
   }
-  console.log("word played: ", temp);
+  // console.log("word played: ", temp);
 
   let wordsInPlay = [];
 
@@ -437,8 +437,8 @@ function checkAdjacentBoxes(wordInPlayArray) {
     const rightwardPosition = wordInPlayArray[i] + adjacentDirections.right;
     const leftwardPosition = wordInPlayArray[i] + adjacentDirections.left;
 
-    console.log("positionInfo", positionInfo);
-    console.log("wordInPlayArray[i]: ", wordInPlayArray[i]);
+    // console.log("positionInfo", positionInfo);
+    // console.log("wordInPlayArray[i]: ", wordInPlayArray[i]);
 
     checkPositionForText(
       "up", // wordInPlayArray[i] direction
@@ -583,7 +583,9 @@ function checkAdjacentBoxes(wordInPlayArray) {
       // console.log(checkForHorizontalOrVerticalWord());
       if (checkForHorizontalOrVerticalWord() === "horizontal Direction") {
         console.log("checking for horizontal direction words...");
-        checkHorizontalDirectionWords();
+        console.log(checkHorizontalDirectionWords());
+
+        // checkHorizontalDirectionWords();
       } else if (checkForHorizontalOrVerticalWord() === "vertical Direction") {
         console.log("checking for vertical direction words...");
         checkVerticalDirectionWords();
@@ -596,6 +598,8 @@ function checkAdjacentBoxes(wordInPlayArray) {
     });
 
     function checkHorizontalDirectionWords() {
+
+      console.log("wordInPlayArray: ", wordInPlayArray);
       for (let i = 0; i < wordInPlayArray.length; i++) {
         let currentLocation = wordInPlayArray[i];
 
@@ -604,7 +608,7 @@ function checkAdjacentBoxes(wordInPlayArray) {
         let tempHorizontal = "";
 
         console.log("location: ", currentLocation);
-        console.log("wordInPlayArray: ", wordInPlayArray);
+
         currentLocation.up?.map(
           (letter) => (tempUp += gameGrid[letter].textContent)
         );
@@ -614,6 +618,9 @@ function checkAdjacentBoxes(wordInPlayArray) {
         currentLocation.horizontal?.map(
           (letter) => (tempHorizontal += gameGrid[letter].textContent)
         );
+
+        console.log(tempUp, tempDown, tempHorizontal)
+
         if (tempUp.length > 1) {
           console.log("checking Up: ", tempUp);
           console.log(searchDictionary(tempUp));
