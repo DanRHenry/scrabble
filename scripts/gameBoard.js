@@ -51,8 +51,8 @@ const letterPoints = {
   w: 4,
   x: 8,
   y: 4,
-  z: 10
-}
+  z: 10,
+};
 
 let adjacentDirections = {
   up: -15,
@@ -631,9 +631,9 @@ function createWordsInPlay(wordInPlayArray, originalPlayedTiles) {
 }
 // let counter = 0;
 function checkDictionaryForWordsInPlay(wordsInPlay) {
-  console.log("0000000000000000000000")
-  let runningTotal = 0
-  let collection = []
+  console.log("0000000000000000000000");
+  let runningTotal = 0;
+  let collection = [];
   const otArray = Array.from(originalPlayedTiles);
 
   console.log("wordsInPlay: ", wordsInPlay);
@@ -648,26 +648,26 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
 
         for (let letter of node.horizontal) {
           horiz += gameGrid[letter].textContent;
-          horizNums.push(letter)
+          horizNums.push(letter);
         }
 
         if (!searchDictionary(horiz)) {
           console.log(`horizontal word, ${horiz}, was not found`);
           cancelTilePlacement();
           return false;
-        } 
+        }
 
-        console.log("horizNums: ", horizNums)
-        collection.push(horizNums)
-        
+        console.log("horizNums: ", horizNums);
+        collection.push(horizNums);
+
         if (node.vertical.length > 0) {
           let temp = "";
-          let subVert = []
+          let subVert = [];
           for (let letter of otArray) {
             if (node.vertical.includes(letter)) {
               for (let letter of node.vertical) {
                 temp += gameGrid[letter].textContent;
-                subVert.push(letter)
+                subVert.push(letter);
               }
             }
           }
@@ -677,25 +677,23 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
               console.log(`vertical word, ${temp} was not found`);
               cancelTilePlacement();
               return false;
-            } 
+            }
             if (searchDictionary(temp)) {
               console.log(`vertical word, ${temp} was found!`);
-              console.log("secondary vertical: ",temp)
-              console.log('subVert:',subVert)
-              collection.push(subVert)
+              console.log("secondary vertical: ", temp);
+              console.log("subVert:", subVert);
+              collection.push(subVert);
             }
           }
         }
-        console.log("horiz: ",horiz)
-      } 
-      
-      else if (skippedDirection === "vertical") {
+        console.log("horiz: ", horiz);
+      } else if (skippedDirection === "vertical") {
         let vert = "";
         let vertNums = [];
 
         for (let letter of node.vertical) {
           vert += gameGrid[letter].textContent;
-          vertNums.push(letter)
+          vertNums.push(letter);
         }
 
         if (!searchDictionary(vert)) {
@@ -704,8 +702,8 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
           return false;
         }
 
-        console.log("vertNums: ",vertNums)
-        collection.push(vertNums)
+        console.log("vertNums: ", vertNums);
+        collection.push(vertNums);
 
         if (node.horizontal.length > 0) {
           let temp = "";
@@ -714,7 +712,7 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
             if (node.horizontal.includes(letter)) {
               for (let letter of node.horizontal) {
                 temp += gameGrid[letter].textContent;
-                subHoriz.push(letter)
+                subHoriz.push(letter);
               }
             }
           }
@@ -727,18 +725,17 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
             }
             if (searchDictionary(temp)) {
               console.log(`horizontal word, ${temp} was found!`);
-              console.log("secondary horizontal ",temp)
-              console.log("subHoriz: ",subHoriz)
-              collection.push(subHoriz)
+              console.log("secondary horizontal ", temp);
+              console.log("subHoriz: ", subHoriz);
+              collection.push(subHoriz);
             }
           }
         }
-        console.log('vert:',vert)
+        console.log("vert:", vert);
       }
-      
     }
   }
-  console.log("skippedDirection: ",skippedDirection, typeof skippedDirection)
+  console.log("skippedDirection: ", skippedDirection, typeof skippedDirection);
   if (skippedDirection === undefined) {
     console.log("undefined section");
     for (let node of wordsInPlay) {
@@ -747,8 +744,8 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
         cancelTilePlacement();
         return false;
       }
-      collection.push(node["horizontal"])
-      collection.push(node["vertical"])
+      collection.push(node["horizontal"]);
+      collection.push(node["vertical"]);
     }
   }
 
@@ -769,39 +766,40 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
     }
   }
 
-  let tempArr = []
+  let tempArr = [];
   for (let i = 0; i < collection.length; i++) {
     for (let j = 0; j < collection[i].length; j++) {
-      tempArr.push(collection[i][j])
+      tempArr.push(collection[i][j]);
     }
   }
 
-  console.log(typeof collection)
-  collection = new Set([...tempArr])
-  collection = Array.from(collection)
-  console.log("collection: ",collection)
+  console.log(typeof collection);
+  collection = new Set([...tempArr]);
+  collection = Array.from(collection);
+  console.log("collection: ", collection);
 
-let wordMultiplier = 1;
+  let wordMultiplier = 1;
   for (let i = 0; i < collection.length; i++) {
-    
-    let multiplier = gameGrid[collection[i]].classList[1]
-    let letter = gameGrid[collection[i]].textContent
-    console.log(letter)
-    console.log(letterPoints[letter])
-    console.log(multiplier, typeof multiplier)
-    console.log(squareTypes[multiplier])
+    let multiplier = gameGrid[collection[i]].classList[1];
+    let letter = gameGrid[collection[i]].textContent;
+    console.log(letter);
+    console.log(letterPoints[letter]);
+    console.log(multiplier, typeof multiplier);
+    console.log(squareTypes[multiplier]);
 
     if (multiplier === "tripleWord") {
-      wordMultiplier = 3
-    } else if ((multiplier === "doubleWord" || multiplier === "star") && wordMultiplier < 3) {
-      wordMultiplier = 2
+      wordMultiplier = 3;
+    } else if (
+      (multiplier === "doubleWord" || multiplier === "star") &&
+      wordMultiplier < 3
+    ) {
+      wordMultiplier = 2;
     }
 
-    runningTotal += (letterPoints[letter] * squareTypes[multiplier])
-
+    runningTotal += letterPoints[letter] * squareTypes[multiplier];
   }
   runningTotal *= wordMultiplier;
-  console.log("runningTotal: ", runningTotal)
+  console.log("runningTotal: ", runningTotal);
   wordsInPlay = [];
   pullLettersFromLetterBag();
   putLettersInTheGameGridBoxes();
@@ -944,4 +942,3 @@ X - 8 points <br>
 Y - 4 points <br>
 Z - 10 points <br>
     --> */
-
