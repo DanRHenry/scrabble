@@ -1,7 +1,7 @@
 //!---------------------------------------------------- DOM Variables -------------------------------------------------------------
 const gameGrid = document.getElementsByClassName("gameGridBox");
 const horizontalBtn = document.getElementById("horizontalBtn");
-const inputClearBtn = document.getElementById("inputClearBtn");
+const inputCancelBtn = document.getElementById("inputCancelBtn");
 const inputField = document.getElementById("inputField");
 let p1Score = document.getElementById("p1Score");
 let p2Score = document.getElementById("p2Score");
@@ -46,6 +46,7 @@ const squareTypes = {
 //!-------------------------------------------------- Global Values ------------------------------------------------------------
 
 let activeBox = 112; // Gameboard Starting Position
+let startingBox = activeBox;
 let scrabblePlayerOneName;
 let scrabblePlayerTwoName;
 let activePlayer;
@@ -94,6 +95,7 @@ function moveActiveBoxLeft() {
   if (activeBox % 15 > 0) {
     gameGrid[activeBox].style.opacity = "";
     activeBox--;
+    startingBox = activeBox;
     gameGrid[activeBox].style.opacity = ".5";
   }
 }
@@ -102,6 +104,7 @@ function moveActiveBoxRight() {
   if (activeBox % 15 < 14) {
     gameGrid[activeBox].style.opacity = "";
     activeBox++;
+    startingBox = activeBox;
     gameGrid[activeBox].style.opacity = ".5";
   }
 }
@@ -110,6 +113,7 @@ function moveActiveBoxDown() {
   if (activeBox + 15 <= gameGrid.length - 1) {
     gameGrid[activeBox].style.opacity = "";
     activeBox += 15;
+    startingBox = activeBox;
     gameGrid[activeBox].style.opacity = ".5";
   }
 }
@@ -118,6 +122,7 @@ function moveActiveBoxUp() {
   if (activeBox - 15 >= 0) {
     gameGrid[activeBox].style.opacity = "";
     activeBox -= 15;
+    startingBox = activeBox;
     gameGrid[activeBox].style.opacity = ".5";
   }
 }
@@ -230,7 +235,7 @@ function pullLettersFromLetterBag() {
 
 function tradeInLetters() {
   letterBag.push(...playableLetters);
-  playableLetters = ["t", "e", "s", "t", "e", "a", "t"];
+  playableLetters = ["t", "e", "s", "t", "c", "a", "t"];
   // playableLetters = []
   pullLettersFromLetterBag();
   putLettersInTheGameGridBoxes();
@@ -269,6 +274,7 @@ function gameGridBoxAddEventListeners() {
       "click",
       () => {
         activeBox = i;
+        startingBox = activeBox
         // console.log("gridLocation: ", i);
         if (!gameGrid[i].style.opacity) {
           for (let i = 0; i < gameGrid.length; i++) {
@@ -351,24 +357,21 @@ function lookForBoxesToSkip(index, letter) {
   }
 }
 
-inputClearBtn.addEventListener("click", () => {
-  wordInPlayArray = [];
-  let inputArray = inputField.textContent.split("");
+inputCancelBtn.addEventListener("click", cancelTilePlacement);
 
-  for (let i = 0; i < playerTiles.length; i++) {
-    if (playerTiles[i].textContent === "") {
-      playerTiles[i].textContent = inputArray[0];
-      inputArray.shift();
-    }
+function cancelTilePlacement () {
+  originalPlayedTiles = Array.from(originalPlayedTiles)
+
+  for (let i = 0; i < originalPlayedTiles.length; i++) {
+    playableLetters.push(gameGrid[originalPlayedTiles[i]].textContent)
+    gameGrid[originalPlayedTiles[i]].textContent = ""
   }
-  inputField.textContent = null;
-  for (let i = 0; i < tempCoordinates.length; i++) {
-    document.getElementById(tempCoordinates[i]).style = "";
-    document.getElementById(tempCoordinates[i]).textContent = "";
-  }
-  tempCoordinates.length = 0;
-  console.log("tempCoordinates: ", tempCoordinates);
-});
+  wordInPlayArray = []
+  originalPlayedTiles = []
+  putLettersInTheGameGridBoxes();
+  activeBox = startingBox;
+  skippedDirection = "";
+}
 
 submitBtn.addEventListener("click", clickedSubmitBtn);
 
@@ -383,8 +386,9 @@ function clickedSubmitBtn() {
 
   wordInPlayArray = [];
   originalPlayedTiles = [];
+  skippedDirection = "";
   pullLettersFromLetterBag();
-  putLettersInTheGameGridBoxes();
+  // putLettersInTheGameGridBoxes();
 }
 
 document.addEventListener("keydown", function (event) {
@@ -555,19 +559,19 @@ function createWordsInPlay(wordInPlayArray, originalPlayedTiles) {
 
   return wordsInPlay;
 }
-let counter = 0;
+// let counter = 0;
 function checkDictionaryForWordsInPlay(wordsInPlay) {
   const otArray = Array.from(originalPlayedTiles)
 
   console.log("wordsInPlay: ", wordsInPlay);
-  console.log(typeof skippedDirection, skippedDirection);
+  // console.log(typeof skippedDirection, skippedDirection);
 
   console.log(skippedDirection);
   if (skippedDirection !== undefined) {
     console.log("vertical & horizontal check section");
     for (let node of wordsInPlay) {
-      counter ++
-      console.log(counter)
+      // counter ++
+      // console.log(counter)
       if (skippedDirection === "horizontal") {
         let horiz = ""
         for (let letter of node.horizontal) {
@@ -575,9 +579,10 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
             horiz+= gameGrid[letter].textContent
 
         }
-        console.log("horizontal word: ",horiz)
+        // console.log("horizontal word: ",horiz)
         if (!searchDictionary(horiz)) {
           console.log(`horizontal word, ${horiz}, was not found`)
+          cancelTilePlacement()
           return false
         } 
 
@@ -594,6 +599,7 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
           if (temp.length > 0) {
           if (!searchDictionary(temp)) {
             console.log(`vertical word, ${temp} was not found`)
+            cancelTilePlacement()
             return false;
           }
           if (searchDictionary(temp)) {
@@ -610,9 +616,10 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
             vert+= gameGrid[letter].textContent
 
         }
-        console.log("verticalWord: ",vert)
+        // console.log("verticalWord: ",vert)
         if (!searchDictionary(vert)) {
           console.log(`vertical word, ${vert}, was not found`)
+          cancelTilePlacement()
           return false
         } 
 
@@ -629,6 +636,7 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
           if (temp.length > 0) {
           if (!searchDictionary(temp)) {
             console.log(`horizontal word, ${temp} was not found`)
+            cancelTilePlacement()
             return false;
           }
           if (searchDictionary(temp)) {
@@ -644,6 +652,8 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
     for (let node of wordsInPlay) {
       if (!checkWords(node, "horizontal") || !checkWords(node, "vertical")) {
         console.log(node, "not found");
+        cancelTilePlacement()
+
         return false;
       }
     }
@@ -655,6 +665,7 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
     for (let letter of node[direction]) {
       temp += gameGrid[letter].textContent;
     }
+    console.log("temp: ",temp)
 
     if (temp && searchDictionary(temp) === false) {
       console.log(`no ${direction} word, ${temp} found`);
@@ -662,12 +673,17 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
       return false;
     } else if (temp && searchDictionary(temp) === true) {
       console.log(`${direction} word, ${temp} was found in the dictionary`);
+      return true;
     }
   }
 
   wordsInPlay = [];
+  pullLettersFromLetterBag();
+  putLettersInTheGameGridBoxes()
   return true;
 }
+
+
 
 //!------------------------------------------------------------------------------
 
@@ -719,68 +735,6 @@ function checkPositionForText(
       return "";
     }
   }
-}
-
-function investigateUndeterminedDirectionWords(position) {
-  console.log("position: ", position);
-  let wordsInPlay = [];
-
-  if (wordInPlayArray.length > 1) {
-    console.log("undetermined direction wordInPlayArray: ", wordInPlayArray);
-  } else {
-    let i = 0;
-    let positionInfo = {
-      up: [wordInPlayArray[i]],
-      down: [wordInPlayArray[i]],
-      left: [wordInPlayArray[i]],
-      right: [wordInPlayArray[i]],
-      vertical: [],
-      horizontal: [],
-    };
-
-    // Define adjacent positions relative to the current position
-    const upwardPosition = wordInPlayArray[i] + adjacentDirections.up;
-    const downwardPosition = wordInPlayArray[i] + adjacentDirections.down;
-    const rightwardPosition = wordInPlayArray[i] + adjacentDirections.right;
-    const leftwardPosition = wordInPlayArray[i] + adjacentDirections.left;
-
-    checkPositionForText(
-      "up", // wordInPlayArray[i] direction
-      upwardPosition, // the next position upward
-      wordInPlayArray[i], // the current Position number indexed from the wordInPlayArray
-      positionInfo // the object that contains arrays for the directions that will be pushed to
-    );
-
-    checkPositionForText(
-      "down",
-      downwardPosition,
-      wordInPlayArray[i],
-      positionInfo
-    );
-
-    checkPositionForText(
-      "left",
-      leftwardPosition,
-      wordInPlayArray[i],
-      positionInfo
-    );
-
-    checkPositionForText(
-      "right",
-      rightwardPosition,
-      wordInPlayArray[i],
-      positionInfo
-    );
-    console.log("positionInfo after undecided: ", positionInfo);
-    console.log("wordsInPlay before: ", wordsInPlay);
-    wordsInPlay.push(positionInfo);
-    console.log("wordsInPlay after: ", wordsInPlay);
-  }
-  createVerticalAndHorizontalWords(wordsInPlay);
-  console.log("wordsInPlay: ", wordsInPlay);
-
-  // checkDictionaryForWordsInPlay(wordsInPlay);
-  console.log(checkDictionaryForWordsInPlay(wordsInPlay));
 }
 
 // let counter = 0;
