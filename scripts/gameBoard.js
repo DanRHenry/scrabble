@@ -11,6 +11,7 @@ let playerTwoScoreName = document.getElementById("p2Name");
 const submitBtn = document.getElementById("submitBtn");
 let tradeInLettersButton = document.getElementById("tradeInLetters");
 const verticalBtn = document.getElementById("verticalBtn");
+const activePlayerDisplay = document.getElementById("activePlayerDisplay");
 
 //!----------------------------------------------------- Global Arrays -------------------------------------------------------------
 
@@ -23,6 +24,35 @@ let originalPlayedTiles = [];
 let wordToTestArray = [];
 
 //!---------------------------------------------------- Global Objects ------------------------------------------------------------
+
+const letterPoints = {
+  a: 1,
+  b: 3,
+  c: 3,
+  d: 2,
+  e: 1,
+  f: 4,
+  g: 2,
+  h: 4,
+  i: 1,
+  j: 8,
+  k: 5,
+  l: 1,
+  m: 3,
+  n: 1,
+  o: 1,
+  p: 3,
+  q: 10,
+  r: 1,
+  s: 1,
+  t: 1,
+  u: 1,
+  v: 4,
+  w: 4,
+  x: 8,
+  y: 4,
+  z: 10
+}
 
 let adjacentDirections = {
   up: -15,
@@ -43,19 +73,53 @@ const squareTypes = {
   //stars are doubleWord
 };
 
+let playerOneObject = {
+  name: "",
+  score: 0,
+  tiles: [],
+};
+
+let playerTwoObject = {
+  name: "",
+  score: 0,
+  tiles: [],
+};
+
 //!-------------------------------------------------- Global Values ------------------------------------------------------------
 
 let activeBox = 112; // Gameboard Starting Position
 let startingBox = activeBox;
 let scrabblePlayerOneName;
 let scrabblePlayerTwoName;
-let activePlayer;
+let activePlayer = Math.floor(Math.random() * 2);
+
 let skippedDirection;
 
 let direction = "horizontal";
 // let direction = "vertical";
 
 gameGrid[activeBox].style.opacity = ".5";
+
+document
+  .getElementById("switchPlayersBtn")
+  .addEventListener("click", switchPlayers);
+
+function updateScoreboard() {
+  p1Score.textContent = playerOneObject.score;
+
+  p2Score.textContent = playerTwoObject.score;
+}
+
+updateScoreboard();
+
+function switchPlayers() {
+  if (activePlayer === 0) {
+    activePlayer = 1;
+  } else if (activePlayer === 1) {
+    activePlayer = 0;
+  }
+  tradeInLetters();
+}
 
 function searchDictionary(wordToFind) {
   if (dictionary.find((word) => word === wordToFind)) {
@@ -217,25 +281,45 @@ function getNamesAndScoreboardInfo() {
     playerTwoScoreName.innerText = "Player 2's Score";
     scrabblePlayerTwoName = "Player 2's";
   }
-
-  activePlayer = scrabblePlayerOneName;
 }
 
 // Populate Playable Letter Array with randomLetter from letterBag and remove letters used from the letterBag
 
 function pullLettersFromLetterBag() {
-  // fill the playableLetters array with random letters from the letterBag
-  while (letterBag.length > 0 && playableLetters.length < 7) {
-    let randomLetterIndex = Math.floor(Math.random() * letterBag.length);
-    playableLetters.push(letterBag[randomLetterIndex]);
-    letterBag.splice(randomLetterIndex, 1);
+  playerOneObject.tiles = ["t", "e", "s", "*", "c", "a", "t"];
+  playerTwoObject.tiles = ["d", "e", "s", "*", "c", "a", "t"];
+
+  while (playerOneObject.tiles.length < 7) {
+    if (letterBag.length > 0) {
+      let randomLetterIndex = Math.floor(Math.random() * letterBag.length);
+      playerOneObject.tiles.push(letterBag[randomLetterIndex]);
+
+      letterBag.splice(randomLetterIndex, 1);
+    }
   }
-  // console.log("playableLetters: ",playableLetters)
+  while (playerTwoObject.tiles.length < 7) {
+    if (letterBag.length > 0) {
+      let randomLetterIndex = Math.floor(Math.random() * letterBag.length);
+      playerTwoObject.tiles.push(letterBag[randomLetterIndex]);
+
+      letterBag.splice(randomLetterIndex, 1);
+    }
+  }
+  if (activePlayer === 0) {
+    playableLetters = playerOneObject.tiles;
+  } else if (activePlayer === 1) {
+    playableLetters = playerTwoObject.tiles;
+  }
+  // while (letterBag.length > 0 && playableLetters.length < 7) {
+  //   let randomLetterIndex = Math.floor(Math.random() * letterBag.length);
+  //   playableLetters.push(letterBag[randomLetterIndex]);
+
+  //   letterBag.splice(randomLetterIndex, 1);
+  // }
 }
 
 function tradeInLetters() {
   letterBag.push(...playableLetters);
-  playableLetters = ["t", "e", "s", "t", "c", "a", "t"];
   // playableLetters = []
   pullLettersFromLetterBag();
   putLettersInTheGameGridBoxes();
@@ -252,21 +336,6 @@ function putLettersInTheGameGridBoxes() {
   }
 }
 
-/* 
-  Submitting words
-  For this section, create an array of objects.
-  Each object should contain the orientation and the word found
-
-  1 - start at the active tile position
-  2 - check all letters from that spot moving forward
-  3 - at each location, take note of adjacent letters
-  4 - if there is a letter, check back and forth until the word has finished
-  5 - at each spot, check for adjacent letters. If there are any, repeat check for adjacent letters
-  6 - for each found word, check that the word is real from the dictionary
-  7 - if there is a word that doesn't work, cancel the entire operation
-  8 - if each word is real, iterate through each word, calculating for each tile value
-  */
-
 function gameGridBoxAddEventListeners() {
   for (let i = 0; i < gameGrid.length; i++) {
     // Grabbing the index from the given box on the gameboard
@@ -274,7 +343,7 @@ function gameGridBoxAddEventListeners() {
       "click",
       () => {
         activeBox = i;
-        startingBox = activeBox
+        startingBox = activeBox;
         // console.log("gridLocation: ", i);
         if (!gameGrid[i].style.opacity) {
           for (let i = 0; i < gameGrid.length; i++) {
@@ -359,23 +428,24 @@ function lookForBoxesToSkip(index, letter) {
 
 inputCancelBtn.addEventListener("click", cancelTilePlacement);
 
-function cancelTilePlacement () {
-  originalPlayedTiles = Array.from(originalPlayedTiles)
+function cancelTilePlacement() {
+  originalPlayedTiles = Array.from(originalPlayedTiles);
 
   for (let i = 0; i < originalPlayedTiles.length; i++) {
-    playableLetters.push(gameGrid[originalPlayedTiles[i]].textContent)
-    gameGrid[originalPlayedTiles[i]].textContent = ""
+    playableLetters.push(gameGrid[originalPlayedTiles[i]].textContent);
+    gameGrid[originalPlayedTiles[i]].textContent = "";
   }
-  wordInPlayArray = []
-  originalPlayedTiles = []
+  wordInPlayArray = [];
+  originalPlayedTiles = [];
   putLettersInTheGameGridBoxes();
   activeBox = startingBox;
-  skippedDirection = "";
+  skippedDirection = undefined;
 }
 
 submitBtn.addEventListener("click", clickedSubmitBtn);
 
 function clickedSubmitBtn() {
+  let score = 0;
   originalPlayedTiles = new Set([...originalPlayedTiles]);
   console.log("direction", skippedDirection);
   console.log("originalPlayedTiles: ", originalPlayedTiles);
@@ -386,7 +456,7 @@ function clickedSubmitBtn() {
 
   wordInPlayArray = [];
   originalPlayedTiles = [];
-  skippedDirection = "";
+  skippedDirection = undefined;
   pullLettersFromLetterBag();
   // putLettersInTheGameGridBoxes();
 }
@@ -561,101 +631,124 @@ function createWordsInPlay(wordInPlayArray, originalPlayedTiles) {
 }
 // let counter = 0;
 function checkDictionaryForWordsInPlay(wordsInPlay) {
-  const otArray = Array.from(originalPlayedTiles)
+  console.log("0000000000000000000000")
+  let runningTotal = 0
+  let collection = []
+  const otArray = Array.from(originalPlayedTiles);
 
   console.log("wordsInPlay: ", wordsInPlay);
-  // console.log(typeof skippedDirection, skippedDirection);
 
-  console.log(skippedDirection);
   if (skippedDirection !== undefined) {
     console.log("vertical & horizontal check section");
+
     for (let node of wordsInPlay) {
-      // counter ++
-      // console.log(counter)
       if (skippedDirection === "horizontal") {
-        let horiz = ""
+        let horiz = "";
+        let horizNums = [];
+
         for (let letter of node.horizontal) {
-
-            horiz+= gameGrid[letter].textContent
-
+          horiz += gameGrid[letter].textContent;
+          horizNums.push(letter)
         }
-        // console.log("horizontal word: ",horiz)
+
         if (!searchDictionary(horiz)) {
-          console.log(`horizontal word, ${horiz}, was not found`)
-          cancelTilePlacement()
-          return false
+          console.log(`horizontal word, ${horiz}, was not found`);
+          cancelTilePlacement();
+          return false;
         } 
 
+        console.log("horizNums: ", horizNums)
+        collection.push(horizNums)
+        
         if (node.vertical.length > 0) {
-          let temp = ""
+          let temp = "";
+          let subVert = []
           for (let letter of otArray) {
             if (node.vertical.includes(letter)) {
               for (let letter of node.vertical) {
-                temp += gameGrid[letter].textContent
+                temp += gameGrid[letter].textContent;
+                subVert.push(letter)
               }
+            }
           }
-        }
-          console.log(temp)
+          console.log(temp);
           if (temp.length > 0) {
-          if (!searchDictionary(temp)) {
-            console.log(`vertical word, ${temp} was not found`)
-            cancelTilePlacement()
-            return false;
-          }
-          if (searchDictionary(temp)) {
-            console.log(`vertical word, ${temp} was found!`)
+            if (!searchDictionary(temp)) {
+              console.log(`vertical word, ${temp} was not found`);
+              cancelTilePlacement();
+              return false;
+            } 
+            if (searchDictionary(temp)) {
+              console.log(`vertical word, ${temp} was found!`);
+              console.log("secondary vertical: ",temp)
+              console.log('subVert:',subVert)
+              collection.push(subVert)
+            }
           }
         }
-        }
-      }
+        console.log("horiz: ",horiz)
+      } 
+      
       else if (skippedDirection === "vertical") {
+        let vert = "";
+        let vertNums = [];
 
-        let vert = ""
         for (let letter of node.vertical) {
-
-            vert+= gameGrid[letter].textContent
-
+          vert += gameGrid[letter].textContent;
+          vertNums.push(letter)
         }
-        // console.log("verticalWord: ",vert)
+
         if (!searchDictionary(vert)) {
-          console.log(`vertical word, ${vert}, was not found`)
-          cancelTilePlacement()
-          return false
-        } 
+          console.log(`vertical word, ${vert}, was not found`);
+          cancelTilePlacement();
+          return false;
+        }
+
+        console.log("vertNums: ",vertNums)
+        collection.push(vertNums)
 
         if (node.horizontal.length > 0) {
-          let temp = ""
+          let temp = "";
+          let subHoriz = [];
           for (let letter of otArray) {
             if (node.horizontal.includes(letter)) {
               for (let letter of node.horizontal) {
-                temp += gameGrid[letter].textContent
+                temp += gameGrid[letter].textContent;
+                subHoriz.push(letter)
               }
+            }
           }
-        }
-          console.log(temp)
+          console.log(temp);
           if (temp.length > 0) {
-          if (!searchDictionary(temp)) {
-            console.log(`horizontal word, ${temp} was not found`)
-            cancelTilePlacement()
-            return false;
-          }
-          if (searchDictionary(temp)) {
-            console.log(`horizontal word, ${temp} was found!`)
+            if (!searchDictionary(temp)) {
+              console.log(`horizontal word, ${temp} was not found`);
+              cancelTilePlacement();
+              return false;
+            }
+            if (searchDictionary(temp)) {
+              console.log(`horizontal word, ${temp} was found!`);
+              console.log("secondary horizontal ",temp)
+              console.log("subHoriz: ",subHoriz)
+              collection.push(subHoriz)
+            }
           }
         }
-        }
+        console.log('vert:',vert)
       }
+      
     }
   }
+  console.log("skippedDirection: ",skippedDirection, typeof skippedDirection)
   if (skippedDirection === undefined) {
     console.log("undefined section");
     for (let node of wordsInPlay) {
       if (!checkWords(node, "horizontal") || !checkWords(node, "vertical")) {
         console.log(node, "not found");
-        cancelTilePlacement()
-
+        cancelTilePlacement();
         return false;
       }
+      collection.push(node["horizontal"])
+      collection.push(node["vertical"])
     }
   }
 
@@ -665,11 +758,10 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
     for (let letter of node[direction]) {
       temp += gameGrid[letter].textContent;
     }
-    console.log("temp: ",temp)
+    console.log("temp: ", temp);
 
     if (temp && searchDictionary(temp) === false) {
       console.log(`no ${direction} word, ${temp} found`);
-      console.log();
       return false;
     } else if (temp && searchDictionary(temp) === true) {
       console.log(`${direction} word, ${temp} was found in the dictionary`);
@@ -677,13 +769,44 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
     }
   }
 
+  let tempArr = []
+  for (let i = 0; i < collection.length; i++) {
+    for (let j = 0; j < collection[i].length; j++) {
+      tempArr.push(collection[i][j])
+    }
+  }
+
+  console.log(typeof collection)
+  collection = new Set([...tempArr])
+  collection = Array.from(collection)
+  console.log("collection: ",collection)
+
+let wordMultiplier = 1;
+  for (let i = 0; i < collection.length; i++) {
+    
+    let multiplier = gameGrid[collection[i]].classList[1]
+    let letter = gameGrid[collection[i]].textContent
+    console.log(letter)
+    console.log(letterPoints[letter])
+    console.log(multiplier, typeof multiplier)
+    console.log(squareTypes[multiplier])
+
+    if (multiplier === "tripleWord") {
+      wordMultiplier = 3
+    } else if ((multiplier === "doubleWord" || multiplier === "star") && wordMultiplier < 3) {
+      wordMultiplier = 2
+    }
+
+    runningTotal += (letterPoints[letter] * squareTypes[multiplier])
+
+  }
+  runningTotal *= wordMultiplier;
+  console.log("runningTotal: ", runningTotal)
   wordsInPlay = [];
   pullLettersFromLetterBag();
-  putLettersInTheGameGridBoxes()
+  putLettersInTheGameGridBoxes();
   return true;
 }
-
-
 
 //!------------------------------------------------------------------------------
 
@@ -782,33 +905,15 @@ function createVerticalAndHorizontalWords(wordsInPlay) {
 
 getNamesAndScoreboardInfo();
 fillLetterBag();
-// pullLettersFromLetterBag();
-// putLettersInTheGameGridBoxes()
 tradeInLetters();
 gameGridBoxAddEventListeners();
 
-// TODO: Upon clicking on a box, add the id value to the current location, and change the styling of the square to a different color or border.
-// TODO: Reference that currentlocation upon submission of vertical or horizontal answers as the starting point of the word to be played
 // TODO: Check word's letters against playable tiles (accounting for the wildcards)
-// TODO: Check the submission word's length, and look for letters in the direction of the clicked button to compare with word letters
-// TODO: Add the letters to each of the gameboard squares
-// TODO: Check that the word to be added doesn't go out of the range of the gameboard.
 // TODO: Reference a dictionary to assign score points based on letters used. (create this first)
 // TODO: Update the player's total score
-// TODO:
 
 // Work on this later
-// Get words from word-game-dictionary
 /* 
-let url = "https://www.programmableweb.com/api/word-game-dictionary"
-
-function fetch(url) {
-    let response = await fetch(url);
-    let results = await response.json();
-    let data = results.data[1];
-    console.log(data);
-}
-
 
 
 /*     <!-- Put these into JS later - see menu assignment
@@ -839,3 +944,4 @@ X - 8 points <br>
 Y - 4 points <br>
 Z - 10 points <br>
     --> */
+
