@@ -230,7 +230,7 @@ function pullLettersFromLetterBag() {
 
 function tradeInLetters() {
   letterBag.push(...playableLetters);
-  playableLetters = ["t", "e", "s", "t", "c", "a", "t"];
+  playableLetters = ["t", "e", "s", "t", "e", "a", "t"];
   // playableLetters = []
   pullLettersFromLetterBag();
   putLettersInTheGameGridBoxes();
@@ -374,10 +374,12 @@ submitBtn.addEventListener("click", clickedSubmitBtn);
 
 function clickedSubmitBtn() {
   originalPlayedTiles = new Set([...originalPlayedTiles]);
-  console.log("direction",skippedDirection)
+  console.log("direction", skippedDirection);
   console.log("originalPlayedTiles: ", originalPlayedTiles);
 
-  checkDictionaryForWordsInPlay(createWordsInPlay(wordInPlayArray, originalPlayedTiles))
+  checkDictionaryForWordsInPlay(
+    createWordsInPlay(wordInPlayArray, originalPlayedTiles)
+  );
 
   wordInPlayArray = [];
   originalPlayedTiles = [];
@@ -438,14 +440,13 @@ document.addEventListener("keydown", function (event) {
 // this array will not yet contain any existing letters
 
 function createWordsInPlay(wordInPlayArray, originalPlayedTiles) {
-
   let playedWord = "";
 
   if (skippedDirection === "horizontal") {
     if (
-      (wordInPlayArray[0] -1 % 15 >= 0 &&
+      (wordInPlayArray[0] - (1 % 15) >= 0 &&
         !gameGrid[wordInPlayArray[0] - 1].textContent.length > 0) ||
-      (wordInPlayArray[wordInPlayArray.length - 1] +1 % 15 < 15 &&
+      (wordInPlayArray[wordInPlayArray.length - 1] + (1 % 15) < 15 &&
         !gameGrid[wordInPlayArray[wordInPlayArray.length - 1 + 1]].textContent
           .length > 0)
     ) {
@@ -463,15 +464,12 @@ function createWordsInPlay(wordInPlayArray, originalPlayedTiles) {
 
   if (skippedDirection === "vertical") {
     if (
-      (wordInPlayArray[0]  % 15 >= 0 &&
+      (wordInPlayArray[0] % 15 >= 0 &&
         !gameGrid[wordInPlayArray[0] - 1].textContent.length > 0) ||
       (wordInPlayArray[wordInPlayArray.length - 1] % 15 < 15 &&
         !gameGrid[wordInPlayArray[wordInPlayArray.length - 1 + 1]].textContent
           .length > 0)
     ) {
-
-
-
       if (
         !gameGrid[wordInPlayArray[0] - 1].textContent.length > 0 ||
         !gameGrid[wordInPlayArray[wordInPlayArray.length - 1] + 1].textContent
@@ -555,116 +553,117 @@ function createWordsInPlay(wordInPlayArray, originalPlayedTiles) {
     createVerticalAndHorizontalWords(wordsInPlay);
   }
 
-  //todo Bug to fix: when placing tiles and crossing two words, wrong directions are being checked, in either orientation. (cease down, tease across).
-
-  //todo cont... Maybe add a check where if the originally placed letters have to skip over an existing letter, or add one to before or after the letters in the same direction, don't check the perpendicular directions
-
-  /* //todo 
-    check the direction
-    if horizontal, fill the wordsinplay array up and down words based on the originally played tiles, not the total word
-
-    if vertical, fill wordsinplay array with left and right words based on the originally played tiles, not the total word
-
-*/
-  // console.log("wordsInPlayImmediately: ", wordsInPlay);
-
   return wordsInPlay;
 }
-
+let counter = 0;
 function checkDictionaryForWordsInPlay(wordsInPlay) {
+  const otArray = Array.from(originalPlayedTiles)
 
-  console.log("wordsInPlay: ",wordsInPlay)
-  console.log(typeof skippedDirection, skippedDirection)
+  console.log("wordsInPlay: ", wordsInPlay);
+  console.log(typeof skippedDirection, skippedDirection);
 
-  console.log(skippedDirection)
+  console.log(skippedDirection);
   if (skippedDirection !== undefined) {
-    console.log("vertical & horizontal check section")
+    console.log("vertical & horizontal check section");
     for (let node of wordsInPlay) {
-      console.log("originalPlayedTiles: ", originalPlayedTiles)
-      for (let i = 0; i < originalPlayedTiles.length; i++) {
-        console.log("here")
-        console.log("originalPlayedTiles[i]: ", originalPlayedTiles[i])
-      }
-      checkWords(node, skippedDirection)
+      counter ++
+      console.log(counter)
+      if (skippedDirection === "horizontal") {
+        let horiz = ""
+        for (let letter of node.horizontal) {
 
+            horiz+= gameGrid[letter].textContent
+
+        }
+        console.log("horizontal word: ",horiz)
+        if (!searchDictionary(horiz)) {
+          console.log(`horizontal word, ${horiz}, was not found`)
+          return false
+        } 
+
+        if (node.vertical.length > 0) {
+          let temp = ""
+          for (let letter of otArray) {
+            if (node.vertical.includes(letter)) {
+              for (let letter of node.vertical) {
+                temp += gameGrid[letter].textContent
+              }
+          }
+        }
+          console.log(temp)
+          if (temp.length > 0) {
+          if (!searchDictionary(temp)) {
+            console.log(`vertical word, ${temp} was not found`)
+            return false;
+          }
+          if (searchDictionary(temp)) {
+            console.log(`vertical word, ${temp} was found!`)
+          }
+        }
+        }
+      }
+      else if (skippedDirection === "vertical") {
+
+        let vert = ""
+        for (let letter of node.vertical) {
+
+            vert+= gameGrid[letter].textContent
+
+        }
+        console.log("verticalWord: ",vert)
+        if (!searchDictionary(vert)) {
+          console.log(`vertical word, ${vert}, was not found`)
+          return false
+        } 
+
+        if (node.horizontal.length > 0) {
+          let temp = ""
+          for (let letter of otArray) {
+            if (node.horizontal.includes(letter)) {
+              for (let letter of node.horizontal) {
+                temp += gameGrid[letter].textContent
+              }
+          }
+        }
+          console.log(temp)
+          if (temp.length > 0) {
+          if (!searchDictionary(temp)) {
+            console.log(`horizontal word, ${temp} was not found`)
+            return false;
+          }
+          if (searchDictionary(temp)) {
+            console.log(`horizontal word, ${temp} was found!`)
+          }
+        }
+        }
+      }
     }
   }
   if (skippedDirection === undefined) {
-    console.log("undefined section")
+    console.log("undefined section");
     for (let node of wordsInPlay) {
-      if (
-        !checkWords(node, "horizontal") ||
-        !checkWords(node, "vertical")
-      ) {
-        console.log(node,"not found")
-        return false
+      if (!checkWords(node, "horizontal") || !checkWords(node, "vertical")) {
+        console.log(node, "not found");
+        return false;
       }
+    }
   }
-  }
 
-
-
-  // if (wordsInPlay.length === 1) {
-  //   const wordNodeZero = wordsInPlay[0]
-
-  function checkWords (node, direction) {
-    let temp = ""
+  function checkWords(node, direction) {
+    let temp = "";
 
     for (let letter of node[direction]) {
-      temp+= gameGrid[letter].textContent
+      temp += gameGrid[letter].textContent;
     }
 
     if (temp && searchDictionary(temp) === false) {
-      console.log(`no ${direction} word, ${temp} found`)
-      console.log()
-      return false
+      console.log(`no ${direction} word, ${temp} found`);
+      console.log();
+      return false;
     } else if (temp && searchDictionary(temp) === true) {
-      console.log(`${direction} word, ${temp} was found in the dictionary`)
+      console.log(`${direction} word, ${temp} was found in the dictionary`);
     }
-  
   }
-
-
-
-  // Dealing with single letter additions
-  // if (wordInPlayArray.length === 1) {
-  //   let wordsObject = wordsInPlay[0];
-  //   console.log("wordsObject: ", wordsObject);
-
-  //   const keys = Object.keys(wordsObject);
-  //   const values = Object.values(wordsObject);
-
-  //   for (let i = 0; i < values.length; i++) {
-  //     if (values[i].length > 1) {
-  //       for (let j = 0; j < values[i].length; j++) {
-  //         if (values[i][j] === wordInPlayArray[0]) {
-  //           if (keys[i] === "left" || keys[i] === "right") {
-  //             console.log(values[i]);
-  //             console.log("horizontal");
-  //           } else if (keys[i] === "up" || keys[i] === "down") {
-  //             console.log(values[i]);
-  //             console.log("vertical");
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-
-  // function checkForHorizontalOrVerticalWord() {
-  //   if (wordInPlayArray[1] - wordInPlayArray[0] === 1) {
-  //     console.log("horizontal Direction");
-  //     return "horizontal Direction";
-  //     //for each location, check
-  //   } else if (wordInPlayArray[1] - wordInPlayArray[0] === 15) {
-  //     console.log("vertical Direction");
-  //     return "vertical Direction";
-  //   } else {
-  //     console.log("undetermined Direction");
-  //     return "undetermined Direction";
-  //   }
-  // }
-
 
   wordsInPlay = [];
   return true;
