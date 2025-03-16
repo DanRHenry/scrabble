@@ -401,11 +401,18 @@ function tradeInLetters() {
 }
 
 function putLettersInTheGameGridBoxes() {
+  // console.log("playableLetters: ",playableLetters)
   const limit = playableLetters.length;
+  // console.log(playableLetters)
+  // console.log(limit)
+  // let counter = 0
   for (let i = 0; i < limit; i++) {
+    // counter++
+    // console.log(counter)
     //todo change the IDs for letter tiles on the gameboard to something more descriptive
     let id = document.getElementById(i);
     let letterToReplace = id.innerText;
+    //! this is broken when tiles were clicked instead of entered with keys and then cancel is clicked
     id.innerText = id.innerText.replace(letterToReplace, playableLetters[i]);
   }
 }
@@ -423,14 +430,19 @@ function gameGridBoxAddEventListeners() {
         activeBox = i;
         startingBox = activeBox;
         // console.log("gridLocation: ", i);
-        if (!gameGrid[i].style.opacity) {
-          for (let i = 0; i < gameGrid.length; i++) {
-            gameGrid[i].style.opacity = "";
-          }
-          gameGrid[i].style.opacity = ".5";
-        } else {
-          gameGrid[i].style.opacity = "";
+        for (let space of gameGrid) {
+          space.style.opacity = ""
         }
+
+        gameGrid[activeBox].style.opacity = ".5"
+        // if (!gameGrid[i].style.opacity) {
+        //   for (let i = 0; i < gameGrid.length; i++) {
+        //     gameGrid[i].style.opacity = "";
+        //   }
+        //   gameGrid[i].style.opacity = ".5";
+        // } else {
+        //   gameGrid[i].style.opacity = "";
+        // }
       },
       false
     );
@@ -449,14 +461,22 @@ verticalBtn.addEventListener("click", () => {
 
 tradeInLettersButton.addEventListener("click", tradeInLetters);
 
-for (let i = 0; i < playerTiles.length; i++) {
-  wordInPlayArray = [];
-  playerTiles[i].addEventListener("click", () => {
-    originalPlayedTiles.push(activeBox);
-    // console.log("originalPlayedTiles: ", originalPlayedTiles);
-    lookForBoxesToSkip(i, playerTiles[i].textContent);
-  });
-}
+// for (let i = 0; i < playerTiles.length; i++) {
+//   wordInPlayArray = [];
+//   playerTiles[i].addEventListener("click", () => {
+//     // originalPlayedTiles.push(activeBox);
+//     // console.log("originalPlayedTiles: ", originalPlayedTiles);
+//     lookForBoxesToSkip(i, playerTiles[i].textContent);
+//     // originalPlayedTiles.push(activeBox)
+//     console.log("playableLetters: ",playableLetters)
+//     playableLetters.splice(playableLetters.indexOf(gameGrid[activeBox].textContent), 0)
+//     console.log("playableLetters: ",playableLetters)
+
+//     playerTiles[i].textContent = ""
+    
+//   });
+// }
+//todo add a drag event listener to move letters from one tile location to another
 
 function lookForBoxesToSkip(index, letter) {
   if (letter === "*") {
@@ -548,20 +568,16 @@ document.addEventListener("keydown", function (event) {
     tiles.push(playerTiles[i].textContent);
   }
   if (tiles.includes(key.toLowerCase())) {
-    // console.log(key.toLocaleLowerCase());
-    // console.log(tiles)
-    lookForBoxesToSkip(tiles.indexOf(key.toLowerCase()), key);
-    originalPlayedTiles.push(activeBox);
-    // console.log("originalPlayedTiles: ", originalPlayedTiles);
 
+    lookForBoxesToSkip(tiles.indexOf(key.toLowerCase()), key);
+
+    originalPlayedTiles.push(activeBox);
     playerTiles[tiles.indexOf(key)].textContent = "";
     tiles = [];
     playableLetters.splice(playableLetters.indexOf(key.toLocaleLowerCase()), 1);
     for (let i = 0; i < playerTiles.length; i++) {
       tiles.push(playerTiles[i].textContent);
     }
-    // console.log(tiles);
-    // console.log("playableLetters: ", playableLetters);
   }
   if (key === "Enter") {
     clickedSubmitBtn();
