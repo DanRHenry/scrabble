@@ -52,6 +52,7 @@ const letterPoints = {
   x: 8,
   y: 4,
   z: 10,
+  "*": 0,
 };
 
 let adjacentDirections = {
@@ -113,15 +114,66 @@ function updateScoreboard() {
 updateScoreboard();
 
 function switchPlayers() {
+  console.log(playerOneObject);
+  console.log(playerTwoObject);
   if (activePlayer === 0) {
     activePlayer = 1;
+    activePlayerDisplay.textContent = `Player 2`
   } else if (activePlayer === 1) {
     activePlayer = 0;
+    activePlayerDisplay.textContent = "Player 1"
   }
-  tradeInLetters();
+  // tradeInLetters();
 }
 
 function searchDictionary(wordToFind) {
+  let word = wordToFind;
+  //todo find a better way of doing this. Probably will need to accept user input to clarify the letter to play. The problem is that wild cards remain wild permanently.
+
+  let alphabet = [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g",
+    "h",
+    "i",
+    "j",
+    "k",
+    "l",
+    "m",
+    "n",
+    "o",
+    "p",
+    "q",
+    "r",
+    "s",
+    "t",
+    "u",
+    "v",
+    "w",
+    "x",
+    "y",
+    "z",
+  ];
+
+  // console.log(word)
+  for (let i = 0; i < word.length; i++) {
+    if (word[i] === "*") {
+      for (let j = 0; j < alphabet.length; j++) {
+        let first = word.slice(0, i);
+        let second = word.slice(i + 1);
+        word = first + alphabet[j] + second;
+        console.log(word);
+        if (searchDictionary(word) === true) {
+          console.log(word);
+          return true;
+        }
+      }
+    }
+  }
   if (dictionary.find((word) => word === wordToFind)) {
     return true;
   } else {
@@ -245,6 +297,8 @@ function fillLetterBag() {
   }
 }
 
+let playerOnePossessiveName
+let playerTwoPossessiveName
 // Check Local Storage and Populate Scoreboard and Names
 function getNamesAndScoreboardInfo() {
   // Get player names from local storage and input them to the scoreboard names
@@ -254,13 +308,18 @@ function getNamesAndScoreboardInfo() {
         localStorage.scrabblePlayerOneName.length - 1
       ] == "s"
     ) {
+      playerOnePossessiveName = `${localStorage.scrabblePlayerOneName}'`
+
       playerOneScoreName.innerText = `${localStorage.scrabblePlayerOneName}' Score:`;
       scrabblePlayerOneName = `${localStorage.scrabblePlayerOneName}'`;
     } else {
+      playerOnePossessiveName = `${localStorage.scrabblePlayerOneName}'s`
+
       playerOneScoreName.innerText = `${localStorage.scrabblePlayerOneName}'s Score:`;
       scrabblePlayerOneName = `${localStorage.scrabblePlayerOneName}'s`;
     }
   } else {
+    playerOnePossessiveName = "Player 1's"
     playerOneScoreName.innerText = "Player 1's Score";
     scrabblePlayerOneName = "Player 1's";
   }
@@ -271,13 +330,16 @@ function getNamesAndScoreboardInfo() {
         localStorage.scrabblePlayerTwoName.length - 1
       ] == "s"
     ) {
+      playerTwoPossessiveName = `${localStorage.scrabblePlayerTwoName}'`
       playerTwoScoreName.innerText = `${localStorage.scrabblePlayerTwoName}' Score:`;
       scrabblePlayerTwoName = `${localStorage.scrabblePlayerTwoName}'`;
     } else {
+      playerTwoPossessiveName = `${localStorage.scrabblePlayerTwoName}'s`
       playerTwoScoreName.innerText = `${localStorage.scrabblePlayerTwoName}'s Score:`;
       scrabblePlayerTwoName = `${localStorage.scrabblePlayerTwoName}'s`;
     }
   } else {
+    playerTwoPossessiveName = "Player 2's"
     playerTwoScoreName.innerText = "Player 2's Score";
     scrabblePlayerTwoName = "Player 2's";
   }
@@ -323,6 +385,7 @@ function tradeInLetters() {
   // playableLetters = []
   pullLettersFromLetterBag();
   putLettersInTheGameGridBoxes();
+  switchPlayers();
 }
 
 function putLettersInTheGameGridBoxes() {
@@ -445,10 +508,9 @@ function cancelTilePlacement() {
 submitBtn.addEventListener("click", clickedSubmitBtn);
 
 function clickedSubmitBtn() {
-  let score = 0;
   originalPlayedTiles = new Set([...originalPlayedTiles]);
-  console.log("direction", skippedDirection);
-  console.log("originalPlayedTiles: ", originalPlayedTiles);
+  // console.log("direction", skippedDirection);
+  // console.log("originalPlayedTiles: ", originalPlayedTiles);
 
   checkDictionaryForWordsInPlay(
     createWordsInPlay(wordInPlayArray, originalPlayedTiles)
@@ -458,6 +520,7 @@ function clickedSubmitBtn() {
   originalPlayedTiles = [];
   skippedDirection = undefined;
   pullLettersFromLetterBag();
+  switchPlayers();
   // putLettersInTheGameGridBoxes();
 }
 
@@ -514,6 +577,11 @@ document.addEventListener("keydown", function (event) {
 // this array will not yet contain any existing letters
 
 function createWordsInPlay(wordInPlayArray, originalPlayedTiles) {
+  if (!gameGrid[112].textContent.length > 0 && !wordInPlayArray.includes(112)) {
+    console.log("place word on star");
+    cancelTilePlacement();
+  }
+  // console.log("wordInPlay: ",wordInPlayArray)
   let playedWord = "";
 
   if (skippedDirection === "horizontal") {
@@ -539,14 +607,14 @@ function createWordsInPlay(wordInPlayArray, originalPlayedTiles) {
   if (skippedDirection === "vertical") {
     if (
       (wordInPlayArray[0] % 15 >= 0 &&
-        !gameGrid[wordInPlayArray[0] - 1].textContent.length > 0) ||
+        !gameGrid[wordInPlayArray[0] - 1]?.textContent.length > 0) ||
       (wordInPlayArray[wordInPlayArray.length - 1] % 15 < 15 &&
-        !gameGrid[wordInPlayArray[wordInPlayArray.length - 1 + 1]].textContent
+        !gameGrid[wordInPlayArray[wordInPlayArray.length - 1 + 1]]?.textContent
           .length > 0)
     ) {
       if (
-        !gameGrid[wordInPlayArray[0] - 1].textContent.length > 0 ||
-        !gameGrid[wordInPlayArray[wordInPlayArray.length - 1] + 1].textContent
+        !gameGrid[wordInPlayArray[0] - 1]?.textContent.length > 0 ||
+        !gameGrid[wordInPlayArray[wordInPlayArray.length - 1] + 1]?.textContent
           .length > 0
       ) {
         for (let index of wordInPlayArray) {
@@ -617,29 +685,45 @@ function createWordsInPlay(wordInPlayArray, originalPlayedTiles) {
       positionInfo
     );
 
-    // push the information discovered at each index of the wordInPlayArray into the wordsInPlay array
     wordsInPlay.push(positionInfo);
-    //!----------------------------------------------
-    // The complete array of the wordinplay and all adjacent words is complete.
-    //!----------------------------------------------
-    // create vertical and horizontal words, concatinated as necessary
 
     createVerticalAndHorizontalWords(wordsInPlay);
   }
 
   return wordsInPlay;
 }
-// let counter = 0;
 function checkDictionaryForWordsInPlay(wordsInPlay) {
-  console.log("0000000000000000000000");
+  // console.log("0000000000000000000000");
   let runningTotal = 0;
   let collection = [];
   const otArray = Array.from(originalPlayedTiles);
 
-  console.log("wordsInPlay: ", wordsInPlay);
+  // console.log("wordsInPlay: ", wordsInPlay);
+  let wordsCollection = [];
+
+  let disconnected = true;
+
+  for (let i = 0; i < wordsInPlay.length; i++) {
+    let wordsArray = Object.values(wordsInPlay[i]);
+    wordsArray.forEach((index) => {
+      wordsCollection.push(...index);
+    });
+
+    for (let i = 0; i < wordsCollection.length; i++) {
+      if (!otArray.includes(wordsCollection[i])) {
+        disconnected = false;
+      }
+    }
+  }
+
+  if (!otArray.includes(112) || gameGrid[112].textContent.length === 0) {
+    if (disconnected === true) {
+      cancelTilePlacement();
+    }
+  }
 
   if (skippedDirection !== undefined) {
-    console.log("vertical & horizontal check section");
+    // console.log("vertical & horizontal check section");
 
     for (let node of wordsInPlay) {
       if (skippedDirection === "horizontal") {
@@ -657,7 +741,7 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
           return false;
         }
 
-        console.log("horizNums: ", horizNums);
+        // console.log("horizNums: ", horizNums);
         collection.push(horizNums);
 
         if (node.vertical.length > 0) {
@@ -671,7 +755,7 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
               }
             }
           }
-          console.log(temp);
+          // console.log(temp);
           if (temp.length > 0) {
             if (!searchDictionary(temp)) {
               console.log(`vertical word, ${temp} was not found`);
@@ -686,7 +770,7 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
             }
           }
         }
-        console.log("horiz: ", horiz);
+        // console.log("horiz: ", horiz);
       } else if (skippedDirection === "vertical") {
         let vert = "";
         let vertNums = [];
@@ -702,7 +786,7 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
           return false;
         }
 
-        console.log("vertNums: ", vertNums);
+        // console.log("vertNums: ", vertNums);
         collection.push(vertNums);
 
         if (node.horizontal.length > 0) {
@@ -725,25 +809,38 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
             }
             if (searchDictionary(temp)) {
               console.log(`horizontal word, ${temp} was found!`);
-              console.log("secondary horizontal ", temp);
-              console.log("subHoriz: ", subHoriz);
               collection.push(subHoriz);
             }
           }
         }
-        console.log("vert:", vert);
       }
     }
   }
-  console.log("skippedDirection: ", skippedDirection, typeof skippedDirection);
   if (skippedDirection === undefined) {
     console.log("undefined section");
     for (let node of wordsInPlay) {
-      if (!checkWords(node, "horizontal") || !checkWords(node, "vertical")) {
-        console.log(node, "not found");
-        cancelTilePlacement();
-        return false;
+      console.log("wordsInPlay: ", wordsInPlay);
+      console.log("node: ", node);
+      if (node.horizontal.length > 0 && node.vertical.length > 0) {
+        if (!checkWords(node, "horizontal") || !checkWords(node, "vertical")) {
+          console.log(node, "not found");
+          cancelTilePlacement();
+          return false;
+        }
+      } else if (node.vertical.length > 0) {
+        if (!checkWords(node, "vertical")) {
+          console.log(node, "not found");
+          cancelTilePlacement();
+          return false;
+        }
+      } else if (node.horizontal.length > 0) {
+        if (!checkWords(node, "horizontal")) {
+          console.log(node, "not found");
+          cancelTilePlacement();
+          return false;
+        }
       }
+
       collection.push(node["horizontal"]);
       collection.push(node["vertical"]);
     }
@@ -781,11 +878,17 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
   let wordMultiplier = 1;
   for (let i = 0; i < collection.length; i++) {
     let multiplier = gameGrid[collection[i]].classList[1];
+    if (gameGrid[collection[i]].classList[1] !== "standardSquare") {
+      gameGrid[collection[i]].classList.remove(
+        gameGrid[collection[i]].classList[1]
+      );
+      gameGrid[collection[i]].classList.add("standardSquare");
+    }
     let letter = gameGrid[collection[i]].textContent;
-    console.log(letter);
-    console.log(letterPoints[letter]);
-    console.log(multiplier, typeof multiplier);
-    console.log(squareTypes[multiplier]);
+    // console.log(letter);
+    // console.log(letterPoints[letter]);
+    // console.log(multiplier, typeof multiplier);
+    // console.log(squareTypes[multiplier]);
 
     if (multiplier === "tripleWord") {
       wordMultiplier = 3;
@@ -800,6 +903,14 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
   }
   runningTotal *= wordMultiplier;
   console.log("runningTotal: ", runningTotal);
+
+  if (activePlayer === 0) {
+    playerOneObject.score += runningTotal;
+  } else if (activePlayer === 1) {
+    playerTwoObject.score += runningTotal;
+  }
+
+  updatePlayerScores();
   wordsInPlay = [];
   pullLettersFromLetterBag();
   putLettersInTheGameGridBoxes();
@@ -807,6 +918,14 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
 }
 
 //!------------------------------------------------------------------------------
+
+function updatePlayerScores() {
+  if (activePlayer === 0) {
+    p1Score.textContent = playerOneObject.score;
+  } else if (activePlayer === 1) {
+    p2Score.textContent = playerTwoObject.score;
+  }
+}
 
 // start at the currentPosition, move in the direction with position as the first spot to check in the direction, and the resulting locations discovered get pushed into positionInfo
 function checkPositionForText(
