@@ -114,66 +114,77 @@ function updateScoreboard() {
 updateScoreboard();
 
 function switchPlayers() {
-  console.log(playerOneObject);
-  console.log(playerTwoObject);
+  // console.log(playerOneObject);
+  // console.log(playerTwoObject);
+
   if (activePlayer === 0) {
     activePlayer = 1;
-    activePlayerDisplay.textContent = `Player 2`
+    activePlayerDisplay.textContent = `${playerTwoPossessiveName} turn`
   } else if (activePlayer === 1) {
     activePlayer = 0;
-    activePlayerDisplay.textContent = "Player 1"
+    activePlayerDisplay.textContent = `${playerOnePossessiveName} turn`
   }
+  pullLettersFromLetterBag()
+  putLettersInTheGameGridBoxes()
   // tradeInLetters();
 }
 
 function searchDictionary(wordToFind) {
-  let word = wordToFind;
-  //todo find a better way of doing this. Probably will need to accept user input to clarify the letter to play. The problem is that wild cards remain wild permanently.
+  // let word = wordToFind;
 
-  let alphabet = [
-    "a",
-    "b",
-    "c",
-    "d",
-    "e",
-    "f",
-    "g",
-    "h",
-    "i",
-    "j",
-    "k",
-    "l",
-    "m",
-    "n",
-    "o",
-    "p",
-    "q",
-    "r",
-    "s",
-    "t",
-    "u",
-    "v",
-    "w",
-    "x",
-    "y",
-    "z",
-  ];
+  // let alphabet = [
+  //   "a",
+  //   "b",
+  //   "c",
+  //   "d",
+  //   "e",
+  //   "f",
+  //   "g",
+  //   "h",
+  //   "i",
+  //   "j",
+  //   "k",
+  //   "l",
+  //   "m",
+  //   "n",
+  //   "o",
+  //   "p",
+  //   "q",
+  //   "r",
+  //   "s",
+  //   "t",
+  //   "u",
+  //   "v",
+  //   "w",
+  //   "x",
+  //   "y",
+  //   "z",
+  // ];
 
   // console.log(word)
-  for (let i = 0; i < word.length; i++) {
-    if (word[i] === "*") {
-      for (let j = 0; j < alphabet.length; j++) {
-        let first = word.slice(0, i);
-        let second = word.slice(i + 1);
-        word = first + alphabet[j] + second;
-        console.log(word);
-        if (searchDictionary(word) === true) {
-          console.log(word);
-          return true;
-        }
-      }
-    }
-  }
+  // for (let i = 0; i < word.length; i++) {
+  //   if (word[i] === "*") {
+  //     let letter = prompt("Pick a letter")
+  //     console.log(originalPlayedTiles)
+  //     for (let i = 0; i < word.length; i++) {
+  //       if (gameGrid[i].textContent = "*") {
+  //         gameGrid[i].textContent = letter;
+  //       }
+  //     }
+  //     let first = word.slice(0, i);
+  //     let second = word.slice(i + 1);
+  //     wordToFind = first + letter + second
+
+  //     // for (let j = 0; j < alphabet.length; j++) {
+  //     //   word = first + alphabet[j] + second;
+  //     //   console.log(word);
+  //     //   if (searchDictionary(word) === true) {
+  //     //     console.log(word);
+  //     //     return true;
+  //     //   }
+  //     // }
+  //   }
+  // }
   if (dictionary.find((word) => word === wordToFind)) {
     return true;
   } else {
@@ -348,8 +359,10 @@ function getNamesAndScoreboardInfo() {
 // Populate Playable Letter Array with randomLetter from letterBag and remove letters used from the letterBag
 
 function pullLettersFromLetterBag() {
-  playerOneObject.tiles = ["t", "e", "s", "*", "c", "a", "t"];
-  playerTwoObject.tiles = ["d", "e", "s", "*", "c", "a", "t"];
+  // console.log("activePlayer: ",activePlayer)
+  // playerOneObject.tiles = ["t", "e", "s", "*", "c", "a", "t"];
+  // playerTwoObject.tiles = ["d", "e", "s", "*", "c", "a", "t"];
+
 
   while (playerOneObject.tiles.length < 7) {
     if (letterBag.length > 0) {
@@ -372,24 +385,22 @@ function pullLettersFromLetterBag() {
   } else if (activePlayer === 1) {
     playableLetters = playerTwoObject.tiles;
   }
-  // while (letterBag.length > 0 && playableLetters.length < 7) {
-  //   let randomLetterIndex = Math.floor(Math.random() * letterBag.length);
-  //   playableLetters.push(letterBag[randomLetterIndex]);
-
-  //   letterBag.splice(randomLetterIndex, 1);
-  // }
 }
 
 function tradeInLetters() {
   letterBag.push(...playableLetters);
-  // playableLetters = []
+  if (activePlayer === 0) {
+    playerOneObject.tiles = []
+  }
+  if (activePlayer === 1) {
+    playerTwoObject.tiles = []
+  }
   pullLettersFromLetterBag();
   putLettersInTheGameGridBoxes();
-  switchPlayers();
+  switchPlayers()  
 }
 
 function putLettersInTheGameGridBoxes() {
-  // place letters from the playableLetters array into the game page
   const limit = playableLetters.length;
   for (let i = 0; i < limit; i++) {
     //todo change the IDs for letter tiles on the gameboard to something more descriptive
@@ -398,6 +409,10 @@ function putLettersInTheGameGridBoxes() {
     id.innerText = id.innerText.replace(letterToReplace, playableLetters[i]);
   }
 }
+
+
+//!---------------------------------------------- Event Listeners ----------------------------------------------------
+
 
 function gameGridBoxAddEventListeners() {
   for (let i = 0; i < gameGrid.length; i++) {
@@ -422,8 +437,6 @@ function gameGridBoxAddEventListeners() {
   }
 }
 
-//!---------------------------------------------- Event Listeners ----------------------------------------------------
-
 horizontalBtn.addEventListener("click", () => {
   direction = "horizontal";
   setDirectionalBtnStyling();
@@ -440,12 +453,15 @@ for (let i = 0; i < playerTiles.length; i++) {
   wordInPlayArray = [];
   playerTiles[i].addEventListener("click", () => {
     originalPlayedTiles.push(activeBox);
-    console.log("originalPlayedTiles: ", originalPlayedTiles);
+    // console.log("originalPlayedTiles: ", originalPlayedTiles);
     lookForBoxesToSkip(i, playerTiles[i].textContent);
   });
 }
 
 function lookForBoxesToSkip(index, letter) {
+  if (letter === "*") {
+    letter = prompt("Pick a Letter").toLowerCase()
+  }
   // console.log("direction: ", direction);
   // console.log("activeBox: ", activeBox);
   let activeBoxLocation =
@@ -870,10 +886,10 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
     }
   }
 
-  console.log(typeof collection);
+  // console.log(typeof collection);
   collection = new Set([...tempArr]);
   collection = Array.from(collection);
-  console.log("collection: ", collection);
+  // console.log("collection: ", collection);
 
   let wordMultiplier = 1;
   for (let i = 0; i < collection.length; i++) {
