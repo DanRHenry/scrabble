@@ -119,13 +119,13 @@ function switchPlayers() {
 
   if (activePlayer === 0) {
     activePlayer = 1;
-    activePlayerDisplay.textContent = `${playerTwoPossessiveName} turn`
+    activePlayerDisplay.textContent = `${playerTwoPossessiveName} turn`;
   } else if (activePlayer === 1) {
     activePlayer = 0;
-    activePlayerDisplay.textContent = `${playerOnePossessiveName} turn`
+    activePlayerDisplay.textContent = `${playerOnePossessiveName} turn`;
   }
-  pullLettersFromLetterBag()
-  putLettersInTheGameGridBoxes()
+  pullLettersFromLetterBag();
+  putLettersInTheGameGridBoxes();
   // tradeInLetters();
 }
 
@@ -212,10 +212,11 @@ setDirectionalBtnStyling();
 function switchDirections() {
   if (direction === "horizontal") {
     direction = "vertical";
-  } else {
-    direction = "horizontal";
+    setDirectionalBtnStyling()
+  } else if (direction === "vertical"){
+    direction = "horizontal";  
+    setDirectionalBtnStyling()
   }
-  setDirectionalBtnStyling();
 }
 
 function moveActiveBoxLeft() {
@@ -308,8 +309,8 @@ function fillLetterBag() {
   }
 }
 
-let playerOnePossessiveName
-let playerTwoPossessiveName
+let playerOnePossessiveName;
+let playerTwoPossessiveName;
 // Check Local Storage and Populate Scoreboard and Names
 function getNamesAndScoreboardInfo() {
   // Get player names from local storage and input them to the scoreboard names
@@ -319,18 +320,18 @@ function getNamesAndScoreboardInfo() {
         localStorage.scrabblePlayerOneName.length - 1
       ] == "s"
     ) {
-      playerOnePossessiveName = `${localStorage.scrabblePlayerOneName}'`
+      playerOnePossessiveName = `${localStorage.scrabblePlayerOneName}'`;
 
       playerOneScoreName.innerText = `${localStorage.scrabblePlayerOneName}' Score:`;
       scrabblePlayerOneName = `${localStorage.scrabblePlayerOneName}'`;
     } else {
-      playerOnePossessiveName = `${localStorage.scrabblePlayerOneName}'s`
+      playerOnePossessiveName = `${localStorage.scrabblePlayerOneName}'s`;
 
       playerOneScoreName.innerText = `${localStorage.scrabblePlayerOneName}'s Score:`;
       scrabblePlayerOneName = `${localStorage.scrabblePlayerOneName}'s`;
     }
   } else {
-    playerOnePossessiveName = "Player 1's"
+    playerOnePossessiveName = "Player 1's";
     playerOneScoreName.innerText = "Player 1's Score";
     scrabblePlayerOneName = "Player 1's";
   }
@@ -341,16 +342,16 @@ function getNamesAndScoreboardInfo() {
         localStorage.scrabblePlayerTwoName.length - 1
       ] == "s"
     ) {
-      playerTwoPossessiveName = `${localStorage.scrabblePlayerTwoName}'`
+      playerTwoPossessiveName = `${localStorage.scrabblePlayerTwoName}'`;
       playerTwoScoreName.innerText = `${localStorage.scrabblePlayerTwoName}' Score:`;
       scrabblePlayerTwoName = `${localStorage.scrabblePlayerTwoName}'`;
     } else {
-      playerTwoPossessiveName = `${localStorage.scrabblePlayerTwoName}'s`
+      playerTwoPossessiveName = `${localStorage.scrabblePlayerTwoName}'s`;
       playerTwoScoreName.innerText = `${localStorage.scrabblePlayerTwoName}'s Score:`;
       scrabblePlayerTwoName = `${localStorage.scrabblePlayerTwoName}'s`;
     }
   } else {
-    playerTwoPossessiveName = "Player 2's"
+    playerTwoPossessiveName = "Player 2's";
     playerTwoScoreName.innerText = "Player 2's Score";
     scrabblePlayerTwoName = "Player 2's";
   }
@@ -362,7 +363,6 @@ function pullLettersFromLetterBag() {
   // console.log("activePlayer: ",activePlayer)
   // playerOneObject.tiles = ["t", "e", "s", "*", "c", "a", "t"];
   // playerTwoObject.tiles = ["d", "e", "s", "*", "c", "a", "t"];
-
 
   while (playerOneObject.tiles.length < 7) {
     if (letterBag.length > 0) {
@@ -390,21 +390,21 @@ function pullLettersFromLetterBag() {
 function tradeInLetters() {
   letterBag.push(...playableLetters);
   if (activePlayer === 0) {
-    playerOneObject.tiles = []
+    playerOneObject.tiles = [];
   }
   if (activePlayer === 1) {
-    playerTwoObject.tiles = []
+    playerTwoObject.tiles = [];
   }
   pullLettersFromLetterBag();
   putLettersInTheGameGridBoxes();
-  switchPlayers()  
+  switchPlayers();
 }
 
 function putLettersInTheGameGridBoxes() {
-  // console.log("playableLetters: ",playableLetters)
+  console.log("playableLetters: ", playableLetters);
   const limit = playableLetters.length;
   // console.log(playableLetters)
-  // console.log(limit)
+  console.log(limit);
   // let counter = 0
   for (let i = 0; i < limit; i++) {
     // counter++
@@ -417,9 +417,7 @@ function putLettersInTheGameGridBoxes() {
   }
 }
 
-
 //!---------------------------------------------- Event Listeners ----------------------------------------------------
-
 
 function gameGridBoxAddEventListeners() {
   for (let i = 0; i < gameGrid.length; i++) {
@@ -431,10 +429,10 @@ function gameGridBoxAddEventListeners() {
         startingBox = activeBox;
         // console.log("gridLocation: ", i);
         for (let space of gameGrid) {
-          space.style.opacity = ""
+          space.style.opacity = "";
         }
 
-        gameGrid[activeBox].style.opacity = ".5"
+        gameGrid[activeBox].style.opacity = ".5";
         // if (!gameGrid[i].style.opacity) {
         //   for (let i = 0; i < gameGrid.length; i++) {
         //     gameGrid[i].style.opacity = "";
@@ -449,38 +447,46 @@ function gameGridBoxAddEventListeners() {
   }
 }
 
-horizontalBtn.addEventListener("click", () => {
+horizontalBtn.addEventListener("mousedown", () => {
   direction = "horizontal";
   setDirectionalBtnStyling();
 });
 
-verticalBtn.addEventListener("click", () => {
+verticalBtn.addEventListener("mousedown", () => {
   direction = "vertical";
   setDirectionalBtnStyling();
 });
 
 tradeInLettersButton.addEventListener("click", tradeInLetters);
 
-// for (let i = 0; i < playerTiles.length; i++) {
-//   wordInPlayArray = [];
-//   playerTiles[i].addEventListener("click", () => {
-//     // originalPlayedTiles.push(activeBox);
-//     // console.log("originalPlayedTiles: ", originalPlayedTiles);
-//     lookForBoxesToSkip(i, playerTiles[i].textContent);
-//     // originalPlayedTiles.push(activeBox)
-//     console.log("playableLetters: ",playableLetters)
-//     playableLetters.splice(playableLetters.indexOf(gameGrid[activeBox].textContent), 0)
-//     console.log("playableLetters: ",playableLetters)
+function addPlayerTileEventListeners() {
+  for (let i = 0; i < playerTiles.length; i++) {
+    wordInPlayArray = [];
 
-//     playerTiles[i].textContent = ""
-    
-//   });
-// }
+    playerTiles[i].addEventListener("click", handlePlayerTileClick);
+
+    function handlePlayerTileClick() {
+      let textContent = playerTiles[i].textContent;
+      if (textContent.length === 1) {
+        lookForBoxesToSkip(i, textContent);
+        originalPlayedTiles.push(activeBox);
+        playableLetters.splice(
+          playableLetters.indexOf(playerTiles[i].textContent),
+          1
+        );
+        playerTiles[i].textContent = "";
+      }
+    }
+  }
+}
+
+addPlayerTileEventListeners();
 //todo add a drag event listener to move letters from one tile location to another
 
 function lookForBoxesToSkip(index, letter) {
+  console.log("wordinplayarray: ", wordInPlayArray);
   if (letter === "*") {
-    letter = prompt("Pick a Letter").toLowerCase()
+    letter = prompt("Pick a Letter").toLowerCase();
   }
   // console.log("direction: ", direction);
   // console.log("activeBox: ", activeBox);
@@ -539,6 +545,7 @@ function cancelTilePlacement() {
   putLettersInTheGameGridBoxes();
   activeBox = startingBox;
   skippedDirection = undefined;
+  addPlayerTileEventListeners();
 }
 
 submitBtn.addEventListener("click", clickedSubmitBtn);
@@ -560,7 +567,7 @@ function clickedSubmitBtn() {
   // putLettersInTheGameGridBoxes();
 }
 
-document.addEventListener("keydown", function (event) {
+document.addEventListener("keypress", function (event) {
   let key = event.key || event.keyCode;
   // console.log("key: ",key)
   let tiles = [];
@@ -568,12 +575,16 @@ document.addEventListener("keydown", function (event) {
     tiles.push(playerTiles[i].textContent);
   }
   if (tiles.includes(key.toLowerCase())) {
-
+    console.log("========input=======");
+    console.log(tiles.indexOf(key.toLowerCase()));
+    console.log(key);
     lookForBoxesToSkip(tiles.indexOf(key.toLowerCase()), key);
 
     originalPlayedTiles.push(activeBox);
     playerTiles[tiles.indexOf(key)].textContent = "";
+
     tiles = [];
+
     playableLetters.splice(playableLetters.indexOf(key.toLocaleLowerCase()), 1);
     for (let i = 0; i < playerTiles.length; i++) {
       tiles.push(playerTiles[i].textContent);
@@ -584,7 +595,11 @@ document.addEventListener("keydown", function (event) {
   }
   if (key === " ") {
     // console.log("space");
-    switchDirections();
+    console.log(direction)
+
+    switchDirections(); 
+    setDirectionalBtnStyling()
+ 
   }
 
   if (key === "ArrowLeft") {
