@@ -427,20 +427,25 @@ function gameGridBoxAddEventListeners() {
       () => {
         activeBox = i;
         startingBox = activeBox;
-        // console.log("gridLocation: ", i);
         for (let space of gameGrid) {
           space.style.opacity = "";
         }
-
         gameGrid[activeBox].style.opacity = ".5";
-        // if (!gameGrid[i].style.opacity) {
-        //   for (let i = 0; i < gameGrid.length; i++) {
-        //     gameGrid[i].style.opacity = "";
-        //   }
-        //   gameGrid[i].style.opacity = ".5";
-        // } else {
-        //   gameGrid[i].style.opacity = "";
-        // }
+
+        let classList = gameGrid[activeBox].classList
+        console.log(classList)
+
+        let inputTileStart = "<input class="
+        let inputTileEnd = "></input>"
+
+        for (let className of classList) {
+          inputTileStart += className
+          inputTileStart += " "
+        }
+
+
+        gameGrid[activeBox].innerHTML = inputTileStart+inputTileEnd
+        // space.innerHTML = inputTile
       },
       false
     );
@@ -564,6 +569,22 @@ function clickedSubmitBtn() {
   skippedDirection = undefined;
   pullLettersFromLetterBag();
   switchPlayers();
+  for (let square of gameGrid) {
+    let classes = square.classList;
+    let text = square.textContent;
+    let first = '<div class = ';
+
+    console.log(classes)
+    console.log(text)
+    // for (let classItem of classes) {
+    //   console.log("here")
+    //   first += '"'
+    //   first += classItem
+    //   first += '"'
+    // }
+    // let second = `>${text}<`
+    // square.innerHTML = first+second
+  }
   // putLettersInTheGameGridBoxes();
 }
 
