@@ -262,7 +262,7 @@ function fillLetterBag() {
   for (let i = 0; i < 1; i++) {
     letterBag.push("j");
     letterBag.push("k");
-    letterBag.push("1");
+    letterBag.push("q");
     letterBag.push("x");
     letterBag.push("z");
   }
@@ -401,14 +401,10 @@ function tradeInLetters() {
 }
 
 function putLettersInTheGameGridBoxes() {
-  console.log("playableLetters: ", playableLetters);
+  // console.log("playableLetters: ", playableLetters);
   const limit = playableLetters.length;
-  // console.log(playableLetters)
-  console.log(limit);
-  // let counter = 0
+  // console.log(limit);
   for (let i = 0; i < limit; i++) {
-    // counter++
-    // console.log(counter)
     //todo change the IDs for letter tiles on the gameboard to something more descriptive
     let id = document.getElementById(i);
     let letterToReplace = id.innerText;
