@@ -212,10 +212,10 @@ setDirectionalBtnStyling();
 function switchDirections() {
   if (direction === "horizontal") {
     direction = "vertical";
-    setDirectionalBtnStyling()
-  } else if (direction === "vertical"){
-    direction = "horizontal";  
-    setDirectionalBtnStyling()
+    setDirectionalBtnStyling();
+  } else if (direction === "vertical") {
+    direction = "horizontal";
+    setDirectionalBtnStyling();
   }
 }
 
@@ -428,19 +428,18 @@ function gameGridBoxAddEventListeners() {
         }
         gameGrid[activeBox].style.opacity = ".5";
 
-        let classList = gameGrid[activeBox].classList
-        console.log(classList)
+        // let classList = gameGrid[activeBox].classList
+        // console.log(classList)
 
-        let inputTileStart = "<input class="
-        let inputTileEnd = "></input>"
+        // let inputTileStart = "<input class="
+        // let inputTileEnd = "></input>"
 
-        for (let className of classList) {
-          inputTileStart += className
-          inputTileStart += " "
-        }
+        // for (let className of classList) {
+        //   inputTileStart += className
+        //   inputTileStart += " "
+        // }
 
-
-        gameGrid[activeBox].innerHTML = inputTileStart+inputTileEnd
+        // gameGrid[activeBox].innerHTML = inputTileStart+inputTileEnd
         // space.innerHTML = inputTile
       },
       false
@@ -487,7 +486,7 @@ addPlayerTileEventListeners();
 function lookForBoxesToSkip(index, letter) {
   console.log("wordinplayarray: ", wordInPlayArray);
   if (letter === "*") {
-    letter = prompt("Pick a Letter").toLowerCase();
+    letter = prompt("Pick a Letter")[0].toLowerCase();
   }
   // console.log("direction: ", direction);
   // console.log("activeBox: ", activeBox);
@@ -556,22 +555,29 @@ function clickedSubmitBtn() {
   // console.log("direction", skippedDirection);
   // console.log("originalPlayedTiles: ", originalPlayedTiles);
 
-  checkDictionaryForWordsInPlay(
-    createWordsInPlay(wordInPlayArray, originalPlayedTiles)
-  );
+  // checkDictionaryForWordsInPlay(
+  //   createWordsInPlay(wordInPlayArray, originalPlayedTiles)
+  // );
+
+  if (
+    checkDictionaryForWordsInPlay(
+      createWordsInPlay(wordInPlayArray, originalPlayedTiles)
+    )
+  ) {
+    switchPlayers();
+  }
 
   wordInPlayArray = [];
   originalPlayedTiles = [];
   skippedDirection = undefined;
   pullLettersFromLetterBag();
-  switchPlayers();
   for (let square of gameGrid) {
     let classes = square.classList;
     let text = square.textContent;
-    let first = '<div class = ';
+    let first = "<div class = ";
 
-    console.log(classes)
-    console.log(text)
+    // console.log(classes)
+    // console.log(text)
     // for (let classItem of classes) {
     //   console.log("here")
     //   first += '"'
@@ -592,9 +598,9 @@ document.addEventListener("keypress", function (event) {
     tiles.push(playerTiles[i].textContent);
   }
   if (tiles.includes(key.toLowerCase())) {
-    console.log("========input=======");
-    console.log(tiles.indexOf(key.toLowerCase()));
-    console.log(key);
+    // console.log("========input=======");
+    // console.log(tiles.indexOf(key.toLowerCase()));
+    // console.log(key);
     lookForBoxesToSkip(tiles.indexOf(key.toLowerCase()), key);
 
     originalPlayedTiles.push(activeBox);
@@ -612,11 +618,10 @@ document.addEventListener("keypress", function (event) {
   }
   if (key === " ") {
     // console.log("space");
-    console.log(direction)
+    console.log(direction);
 
-    switchDirections(); 
-    setDirectionalBtnStyling()
- 
+    switchDirections();
+    setDirectionalBtnStyling();
   }
 
   if (key === "ArrowLeft") {
@@ -916,7 +921,7 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
     for (let letter of node[direction]) {
       temp += gameGrid[letter].textContent;
     }
-    console.log("temp: ", temp);
+    // console.log("temp: ", temp);
 
     if (temp && searchDictionary(temp) === false) {
       console.log(`no ${direction} word, ${temp} found`);
