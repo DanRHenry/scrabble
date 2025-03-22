@@ -18,6 +18,35 @@ body {
   background-color: rgb(188, 162, 98);
 }
 
+#multipliersAndGameboardSection {
+  /* background-color: red; */
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  margin: 0;
+  padding: 0;
+}
+
+#multipliers {
+  /* border: 1px solid black; */
+  margin-top: 1em;
+  text-indent: 1em;
+  /* padding-left: 15%; */
+  /* padding-right: 15%; */
+}
+
+#multipliers > div {
+  font-size: large;
+  padding-right: 1em;
+  padding-top: .25em;
+  padding-bottom: .25em;
+  margin-top: .5em;
+  margin-right: .5em;
+  margin-left: .5em;
+  font-size: xx-large;
+}
+
+
 #title {
   justify-content: center;
   margin-bottom: 0.25em;
@@ -30,7 +59,7 @@ body {
 }
 
 #inputFieldRow {
-    min-height: 1.5em;
+  min-height: 1.5em;
 }
 
 .answerRowGrid {
@@ -120,32 +149,55 @@ body {
   padding-right: 3vw;
 }
 
-.scoreBoard {
-}
-
 .standardSquare {
   background-color: white;
 }
 
-.doubleLetter {
+.doubleLetter,
+#d-letter {
   background-color: rgb(129, 239, 239);
 }
+#d-letter {
+  /* color: rgb(129, 239, 239); */
+  /* padding-right: 1em; */
+  text-shadow: none;
+}
 
-.tripleLetter {
+.tripleLetter,
+#t-letter {
   background-color: rgb(81, 135, 135);
 }
 
-.doubleWord {
+#t-letter {
+  /* color: rgb(81, 135, 135); */
+  /* padding-right: 1em; */
+  text-shadow: none;
+}
+
+.doubleWord,
+#d-word {
   background-color: pink;
 }
 
-.tripleWord {
+#d-word {
+  /* color: pink; */
+  /* padding-right: 1em; */
+  text-shadow: none;
+}
+
+.tripleWord,
+#t-word {
   background-color: red;
+}
+#t-word {
+  /* color: red; */
+  /* padding-right: 1em; */
+  text-shadow: none;
 }
 .star {
   max-width: 100%;
   max-height: 100%;
-  background-color: yellow;
+  background-color: pink;
 }
 
 button {
@@ -197,8 +249,7 @@ button {
 }
 
 #activePlayerDisplay {
-    /* display: block; */
-    width: 100vw;
-    background-color: antiquewhite;
-
+  /* display: block; */
+  width: 100vw;
+  background-color: antiquewhite;
 }

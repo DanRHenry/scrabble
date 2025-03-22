@@ -408,6 +408,7 @@ function putLettersInTheGameGridBoxes() {
     //todo change the IDs for letter tiles on the gameboard to something more descriptive
     let id = document.getElementById(i);
     let letterToReplace = id.innerText;
+
     //! this is broken when tiles were clicked instead of entered with keys and then cancel is clicked
     id.innerText = id.innerText.replace(letterToReplace, playableLetters[i]);
   }
