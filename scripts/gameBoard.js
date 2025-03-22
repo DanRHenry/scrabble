@@ -101,9 +101,9 @@ let direction = "horizontal";
 
 gameGrid[activeBox].style.opacity = ".5";
 
-document
-  .getElementById("switchPlayersBtn")
-  .addEventListener("click", switchPlayers);
+// document
+//   .getElementById("switchPlayersBtn")
+//   .addEventListener("click", switchPlayers);
 
 function updateScoreboard() {
   p1Score.textContent = playerOneObject.score;

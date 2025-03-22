@@ -4,13 +4,12 @@ body {
   text-shadow: 2px 2px 2px antiquewhite;
   text-align: center;
   margin: 0;
-  min-width: 100vw;
   user-select: none;
 }
 
 .gamePageHeader {
   margin: 0;
-  width: 100vw;
+  /* width: 100vw; */
   position: sticky;
   top: 0;
   z-index: 2;
@@ -118,13 +117,10 @@ body {
   text-indent: 0;
   font-size: clamp(16px, 2vw, 3em);
   padding-right: 0.5em;
-  /* padding-top: 0.25em; */
-  /* padding-bottom: 0.25em; */
   padding-left: 0.5em;
   margin-top: 0.5em;
   margin-left: 0;
-  /* margin-right: 0.5em; */
-  /* margin-left: 0.5em; */
+  border: 1px solid black;
 }
 
 .gameBoard {
@@ -152,7 +148,7 @@ body {
 }
 
 .gameGridBox:hover{
-  background-color: yellow;
+  background-color: rgb(133, 127, 181);
 }
 
 #columnLeft {
@@ -174,7 +170,7 @@ body {
 #d-letter {
   /* color: rgb(129, 239, 239); */
   /* padding-right: 1em; */
-  width: 100px;
+  /* width: 100px; */
   text-shadow: none;
 }
 
@@ -184,7 +180,7 @@ body {
 }
 
 #t-letter {
-  width: 100px;
+  /* width: 100px; */
 
   /* color: rgb(81, 135, 135); */
   /* padding-right: 1em; */
@@ -197,7 +193,7 @@ body {
 }
 
 #d-word {
-  width: 100px;
+  /* width: 100px; */
 
   /* color: pink; */
   /* padding-right: 1em; */
@@ -209,7 +205,7 @@ body {
   background-color: red;
 }
 #t-word {
-  width: 100px;
+  /* width: 100px; */
 
   /* color: red; */
   /* padding-right: 1em; */
@@ -282,4 +278,12 @@ button {
   /* display: block; */
   width: 100vw;
   background-color: antiquewhite;
+}
+
+#multipliers > div {
+  /* width: 10em; */
+/* max-width: 200px; */
+border: 0;
+margin: 0;
+padding: 0;
 }
