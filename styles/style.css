@@ -234,14 +234,18 @@ button {
   padding-right: 0.5em;
 }
 
-#p1Score {
-  margin-left: .5rem;
-  margin-right: 2vw;
+#p1ScoreSection, #p2ScoreSection {
+  width: 50vw;
 }
 
-#p2Score {
+/* #p1Score {
   margin-left: .5rem;
-}
+  margin-right: 2vw;
+} */
+
+/* #p2Score {
+  margin-left: .5rem;
+} */
 
 .scoreBoard {
   display: flex;
@@ -250,6 +254,7 @@ button {
 
 #scoreboardPlayerSection{
   display: flex;
+  flex-direction: row;
   align-self: center;
   /* margin: 3rem; */
 }
