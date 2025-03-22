@@ -18,34 +18,18 @@ body {
   background-color: rgb(188, 162, 98);
 }
 
-#multipliersAndGameboardSection {
-  /* background-color: red; */
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  margin: 0;
-  padding: 0;
+.letter {
+  font-size: 1.5em;
 }
 
-#multipliers {
-  margin-top: 1em;
-  text-indent: 1em;
+.letterPoints {
+  font-size: 0.75em;
+  position: relative;
+  bottom: 0.15em;
+  bottom: 1%;
+  left: 0.25em;
+  left: 13%
 }
-
-#multipliers > div {
-    text-indent: 0;
-  font-size: large;
-  padding-right: .5em;
-  padding-top: .25em;
-  padding-bottom: .25em;
-  padding-left: .5em;
-  margin-top: .5em;
-  margin-right: .5em;
-  margin-left: .5em;
-  /* font-size: xx-large; */
-}
-
-
 #title {
   justify-content: center;
   margin-bottom: 0.25em;
@@ -121,23 +105,71 @@ body {
   text-shadow: 2px 2px 2px antiquewhite;
   font-size: clamp(19px, 4vw, 4em);
   font-weight: bold;
+  /* display: flex;
+  flex-direction: column;
+  align-items: center; */
+}
+
+#gameplayArea {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* background-color: red; */
+  /* width: 100%; */
+  /* width: 100vw; */
+  /* display: flex; */
+  /* flex-direction: row; */
+  /* display: grid; */
+  /* grid-template-columns: .5fr 1fr; */
+  margin: 0;
+  padding: 0;
+}
+
+#multipliers {
+  /* max-width: 15%; */
+  /* display: inline-block; */
+  margin-top: 1em;
+  text-indent: 1em;
+}
+
+#multipliers > div {
+  text-indent: 0;
+  font-size: large;
+  padding-right: 0.5em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  padding-left: 0.5em;
+  margin-top: 0.5em;
+  margin-right: 0.5em;
+  margin-left: 0.5em;
+}
+
+.gameBoard {
+  /* max-width: 50%; */
+  /* display: inline-block; */
+  margin-top: 1em;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.gameBoard {
-  margin-top: 1em;
+.gameGrid {
+  display: grid;
+  grid-template-columns: repeat(15, clamp(12.2px, 5vw, 60px));
+  grid-template-rows: repeat(15, clamp(12.2px, 5vw, 60px));
+  /* width: 100vw; */
+  /* width: 100vw;
+    height: 100vw; */
 }
 
-.letterPoints {
-  min-width: fit-content;
-  max-width: fit-content;
-  max-height: 60vh;
-  color: black;
-  font-size: larger;
-  text-align: left;
-  font-size: 3.5vh;
+.gameGridBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* background-color: red;   */
+  font-size: clamp(12px, 4vw, 4em);
+  font-weight: bold;
+  border: 2px solid black;
 }
 
 #columnLeft {
@@ -159,6 +191,7 @@ body {
 #d-letter {
   /* color: rgb(129, 239, 239); */
   /* padding-right: 1em; */
+  width: 100px;
   text-shadow: none;
 }
 
@@ -168,6 +201,8 @@ body {
 }
 
 #t-letter {
+  width: 100px;
+
   /* color: rgb(81, 135, 135); */
   /* padding-right: 1em; */
   text-shadow: none;
@@ -179,6 +214,8 @@ body {
 }
 
 #d-word {
+  width: 100px;
+
   /* color: pink; */
   /* padding-right: 1em; */
   text-shadow: none;
@@ -189,6 +226,8 @@ body {
   background-color: red;
 }
 #t-word {
+  width: 100px;
+
   /* color: red; */
   /* padding-right: 1em; */
   text-shadow: none;
@@ -227,24 +266,6 @@ button {
   left: 0;
   bottom: 0;
   padding: 0.5em;
-}
-
-.gameGrid {
-  display: grid;
-  grid-template-columns: repeat(15, clamp(12.2px, 5vw, 60px));
-  grid-template-rows: repeat(15, clamp(12.2px, 5vw, 60px));
-  /* width: 100vw;
-    height: 100vw; */
-}
-
-.gameGridBox {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  /* background-color: red;   */
-  font-size: clamp(12px, 4vw, 4em);
-  font-weight: bold;
-  border: 2px solid black;
 }
 
 #activePlayerDisplay {

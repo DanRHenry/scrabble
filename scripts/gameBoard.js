@@ -418,10 +418,15 @@ function putLettersInTheGameGridBoxes() {
   for (let i = 0; i < limit; i++) {
     //todo change the IDs for letter tiles on the gameboard to something more descriptive
     let id = document.getElementById(i);
-    let letterToReplace = id.innerText;
+    // let letterToReplace = id.innerText;
+    console.log(playableLetters[i],letterPoints[playableLetters[i]])
 
     //! this is broken when tiles were clicked instead of entered with keys and then cancel is clicked
-    id.innerText = id.innerText.replace(letterToReplace, playableLetters[i]);
+    // id.innerText = id.innerText.replace(letterToReplace, playableLetters[i]);
+    // id.innerText = playableLetters[i]
+    id.childNodes[0].innerText = playableLetters[i]
+    console.log(id.childNodes[0])
+    id.childNodes[1].innerText = letterPoints[playableLetters[i]]
   }
 }
 

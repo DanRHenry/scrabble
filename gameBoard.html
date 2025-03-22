@@ -12,17 +12,18 @@
     <!-- make the let's play title stick while scrolling -->
 
 <div class="gamePageHeader">
-    <h1 id="title">&#8200Scrabble!</h1>
+    <h1 id="title">Scrabble!</h1>
         <div id="tileGridHolder">
-        <div class="playerTileGrid">
-            <div class="playerTiles", id="0"><span>H</span></div>
-            <div class="playerTiles", id="1"><span>E</span></div>
-            <div class="playerTiles", id="2"><span>L</span></div>
-            <div class="playerTiles", id="3"><span>L</span></div>
-            <div class="playerTiles", id="4"><span>O</span></div>
-            <div class="playerTiles", id="5"><span>!</span></div>
-            <div class="playerTiles", id="6"><span>!</span></div>
-        </div>
+            <div class="playerTileGrid">
+            <div class="playerTiles", id="0"><span class="letter"></span><span class="letterPoints"></span></div>
+                
+            <div class="playerTiles", id="1"><span class="letter"></span><span class="letterPoints"></span></div>
+            <div class="playerTiles", id="2"><span class="letter"></span><span class="letterPoints"></span></div>
+            <div class="playerTiles", id="3"><span class="letter"></span><span class="letterPoints"></span></div>
+            <div class="playerTiles", id="4"><span class="letter"></span><span class="letterPoints"></span></div>
+            <div class="playerTiles", id="5"><span class="letter"></span><span class="letterPoints"></span></div>
+            <div class="playerTiles", id="6"><span class="letter"></span><span class="letterPoints"></span></div>
+            </div>
         </div>
 
         <div id="inputFieldRow">
@@ -32,52 +33,15 @@
             <button id="horizontalBtn">Horizontal</button>
             <button id="verticalBtn">Vertical</button>
         </div>
-        
-
-<!-- Vertical Input Field -->
-        <!-- <div class="answerRowGrid"> -->
-            <!-- <div class="answerInput" id="inputField" style="text-align: center"> -->
-                <!-- <input type="text" id="verticalInput" placeholder="Play Vertical Word" > -->
-                <!-- <button id="verticalSubmitButton">Submit Vertical</button> -->
-            <!-- </div> -->
-
-<!-- Horizontal Input Field -->
-            <!-- <div class="answerInput" id="inputField" style="text-align: center">&#8200
-                <input type="text" id="horizontalInput" placeholder="Play Horizontal Word" >&#8200&#8200
-                <button id="horizontalSubmitButton">Submit Horizontal</button>
-            </div> -->
-            <!-- <br> -->
             <div id="activePlayerDisplay"></div>
         </div>
-    </div>
-</div>
+
 <!-- 
     ! To Do List
-    * use css positioning to fix the title scrolling issue
-    * Letter Distribution List (display # of points per letter)
-    * Create a scoreboard for at two players (human & computer)
-    * Create a key for board colors: double letter, etc.
-    * Add player name to the scoreboard
-    * Click on a starting location on the grid, change color of tile, and enter text into a horizontal input text box, or a vertical input text box
     * Points for using all letters
-    * When entering a word, check for existing characters on the game grid to allow or disallow the word
-    * Change the points amounts column to be a table nested in the grid.
-    * Create check that the only letters able to be played are contained in the playable letters array (use an event listener and a promise)
-    * Potential api https://www.programmableweb.com/api/word-game-dictionary
-
-
-    Done
-        Create a 15x15 gameboard grid for typing in letters.
-    The grid needs squares for
-            Double Letter,
-            Double word,
-            Triple Word etc
-            Star (Double Word)
-    Create a display of letters obtained from the letterBag.
-    Deal with blank tiles
 -->
-
-<div id="multipliersAndGameboardSection">
+<div id="gameplayAreaContainer">
+<div id="gameplayArea">
 <div id="multipliers">
     <div id="d-letter">Double Letter</div>
     <div id="t-letter">Triple Letter</div>
@@ -87,38 +51,7 @@
 </div>
 
 <div class="gameBoard">
-        <!-- <div class="letterPoints" id="columnLeft">
-                A - 1 point <br>
-                B - 3 points <br>
-                C - 3 points <br>
-                D - 2 points <br> 
-                E - 1 point <br> 
-                F - 4 points <br>
-                G - 2 points <br>
-                H - 4 points <br>
-                I - 1 point <br>
-                J - 8 points <br>
-                K - 5 points <br>
-                L - 1 point <br>
-                M - 3 points <br>
-                N - 1 point <br>
-        </div>
-        <div class="letterPoints" id="columnRight">
-                O - 1 point <br>
-                P - 3 points <br>
-                Q - 10 points <br>
-                R - 1 point <br>
-                S - 1 point <br>
-                T - 1 point <br>
-                U - 1 point <br>
-                V - 4 points <br>
-                W - 4 points <br>
-                X - 8 points <br>
-                Y - 4 points <br>
-                Z - 10 points <br>
-                <br>
-                Play 7 - 50!
-            </div> -->
+
         <div class="gameGrid">
             <!-- Row 0 -->
             <div class="gameGridBox tripleWord", id="0000"></div> 
@@ -366,6 +299,8 @@
     </div>
 </div>
 </div>
+
+<!-- </div> -->
 <br>
 <div class="scoreBoard"> Scoreboard
 
@@ -379,7 +314,7 @@
 <div>
     <button id="tradeInLetters">Trade in Letters</button>
 </div>
-<div style="padding-bottom: 1em;">
+<div style="padding-bottom: 1em">
     <!-- <button class="btn" id="returnButton">
         <a href="index.html">Return to Title</a>
     </button> -->
