@@ -107,9 +107,12 @@ document
 
 function updateScoreboard() {
   p1Score.textContent = playerOneObject.score;
+  p1Score.textContent = 255;
+
 
   p2Score.textContent = playerTwoObject.score;
-}
+
+  p2Score.textContent = 255}
 
 updateScoreboard();
 
@@ -361,7 +364,7 @@ function getNamesAndScoreboardInfo() {
     }
   } else {
     playerTwoPossessiveName = "Player 2's";
-    playerTwoScoreName.innerText = "Player 2's Score";
+    playerTwoScoreName.innerText = "Player 2's Score:";
     scrabblePlayerTwoName = "Player 2's";
   }
 }
@@ -598,37 +601,16 @@ function clickedSubmitBtn() {
   originalPlayedTiles = [];
   skippedDirection = undefined;
   pullLettersFromLetterBag();
-  for (let square of gameGrid) {
-    let classes = square.classList;
-    let text = square.textContent;
-    let first = "<div class = ";
-
-    // console.log(classes)
-    // console.log(text)
-    // for (let classItem of classes) {
-    //   console.log("here")
-    //   first += '"'
-    //   first += classItem
-    //   first += '"'
-    // }
-    // let second = `>${text}<`
-    // square.innerHTML = first+second
-  }
-  // putLettersInTheGameGridBoxes();
 }
 
 document.addEventListener("keypress", function (event) {
   let playerTiles = document.getElementsByClassName("letter")
   let key = event.key || event.keyCode;
-  // console.log("key: ",key)
   let tiles = [];
   for (let i = 0; i < playerTiles.length; i++) {
     tiles.push(playerTiles[i].textContent);
   }
   if (tiles.includes(key.toLowerCase())) {
-    // console.log("========input=======");
-    // console.log(tiles.indexOf(key.toLowerCase()));
-    // console.log(key);
     lookForBoxesToSkip(tiles.indexOf(key.toLowerCase()), key);
 
     originalPlayedTiles.push(activeBox);
@@ -645,9 +627,6 @@ document.addEventListener("keypress", function (event) {
     clickedSubmitBtn();
   }
   if (key === " ") {
-    // console.log("space");
-    console.log(direction);
-
     switchDirections();
     setDirectionalBtnStyling();
   }
@@ -673,12 +652,11 @@ document.addEventListener("keypress", function (event) {
 // accepts an argument of the array of the word that was placed
 // this array will not yet contain any existing letters
 
-function createWordsInPlay(wordInPlayArray, originalPlayedTiles) {
+function createWordsInPlay(wordInPlayArray) {
   if (!gameGrid[112].textContent.length > 0 && !wordInPlayArray.includes(112)) {
     console.log("place word on star");
     cancelTilePlacement();
   }
-  // console.log("wordInPlay: ",wordInPlayArray)
   let playedWord = "";
 
   if (skippedDirection === "horizontal") {
@@ -790,12 +768,10 @@ function createWordsInPlay(wordInPlayArray, originalPlayedTiles) {
   return wordsInPlay;
 }
 function checkDictionaryForWordsInPlay(wordsInPlay) {
-  // console.log("0000000000000000000000");
   let runningTotal = 0;
   let collection = [];
   const otArray = Array.from(originalPlayedTiles);
 
-  // console.log("wordsInPlay: ", wordsInPlay);
   let wordsCollection = [];
 
   let disconnected = true;
@@ -949,7 +925,6 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
     for (let letter of node[direction]) {
       temp += gameGrid[letter].textContent;
     }
-    // console.log("temp: ", temp);
 
     if (temp && searchDictionary(temp) === false) {
       console.log(`no ${direction} word, ${temp} found`);
@@ -967,10 +942,8 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
     }
   }
 
-  // console.log(typeof collection);
   collection = new Set([...tempArr]);
   collection = Array.from(collection);
-  // console.log("collection: ", collection);
 
   let wordMultiplier = 1;
   for (let i = 0; i < collection.length; i++) {
@@ -982,10 +955,6 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
       gameGrid[collection[i]].classList.add("standardSquare");
     }
     let letter = gameGrid[collection[i]].textContent;
-    // console.log(letter);
-    // console.log(letterPoints[letter]);
-    // console.log(multiplier, typeof multiplier);
-    // console.log(squareTypes[multiplier]);
 
     if (multiplier === "tripleWord") {
       wordMultiplier = 3;
@@ -1011,7 +980,7 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
   wordsInPlay = [];
   pullLettersFromLetterBag();
   putLettersInTheGameGridBoxes();
-  return true;
+  return runningTotal;
 }
 
 //!------------------------------------------------------------------------------
@@ -1019,8 +988,11 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
 function updatePlayerScores() {
   if (activePlayer === 0) {
     p1Score.textContent = playerOneObject.score;
+    p1Score.textContent = 255;
+
   } else if (activePlayer === 1) {
     p2Score.textContent = playerTwoObject.score;
+    p2Score.textContent = 255;
   }
 }
 

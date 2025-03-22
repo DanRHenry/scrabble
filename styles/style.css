@@ -35,6 +35,7 @@ body {
   margin-bottom: 0.25em;
   margin-top: 0;
   font-size: 55px;
+  font-size: 10rem;
 }
 
 #inputField {
@@ -87,16 +88,9 @@ body {
   justify-content: center;
   border: 2px solid black;
   background-color: white;
-  padding-top: 5%;
-  padding-bottom: 5%;
+  /* padding-top: 5%; */
+  /* padding-bottom: 5%; */
   min-height: 1.5em;
-  /* min-width: 1em; */
-  /* width: 5vw;
-    height: 5vw; */
-  /* min-height: 1.5em;
-    max-height: 1.5em;
-    min-width: 1.5em;
-    max-width: 1.5em; */
 }
 
 .gamePage {
@@ -105,43 +99,32 @@ body {
   text-shadow: 2px 2px 2px antiquewhite;
   font-size: clamp(19px, 4vw, 4em);
   font-weight: bold;
-  /* display: flex;
-  flex-direction: column;
-  align-items: center; */
 }
 
 #gameplayArea {
-  display: flex;
-  flex-direction: row;
   align-items: center;
-  /* background-color: red; */
-  /* width: 100%; */
-  /* width: 100vw; */
-  /* display: flex; */
-  /* flex-direction: row; */
-  /* display: grid; */
-  /* grid-template-columns: .5fr 1fr; */
   margin: 0;
   padding: 0;
 }
 
 #multipliers {
-  /* max-width: 15%; */
-  /* display: inline-block; */
-  margin-top: 1em;
-  text-indent: 1em;
+  margin: 0;
+  padding: 0;
+  margin-top: .25vh;
 }
 
 #multipliers > div {
+  display: inline;
   text-indent: 0;
-  font-size: large;
+  font-size: clamp(16px, 2vw, 3em);
   padding-right: 0.5em;
-  padding-top: 0.25em;
-  padding-bottom: 0.25em;
+  /* padding-top: 0.25em; */
+  /* padding-bottom: 0.25em; */
   padding-left: 0.5em;
   margin-top: 0.5em;
-  margin-right: 0.5em;
-  margin-left: 0.5em;
+  margin-left: 0;
+  /* margin-right: 0.5em; */
+  /* margin-left: 0.5em; */
 }
 
 .gameBoard {
@@ -157,19 +140,19 @@ body {
   display: grid;
   grid-template-columns: repeat(15, clamp(12.2px, 5vw, 60px));
   grid-template-rows: repeat(15, clamp(12.2px, 5vw, 60px));
-  /* width: 100vw; */
-  /* width: 100vw;
-    height: 100vw; */
 }
 
 .gameGridBox {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* background-color: red;   */
-  font-size: clamp(12px, 4vw, 4em);
+  font-size: clamp(1.5rem, 3vw, 3.5rem);
   font-weight: bold;
   border: 2px solid black;
+}
+
+.gameGridBox:hover{
+  background-color: yellow;
 }
 
 #columnLeft {
@@ -239,27 +222,49 @@ body {
 }
 
 button {
-  font-size: large;
+  font-size: clamp(1.5rem, 3vw, 3.5rem);
 }
 
 #playButton {
   margin-top: 2em;
-  font-size: 1em;
+  font-size: clamp(1.5rem, 3vw, 3.5rem);
   padding-top: 0.25em;
   padding-bottom: 0.25em;
   padding-left: 0.5em;
   padding-right: 0.5em;
 }
 
+#p1Score {
+  margin-left: .5rem;
+  margin-right: 5rem;
+}
+
+#p2Score {
+  margin-left: .5rem;
+}
+
+.scoreBoard {
+  display: flex;
+  flex-direction: column;
+}
+
+#scoreboardPlayerSection{
+  display: flex;
+  align-self: center;
+  /* margin: 3rem; */
+}
+
+
+
 .tradeInLetters {
-  font-size: 0.5em;
+  font-size: clamp(1.5rem, 3vw, 3.5rem);
   padding: 0.15em;
   margin-top: 1em;
   margin-bottom: 1em;
 }
 
 #returnButton {
-  font-size: 0.75em;
+  font-size: clamp(1.5rem, 3vw, 3.5rem);
   position: static;
   margin-top: 2em;
   right: 0;
