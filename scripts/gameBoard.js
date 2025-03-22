@@ -419,9 +419,9 @@ function putLettersInTheGameGridBoxes() {
     const letter = document.getElementsByClassName("letter")[i]
     const letterPoint = document.getElementsByClassName("letterPoints")[i]
     //todo change the IDs for letter tiles on the gameboard to something more descriptive
-    let id = document.getElementById(i);
+    // let id = document.getElementById(i);
     // let letterToReplace = id.innerText;
-    console.log(playableLetters[i],letterPoints[playableLetters[i]])
+    // console.log(playableLetters[i],letterPoints[playableLetters[i]])
 
     //! this is broken when tiles were clicked instead of entered with keys and then cancel is clicked
     letter.innerText = playableLetters[i]
@@ -488,15 +488,20 @@ function addPlayerTileEventListeners() {
     playerTiles[i].addEventListener("click", handlePlayerTileClick);
 
     function handlePlayerTileClick() {
-      let textContent = playerTiles[i].textContent;
+
+      // let textContent = playerTiles[i].textContent;
+      let textContent = document.getElementsByClassName("letter")[i].textContent;
       if (textContent.length === 1) {
         lookForBoxesToSkip(i, textContent);
         originalPlayedTiles.push(activeBox);
         playableLetters.splice(
-          playableLetters.indexOf(playerTiles[i].textContent),
+          playableLetters.indexOf(textContent),
           1
         );
-        playerTiles[i].textContent = "";
+
+        // playerTiles[i].textContent = "";
+        document.getElementsByClassName("letter")[i].textContent = "";
+        document.getElementsByClassName("letterPoints")[i].textContent = "";
       }
     }
   }
@@ -613,6 +618,7 @@ function clickedSubmitBtn() {
 }
 
 document.addEventListener("keypress", function (event) {
+  let playerTiles = document.getElementsByClassName("letter")
   let key = event.key || event.keyCode;
   // console.log("key: ",key)
   let tiles = [];
@@ -627,7 +633,7 @@ document.addEventListener("keypress", function (event) {
 
     originalPlayedTiles.push(activeBox);
     playerTiles[tiles.indexOf(key)].textContent = "";
-
+    document.getElementsByClassName("letterPoints")[tiles.indexOf(key)].textContent = "";
     tiles = [];
 
     playableLetters.splice(playableLetters.indexOf(key.toLocaleLowerCase()), 1);
