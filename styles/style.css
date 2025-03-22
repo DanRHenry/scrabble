@@ -110,6 +110,10 @@ body {
   margin: 0;
   padding: 0;
   margin-top: .25vh;
+  background-color: rgb(186, 186, 186);
+  border: 1px solid black;
+  border-radius: .25em;
+  min-height: 1.5em;
 }
 
 #multipliers > div {
@@ -232,16 +236,14 @@ button {
 
 #p1ScoreSection, #p2ScoreSection {
   width: 50vw;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: .25em;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin-right: .5rem;
+  margin-left: .5rem;
 }
-
-/* #p1Score {
-  margin-left: .5rem;
-  margin-right: 2vw;
-} */
-
-/* #p2Score {
-  margin-left: .5rem;
-} */
 
 .scoreBoard {
   display: flex;
@@ -252,6 +254,10 @@ button {
   display: flex;
   flex-direction: row;
   align-self: center;
+  margin-right: 2em;
+  margin-left: 2em;
+  width: 90%;
+  margin-bottom: 1em;
   /* margin: 3rem; */
 }
 
