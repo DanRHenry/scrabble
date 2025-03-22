@@ -107,12 +107,13 @@ document
 
 function updateScoreboard() {
   p1Score.textContent = playerOneObject.score;
-  p1Score.textContent = 255;
+  // p1Score.textContent = 255;
 
 
   p2Score.textContent = playerTwoObject.score;
 
-  p2Score.textContent = 255}
+  // p2Score.textContent = 255
+}
 
 updateScoreboard();
 
@@ -988,11 +989,11 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
 function updatePlayerScores() {
   if (activePlayer === 0) {
     p1Score.textContent = playerOneObject.score;
-    p1Score.textContent = 255;
+    // p1Score.textContent = 255;
 
   } else if (activePlayer === 1) {
     p2Score.textContent = playerTwoObject.score;
-    p2Score.textContent = 255;
+    // p2Score.textContent = 255;
   }
 }
 
