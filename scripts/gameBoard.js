@@ -260,6 +260,9 @@ function moveActiveBoxUp() {
 }
 //! ----------------------------------------------------- Functions ---------------------------------------------------------------
 
+// function fillLetterBag() {
+//   letterBag = ["a","b","c","d","e","f","g","a","b","c","d","e","f","g","h"]
+// }
 // Put all letters into an array, letterbag
 function fillLetterBag() {
   letterBag = [];
@@ -373,6 +376,11 @@ function getNamesAndScoreboardInfo() {
 // Populate Playable Letter Array with randomLetter from letterBag and remove letters used from the letterBag
 
 function pullLettersFromLetterBag() {
+  console.log(letterBag.length)
+
+  if (letterBag.length === 0) {
+    alert("No More Tiles")
+  }
   // console.log("activePlayer: ",activePlayer)
   // playerOneObject.tiles = ["t", "e", "s", "*", "c", "a", "t"];
   // playerTwoObject.tiles = ["d", "e", "s", "*", "c", "a", "t"];
@@ -771,6 +779,9 @@ function createWordsInPlay(wordInPlayArray) {
 function checkDictionaryForWordsInPlay(wordsInPlay) {
   let runningTotal = 0;
   let collection = [];
+  if (originalPlayedTiles.size === 7) {
+    runningTotal += 50;
+  }
   const otArray = Array.from(originalPlayedTiles);
 
   let wordsCollection = [];
