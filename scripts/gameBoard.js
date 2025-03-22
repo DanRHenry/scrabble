@@ -307,6 +307,15 @@ function fillLetterBag() {
   for (let i = 0; i < 12; i++) {
     letterBag.push("e");
   }
+  randomizeLetterBag(letterBag)
+}
+
+function randomizeLetterBag (letterBag) {
+  for (let index = letterBag.length -1; index > 0; index--) {
+    const randomIndex = Math.floor(Math.random() * (index +1));
+    [letterBag[index], letterBag[randomIndex]] = [letterBag[randomIndex], letterBag[index]]
+  }
+  // console.log(letterBag)
 }
 
 let playerOnePossessiveName;
@@ -364,6 +373,7 @@ function pullLettersFromLetterBag() {
   // playerOneObject.tiles = ["t", "e", "s", "*", "c", "a", "t"];
   // playerTwoObject.tiles = ["d", "e", "s", "*", "c", "a", "t"];
 
+  randomizeLetterBag(letterBag)
   while (playerOneObject.tiles.length < 7) {
     if (letterBag.length > 0) {
       let randomLetterIndex = Math.floor(Math.random() * letterBag.length);
@@ -372,6 +382,7 @@ function pullLettersFromLetterBag() {
       letterBag.splice(randomLetterIndex, 1);
     }
   }
+  randomizeLetterBag(letterBag)
   while (playerTwoObject.tiles.length < 7) {
     if (letterBag.length > 0) {
       let randomLetterIndex = Math.floor(Math.random() * letterBag.length);
