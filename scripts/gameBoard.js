@@ -101,7 +101,6 @@ let direction = "horizontal";
 
 gameGrid[activeBox].style.opacity = ".5";
 
-
 function updateScoreboard() {
   p1Score.textContent = playerOneObject.score;
   p2Score.textContent = playerTwoObject.score;
@@ -110,7 +109,6 @@ function updateScoreboard() {
 updateScoreboard();
 
 function switchPlayers() {
-
   if (activePlayer === 0) {
     activePlayer = 1;
     activePlayerDisplay.textContent = `${playerTwoPossessiveName} turn`;
@@ -244,13 +242,16 @@ function fillLetterBag() {
   for (let i = 0; i < 12; i++) {
     letterBag.push("e");
   }
-  randomizeLetterBag(letterBag)
+  randomizeLetterBag(letterBag);
 }
 
-function randomizeLetterBag (letterBag) {
-  for (let index = letterBag.length -1; index > 0; index--) {
-    const randomIndex = Math.floor(Math.random() * (index +1));
-    [letterBag[index], letterBag[randomIndex]] = [letterBag[randomIndex], letterBag[index]]
+function randomizeLetterBag(letterBag) {
+  for (let index = letterBag.length - 1; index > 0; index--) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [letterBag[index], letterBag[randomIndex]] = [
+      letterBag[randomIndex],
+      letterBag[index],
+    ];
   }
 }
 
@@ -301,17 +302,34 @@ function getNamesAndScoreboardInfo() {
 }
 
 function pullLettersFromLetterBag() {
-  console.log(letterBag.length)
-
   if (letterBag.length === 0) {
-    alert("No More Tiles")
+    const endgameBtn = document.createElement("button");
+    endgameBtn.id = "endgameBtn";
+    endgameBtn.innerText = "End Game?";
+    endgameBtn.addEventListener("click", () => {
+      if (
+        parseInt(document.getElementById("p1Score").textContent) >
+        parseInt(document.getElementById("p2Score").textContent)
+      ) {
+        document.getElementById("activePlayerDisplay").textContent = `${
+          document.getElementById("p1Name").textContent
+        } is ahead. Subtract letters to see who wins.`;
+      } else {
+        document.getElementById("activePlayerDisplay").textContent = `${
+          document.getElementById("p2Name").textContent
+        } is ahead. Subtract letters to see who wins.`;
+      }
+    });
+    if (!document.getElementById("endgameBtn")) {
+      submitBtn.after(endgameBtn);
+    }
   }
   // console.log("activePlayer: ",activePlayer)
   // playerOneObject.tiles = ["t", "e", "s", "*", "c", "a", "t"];
   // playerTwoObject.tiles = ["d", "e", "s", "*", "c", "a", "t"];
 
-  randomizeLetterBag(letterBag)
-  while (playerOneObject.tiles.length < 7) {
+  randomizeLetterBag(letterBag);
+  while (playerOneObject.tiles.length < 7 && letterBag.length > 0) {
     if (letterBag.length > 0) {
       let randomLetterIndex = Math.floor(Math.random() * letterBag.length);
       playerOneObject.tiles.push(letterBag[randomLetterIndex]);
@@ -319,8 +337,8 @@ function pullLettersFromLetterBag() {
       letterBag.splice(randomLetterIndex, 1);
     }
   }
-  randomizeLetterBag(letterBag)
-  while (playerTwoObject.tiles.length < 7) {
+  randomizeLetterBag(letterBag);
+  while (playerTwoObject.tiles.length < 7 && letterBag.length > 0) {
     if (letterBag.length > 0) {
       let randomLetterIndex = Math.floor(Math.random() * letterBag.length);
       playerTwoObject.tiles.push(letterBag[randomLetterIndex]);
@@ -351,11 +369,11 @@ function tradeInLetters() {
 function putLettersInTheGameGridBoxes() {
   const limit = playableLetters.length;
   for (let i = 0; i < limit; i++) {
-    const letter = document.getElementsByClassName("letter")[i]
-    const letterPoint = document.getElementsByClassName("letterPoints")[i]
+    const letter = document.getElementsByClassName("letter")[i];
+    const letterPoint = document.getElementsByClassName("letterPoints")[i];
 
-    letter.innerText = playableLetters[i]
-    letterPoint.innerText = letterPoints[playableLetters[i]]
+    letter.innerText = playableLetters[i];
+    letterPoint.innerText = letterPoints[playableLetters[i]];
   }
 }
 
@@ -397,15 +415,13 @@ function addPlayerTileEventListeners() {
     playerTiles[i].addEventListener("click", handlePlayerTileClick);
 
     function handlePlayerTileClick() {
-
-      let textContent = document.getElementsByClassName("letter")[i].textContent;
+      let textContent =
+        document.getElementsByClassName("letter")[i].textContent;
+      console.log(textContent);
       if (textContent.length === 1) {
         lookForBoxesToSkip(i, textContent);
         originalPlayedTiles.push(activeBox);
-        playableLetters.splice(
-          playableLetters.indexOf(textContent),
-          1
-        );
+        playableLetters.splice(playableLetters.indexOf(textContent), 1);
 
         document.getElementsByClassName("letter")[i].textContent = "";
         document.getElementsByClassName("letterPoints")[i].textContent = "";
@@ -418,8 +434,8 @@ addPlayerTileEventListeners();
 //todo add a drag event listener to move letters from one tile location to another
 
 function lookForBoxesToSkip(index, letter) {
-  console.log("wordinplayarray: ", wordInPlayArray);
   if (letter === "*") {
+    //todo add logic to save the wildcard property
     letter = prompt("Pick a Letter")[0].toLowerCase();
   }
   let activeBoxLocation =
@@ -452,10 +468,8 @@ function lookForBoxesToSkip(index, letter) {
       }
     }
   } else if (activeBox % 15 === 14) {
-    console.log("hello?");
-    console.log(activeBox);
     if (activeBoxLocation.textContent.length < 1) {
-      activeBoxLocation.textContent = playerTiles[index].textContent;
+      activeBoxLocation.textContent = letter;
       wordInPlayArray.push(activeBox);
     }
   }
@@ -498,7 +512,7 @@ function clickedSubmitBtn() {
 }
 
 document.addEventListener("keypress", function (event) {
-  let playerTiles = document.getElementsByClassName("letter")
+  let playerTiles = document.getElementsByClassName("letter");
   let key = event.key || event.keyCode;
   let tiles = [];
   for (let i = 0; i < playerTiles.length; i++) {
@@ -509,7 +523,9 @@ document.addEventListener("keypress", function (event) {
 
     originalPlayedTiles.push(activeBox);
     playerTiles[tiles.indexOf(key)].textContent = "";
-    document.getElementsByClassName("letterPoints")[tiles.indexOf(key)].textContent = "";
+    document.getElementsByClassName("letterPoints")[
+      tiles.indexOf(key)
+    ].textContent = "";
     tiles = [];
 
     playableLetters.splice(playableLetters.indexOf(key.toLocaleLowerCase()), 1);
@@ -680,7 +696,6 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
   }
 
   if (skippedDirection !== undefined) {
-
     for (let node of wordsInPlay) {
       if (skippedDirection === "horizontal") {
         let horiz = "";
@@ -769,25 +784,22 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
     }
   }
   if (skippedDirection === undefined) {
-    console.log("undefined section");
     for (let node of wordsInPlay) {
-      console.log("wordsInPlay: ", wordsInPlay);
-      console.log("node: ", node);
       if (node.horizontal.length > 0 && node.vertical.length > 0) {
         if (!checkWords(node, "horizontal") || !checkWords(node, "vertical")) {
-          console.log(node, "not found");
+          // console.log(node, "not found");
           cancelTilePlacement();
           return false;
         }
       } else if (node.vertical.length > 0) {
         if (!checkWords(node, "vertical")) {
-          console.log(node, "not found");
+          // console.log(node, "not found");
           cancelTilePlacement();
           return false;
         }
       } else if (node.horizontal.length > 0) {
         if (!checkWords(node, "horizontal")) {
-          console.log(node, "not found");
+          // console.log(node, "not found");
           cancelTilePlacement();
           return false;
         }
@@ -806,10 +818,8 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
     }
 
     if (temp && searchDictionary(temp) === false) {
-      console.log(`no ${direction} word, ${temp} found`);
       return false;
     } else if (temp && searchDictionary(temp) === true) {
-      console.log(`${direction} word, ${temp} was found in the dictionary`);
       return true;
     }
   }
@@ -847,7 +857,6 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
     runningTotal += letterPoints[letter] * squareTypes[multiplier];
   }
   runningTotal *= wordMultiplier;
-  console.log("runningTotal: ", runningTotal);
 
   if (activePlayer === 0) {
     playerOneObject.score += runningTotal;
@@ -867,7 +876,6 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
 function updatePlayerScores() {
   if (activePlayer === 0) {
     p1Score.textContent = playerOneObject.score;
-
   } else if (activePlayer === 1) {
     p2Score.textContent = playerTwoObject.score;
   }
