@@ -415,6 +415,10 @@ function addPlayerTileEventListeners() {
     playerTiles[i].addEventListener("click", handlePlayerTileClick);
 
     function handlePlayerTileClick() {
+      if (gameGrid[activeBox].textContent.length >0 && activeBox % 15 === 14) {
+        return;
+      }
+
       let textContent =
         document.getElementsByClassName("letter")[i].textContent;
       console.log(textContent);
@@ -471,7 +475,7 @@ function lookForBoxesToSkip(index, letter) {
     if (activeBoxLocation.textContent.length < 1) {
       activeBoxLocation.textContent = letter;
       wordInPlayArray.push(activeBox);
-    }
+    } 
   }
 }
 
@@ -519,6 +523,9 @@ document.addEventListener("keypress", function (event) {
     tiles.push(playerTiles[i].textContent);
   }
   if (tiles.includes(key.toLowerCase())) {
+    if (gameGrid[activeBox].textContent.length >0 && activeBox % 15 === 14) {
+      return;
+    }
     lookForBoxesToSkip(tiles.indexOf(key.toLowerCase()), key);
 
     originalPlayedTiles.push(activeBox);
