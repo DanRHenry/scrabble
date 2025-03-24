@@ -3,13 +3,13 @@ const gameGrid = document.getElementsByClassName("gameGridBox");
 const horizontalBtn = document.getElementById("horizontalBtn");
 const inputCancelBtn = document.getElementById("inputCancelBtn");
 const inputField = document.getElementById("inputField");
-let p1Score = document.getElementById("p1Score");
-let p2Score = document.getElementById("p2Score");
-let playerOneScoreName = document.getElementById("p1Name");
+const p1Score = document.getElementById("p1Score");
+const p2Score = document.getElementById("p2Score");
+const playerOneScoreName = document.getElementById("p1Name");
 const playerTiles = document.getElementsByClassName("playerTiles");
-let playerTwoScoreName = document.getElementById("p2Name");
+const playerTwoScoreName = document.getElementById("p2Name");
 const submitBtn = document.getElementById("submitBtn");
-let tradeInLettersButton = document.getElementById("tradeInLetters");
+const tradeInLettersButton = document.getElementById("tradeInLetters");
 const verticalBtn = document.getElementById("verticalBtn");
 const activePlayerDisplay = document.getElementById("activePlayerDisplay");
 
@@ -93,7 +93,8 @@ let startingBox = activeBox;
 let scrabblePlayerOneName;
 let scrabblePlayerTwoName;
 let activePlayer = Math.floor(Math.random() * 2);
-
+let playerOnePossessiveName;
+let playerTwoPossessiveName;
 let skippedDirection;
 
 let direction = "horizontal";
@@ -101,12 +102,34 @@ let direction = "horizontal";
 
 gameGrid[activeBox].style.opacity = ".5";
 
+
+//!---------------------------------------------- Event Listeners ----------------------------------------------------
+
+horizontalBtn.addEventListener("mousedown", () => {
+  direction = "horizontal";
+  setDirectionalBtnStyling();
+});
+
+verticalBtn.addEventListener("mousedown", () => {
+  direction = "vertical";
+  setDirectionalBtnStyling();
+});
+
+tradeInLettersButton.addEventListener("click", tradeInLetters);
+
+//! ----------------------------------------------------- Functions ---------------------------------------------------------------
+
 function updateScoreboard() {
+  if (localStorage.playerOneObjectScore) {
+    playerOneObject.score = localStorage.playerOneObjectScore
+  }
+
+  if (localStorage.playerTwoObjectScore) {
+    playerTwoObject.score = localStorage.playerTwoObjectScore
+  }
   p1Score.textContent = playerOneObject.score;
   p2Score.textContent = playerTwoObject.score;
 }
-
-updateScoreboard();
 
 function switchPlayers() {
   if (activePlayer === 0) {
@@ -142,8 +165,6 @@ function setDirectionalBtnStyling() {
     verticalBtn.style.color = "white";
   }
 }
-
-setDirectionalBtnStyling();
 
 function switchDirections() {
   if (direction === "horizontal") {
@@ -190,7 +211,6 @@ function moveActiveBoxUp() {
     gameGrid[activeBox].style.opacity = ".5";
   }
 }
-//! ----------------------------------------------------- Functions ---------------------------------------------------------------
 
 function fillLetterBag() {
   letterBag = [];
@@ -255,8 +275,6 @@ function randomizeLetterBag(letterBag) {
   }
 }
 
-let playerOnePossessiveName;
-let playerTwoPossessiveName;
 function getNamesAndScoreboardInfo() {
   if (localStorage.scrabblePlayerOneName != "") {
     if (
@@ -333,7 +351,7 @@ function pullLettersFromLetterBag() {
     if (letterBag.length > 0) {
       let randomLetterIndex = Math.floor(Math.random() * letterBag.length);
       playerOneObject.tiles.push(letterBag[randomLetterIndex]);
-
+      localStorage.playerOneObjectTiles = playerOneObject.tiles
       letterBag.splice(randomLetterIndex, 1);
     }
   }
@@ -342,7 +360,7 @@ function pullLettersFromLetterBag() {
     if (letterBag.length > 0) {
       let randomLetterIndex = Math.floor(Math.random() * letterBag.length);
       playerTwoObject.tiles.push(letterBag[randomLetterIndex]);
-
+      localStorage.playerTwoObjectTiles = playerTwoObject.tiles
       letterBag.splice(randomLetterIndex, 1);
     }
   }
@@ -377,8 +395,6 @@ function putLettersInTheGameGridBoxes() {
   }
 }
 
-//!---------------------------------------------- Event Listeners ----------------------------------------------------
-
 function gameGridBoxAddEventListeners() {
   for (let i = 0; i < gameGrid.length; i++) {
     gameGrid[i].addEventListener(
@@ -395,47 +411,6 @@ function gameGridBoxAddEventListeners() {
     );
   }
 }
-
-horizontalBtn.addEventListener("mousedown", () => {
-  direction = "horizontal";
-  setDirectionalBtnStyling();
-});
-
-verticalBtn.addEventListener("mousedown", () => {
-  direction = "vertical";
-  setDirectionalBtnStyling();
-});
-
-tradeInLettersButton.addEventListener("click", tradeInLetters);
-
-function addPlayerTileEventListeners() {
-  for (let i = 0; i < playerTiles.length; i++) {
-    wordInPlayArray = [];
-
-    playerTiles[i].addEventListener("click", handlePlayerTileClick);
-
-    function handlePlayerTileClick() {
-      if (gameGrid[activeBox].textContent.length >0 && activeBox % 15 === 14) {
-        return;
-      }
-
-      let textContent =
-        document.getElementsByClassName("letter")[i].textContent;
-      console.log(textContent);
-      if (textContent.length === 1) {
-        lookForBoxesToSkip(i, textContent);
-        originalPlayedTiles.push(activeBox);
-        playableLetters.splice(playableLetters.indexOf(textContent), 1);
-
-        document.getElementsByClassName("letter")[i].textContent = "";
-        document.getElementsByClassName("letterPoints")[i].textContent = "";
-      }
-    }
-  }
-}
-
-addPlayerTileEventListeners();
-//todo add a drag event listener to move letters from one tile location to another
 
 function lookForBoxesToSkip(index, letter) {
   if (letter === "*") {
@@ -479,7 +454,31 @@ function lookForBoxesToSkip(index, letter) {
   }
 }
 
-inputCancelBtn.addEventListener("click", cancelTilePlacement);
+function addPlayerTileEventListeners() {
+  for (let i = 0; i < playerTiles.length; i++) {
+    wordInPlayArray = [];
+
+    playerTiles[i].addEventListener("click", handlePlayerTileClick);
+
+    function handlePlayerTileClick() {
+      if (gameGrid[activeBox].textContent.length >0 && activeBox % 15 === 14) {
+        return;
+      }
+
+      let textContent =
+        document.getElementsByClassName("letter")[i].textContent;
+      console.log(textContent);
+      if (textContent.length === 1) {
+        lookForBoxesToSkip(i, textContent);
+        originalPlayedTiles.push(activeBox);
+        playableLetters.splice(playableLetters.indexOf(textContent), 1);
+
+        document.getElementsByClassName("letter")[i].textContent = "";
+        document.getElementsByClassName("letterPoints")[i].textContent = "";
+      }
+    }
+  }
+}
 
 function cancelTilePlacement() {
   originalPlayedTiles = Array.from(originalPlayedTiles);
@@ -496,7 +495,28 @@ function cancelTilePlacement() {
   addPlayerTileEventListeners();
 }
 
-submitBtn.addEventListener("click", clickedSubmitBtn);
+//todo Get this working correctly. Tiles not being returned to available tiles list correctly when not all tiles are used
+function backspaceTilePlacement() {
+  originalPlayedTiles = Array.from(originalPlayedTiles);
+  if (originalPlayedTiles.length === 0) {
+    return;
+  }
+
+  playableLetters.push(gameGrid[originalPlayedTiles[originalPlayedTiles.length -1]].textContent);
+  gameGrid[originalPlayedTiles[originalPlayedTiles.length -1]].textContent = "";
+  
+  console.log(originalPlayedTiles, typeof originalPlayedTiles)
+  originalPlayedTiles.pop()
+  console.log(originalPlayedTiles,  typeof originalPlayedTiles)
+    
+
+  wordInPlayArray = [];
+  // originalPlayedTiles = [];
+  putLettersInTheGameGridBoxes();
+  activeBox = startingBox;
+  skippedDirection = undefined;
+  addPlayerTileEventListeners();
+}
 
 function clickedSubmitBtn() {
   originalPlayedTiles = new Set([...originalPlayedTiles]);
@@ -514,56 +534,6 @@ function clickedSubmitBtn() {
   skippedDirection = undefined;
   pullLettersFromLetterBag();
 }
-
-document.addEventListener("keypress", function (event) {
-  let playerTiles = document.getElementsByClassName("letter");
-  let key = event.key || event.keyCode;
-  let tiles = [];
-  for (let i = 0; i < playerTiles.length; i++) {
-    tiles.push(playerTiles[i].textContent);
-  }
-  if (tiles.includes(key.toLowerCase())) {
-    if (gameGrid[activeBox].textContent.length >0 && activeBox % 15 === 14) {
-      return;
-    }
-    lookForBoxesToSkip(tiles.indexOf(key.toLowerCase()), key);
-
-    originalPlayedTiles.push(activeBox);
-    playerTiles[tiles.indexOf(key)].textContent = "";
-    document.getElementsByClassName("letterPoints")[
-      tiles.indexOf(key)
-    ].textContent = "";
-    tiles = [];
-
-    playableLetters.splice(playableLetters.indexOf(key.toLocaleLowerCase()), 1);
-    for (let i = 0; i < playerTiles.length; i++) {
-      tiles.push(playerTiles[i].textContent);
-    }
-  }
-  if (key === "Enter") {
-    clickedSubmitBtn();
-  }
-  if (key === " ") {
-    switchDirections();
-    setDirectionalBtnStyling();
-  }
-
-  if (key === "ArrowLeft") {
-    moveActiveBoxLeft();
-  }
-
-  if (key === "ArrowRight") {
-    moveActiveBoxRight();
-  }
-
-  if (key === "ArrowUp") {
-    moveActiveBoxUp();
-  }
-
-  if (key === "ArrowDown") {
-    moveActiveBoxDown();
-  }
-});
 
 function createWordsInPlay(wordInPlayArray) {
   if (!gameGrid[112].textContent.length > 0 && !wordInPlayArray.includes(112)) {
@@ -671,6 +641,7 @@ function createWordsInPlay(wordInPlayArray) {
 
   return wordsInPlay;
 }
+
 function checkDictionaryForWordsInPlay(wordsInPlay) {
   let runningTotal = 0;
   let collection = [];
@@ -878,8 +849,6 @@ function checkDictionaryForWordsInPlay(wordsInPlay) {
   return runningTotal;
 }
 
-//!------------------------------------------------------------------------------
-
 function updatePlayerScores() {
   if (activePlayer === 0) {
     p1Score.textContent = playerOneObject.score;
@@ -971,6 +940,84 @@ function createVerticalAndHorizontalWords(wordsInPlay) {
   }
 }
 
+addPlayerTileEventListeners();
+//todo add a drag event listener to move letters from one tile location to another
+
+inputCancelBtn.addEventListener("click", cancelTilePlacement);
+
+submitBtn.addEventListener("click", clickedSubmitBtn);
+
+document.addEventListener("keydown", function (event) {
+  let key = event.key || event.keyCode;
+
+  // if (event.key === "Backspace") {
+  //   console.log('backspace')
+  //   backspaceTilePlacement();
+  // }
+
+  if (key === "ArrowLeft") {
+    moveActiveBoxLeft();
+  }
+
+  if (key === "ArrowRight") {
+    moveActiveBoxRight();
+  }
+
+  if (key === "ArrowUp") {
+    moveActiveBoxUp();
+  }
+
+  if (key === "ArrowDown") {
+    moveActiveBoxDown();
+  }
+})
+
+document.addEventListener("keypress", function (event) {
+  let playerTiles = document.getElementsByClassName("letter");
+  let key = event.key || event.keyCode;
+
+  let tiles = [];
+
+  if (event.key === "Backspace") {
+    console.log("backspace key pressed")
+  }
+  for (let i = 0; i < playerTiles.length; i++) {
+    tiles.push(playerTiles[i].textContent);
+  }
+  if (tiles.includes(key.toLowerCase())) {
+    if (gameGrid[activeBox].textContent.length >0 && activeBox % 15 === 14) {
+      return;
+    }
+    lookForBoxesToSkip(tiles.indexOf(key.toLowerCase()), key);
+
+    originalPlayedTiles.push(activeBox);
+    playerTiles[tiles.indexOf(key)].textContent = "";
+    document.getElementsByClassName("letterPoints")[
+      tiles.indexOf(key)
+    ].textContent = "";
+    tiles = [];
+
+    playableLetters.splice(playableLetters.indexOf(key.toLocaleLowerCase()), 1);
+    for (let i = 0; i < playerTiles.length; i++) {
+      tiles.push(playerTiles[i].textContent);
+    }
+  }
+  if (key === "Enter") {
+    clickedSubmitBtn();
+  }
+  if (key === " ") {
+    switchDirections();
+    setDirectionalBtnStyling();
+  }
+
+});
+
+
+
+//!------------------------------------------------------------------------------
+
+updateScoreboard();
+setDirectionalBtnStyling();
 getNamesAndScoreboardInfo();
 fillLetterBag();
 tradeInLetters();

@@ -65,6 +65,10 @@ body {
   margin-right: 10%;
 }
 
+#submitBtn {
+  margin-top: 1rem;
+}
+
 #tileGridHolder {
   /* width: 50vw; */
   margin-left: 10vw;
@@ -109,7 +113,7 @@ body {
 #multipliers {
   margin: 0;
   padding: 0;
-  margin-top: .25vh;
+  margin-top: 1rem;
   background-color: rgb(186, 186, 186);
   border: 1px solid black;
   border-radius: .25em;
@@ -117,7 +121,7 @@ body {
 }
 
 #multipliers > div {
-  display: inline;
+  display: inline-block;
   text-indent: 0;
   font-size: clamp(16px, 2vw, 3em);
   padding-right: 0.5em;
@@ -235,14 +239,15 @@ button {
 }
 
 #p1ScoreSection, #p2ScoreSection {
-  width: 50vw;
+  width: 20vw;
   background-color: white;
   border: 1px solid black;
   border-radius: .25em;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  margin-right: .5rem;
-  margin-left: .5rem;
+  padding: .5rem;
+  /* padding-top: 1rem; */
+  /* padding-bottom: 1rem; */
+  margin-right: 2rem;
+  margin-left: 2rem;
 }
 
 .scoreBoard {
@@ -253,11 +258,15 @@ button {
 #scoreboardPlayerSection{
   display: flex;
   flex-direction: row;
-  align-self: center;
-  margin-right: 2em;
-  margin-left: 2em;
-  width: 90%;
-  margin-bottom: 1em;
+  margin: auto;
+  /* text-align: center; */
+  /* align-self: center; */
+  /* align-items: center; */
+  margin-top: 1rem;
+  /* margin-right: 2em; */
+  /* margin-left: 2em; */
+  /* width: 90%; */
+  /* margin-bottom: 1em; */
   /* margin: 3rem; */
 }
 
@@ -282,6 +291,7 @@ button {
 
 #activePlayerDisplay {
   /* display: block; */
+  margin-top: 1rem;
   width: 100vw;
   background-color: antiquewhite;
 }
