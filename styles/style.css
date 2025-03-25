@@ -132,7 +132,7 @@ body {
 
 #multipliers > div, #tradeInLetters, #horizontalBtn, #verticalBtn, #inputCancelBtn {
   flex: auto;
-  height: 100%;
+  /* height: 100%; */
   /* font-size: clamp(16px, 2vw, 3em); */
   font-size: clamp(25%,3vw,3em);
 }
@@ -242,30 +242,35 @@ button {
   padding-right: 0.5em;
 }
 
-#p1ScoreSection, #p2ScoreSection {
-  width: 20vw;
-  background-color: white;
-  border: 1px solid black;
-  border-radius: .25em;
-  padding: .5rem;
-  /* padding-top: 1rem; */
-  /* padding-bottom: 1rem; */
-  margin-right: 2rem;
-  margin-left: 2rem;
-}
 
 .scoreBoard {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  /* flex-direction: column; */
 }
 
 #scoreboardPlayerSection{
   display: flex;
-  flex-direction: row;
+  /* flex-direction: row; */
+  align-items: center;
   margin: auto;
   margin-top: 1rem;
+  width: 75%;
 }
 
+#p1ScoreSection, #p2ScoreSection {
+  background-color: white;
+  border: 1px solid black;
+  border-radius: .25em;
+  width: 100%;
+  /* padding: .5rem; */
+  /* margin-right: 2rem; */
+  /* margin-left: 2rem; */
+  padding-top: .5em;
+  padding-bottom: .5em;
+  font-size: clamp(25%,3vw,3em);
+
+}
 
 
 .tradeInLetters {
