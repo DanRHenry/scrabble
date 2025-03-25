@@ -390,10 +390,10 @@ function putLettersInTheGameGridBoxes() {
     const letter = document.getElementsByClassName("letter")[i];
     const letterPoint = document.getElementsByClassName("letterPoints")[i];
 
-    if (letter.textContent.length < 1) {
+    // if (letter.textContent.length < 1) {
       letter.innerText = playableLetters[i];
       letterPoint.innerText = letterPoints[playableLetters[i]];
-    }
+    // }
   }
 }
 
