@@ -390,8 +390,10 @@ function putLettersInTheGameGridBoxes() {
     const letter = document.getElementsByClassName("letter")[i];
     const letterPoint = document.getElementsByClassName("letterPoints")[i];
 
-    letter.innerText = playableLetters[i];
-    letterPoint.innerText = letterPoints[playableLetters[i]];
+    if (letter.textContent.length < 1) {
+      letter.innerText = playableLetters[i];
+      letterPoint.innerText = letterPoints[playableLetters[i]];
+    }
   }
 }
 
@@ -497,6 +499,8 @@ function cancelTilePlacement() {
 
 //todo Get this working correctly. Tiles not being returned to available tiles list correctly when not all tiles are used
 function backspaceTilePlacement() {
+  console.log("playableLetters: ",playableLetters)
+
   originalPlayedTiles = Array.from(originalPlayedTiles);
   if (originalPlayedTiles.length === 0) {
     return;
@@ -505,13 +509,13 @@ function backspaceTilePlacement() {
   playableLetters.push(gameGrid[originalPlayedTiles[originalPlayedTiles.length -1]].textContent);
   gameGrid[originalPlayedTiles[originalPlayedTiles.length -1]].textContent = "";
   
-  console.log(originalPlayedTiles, typeof originalPlayedTiles)
   originalPlayedTiles.pop()
   console.log(originalPlayedTiles,  typeof originalPlayedTiles)
     
-
   wordInPlayArray = [];
-  // originalPlayedTiles = [];
+
+
+  console.log("playableLetters: ",playableLetters)
   putLettersInTheGameGridBoxes();
   activeBox = startingBox;
   skippedDirection = undefined;
@@ -950,10 +954,10 @@ submitBtn.addEventListener("click", clickedSubmitBtn);
 document.addEventListener("keydown", function (event) {
   let key = event.key || event.keyCode;
 
-  // if (event.key === "Backspace") {
-  //   console.log('backspace')
-  //   backspaceTilePlacement();
-  // }
+  if (event.key === "Backspace") {
+    console.log('backspace')
+    backspaceTilePlacement();
+  }
 
   if (key === "ArrowLeft") {
     moveActiveBoxLeft();

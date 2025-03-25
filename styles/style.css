@@ -41,16 +41,25 @@ body {
   height: 1.5em;
 }
 
+#buttonSection {
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  margin: auto;
+}
+
 #inputFieldRow {
   min-height: 1.5em;
+  display: flex;
+  align-items: center;
 }
+
 
 .answerRowGrid {
   margin-top: 1em;
   display: flex;
   display: none;
   justify-content: center;
-  /* border: 1px black solid; */
 }
 
 #verticalInput::placeholder {
@@ -117,23 +126,18 @@ body {
   background-color: rgb(186, 186, 186);
   border: 1px solid black;
   border-radius: .25em;
-  min-height: 1.5em;
+  display: flex;
+  align-items: center;
 }
 
-#multipliers > div {
-  display: inline-block;
-  text-indent: 0;
-  font-size: clamp(16px, 2vw, 3em);
-  padding-right: 0.5em;
-  padding-left: 0.5em;
-  margin-top: 0.5em;
-  margin-left: 0;
-  border: 1px solid black;
+#multipliers > div, #tradeInLetters, #horizontalBtn, #verticalBtn, #inputCancelBtn {
+  flex: auto;
+  height: 100%;
+  /* font-size: clamp(16px, 2vw, 3em); */
+  font-size: clamp(25%,3vw,3em);
 }
 
 .gameBoard {
-  /* max-width: 50%; */
-  /* display: inline-block; */
   margin-top: 1em;
   display: flex;
   flex-direction: column;
@@ -259,15 +263,7 @@ button {
   display: flex;
   flex-direction: row;
   margin: auto;
-  /* text-align: center; */
-  /* align-self: center; */
-  /* align-items: center; */
   margin-top: 1rem;
-  /* margin-right: 2em; */
-  /* margin-left: 2em; */
-  /* width: 90%; */
-  /* margin-bottom: 1em; */
-  /* margin: 3rem; */
 }
 
 
