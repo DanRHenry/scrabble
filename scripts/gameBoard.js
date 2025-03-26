@@ -102,7 +102,6 @@ let direction = "horizontal";
 
 gameGrid[activeBox].style.opacity = ".5";
 
-
 //!---------------------------------------------- Event Listeners ----------------------------------------------------
 
 horizontalBtn.addEventListener("mousedown", () => {
@@ -121,11 +120,11 @@ tradeInLettersButton.addEventListener("click", tradeInLetters);
 
 function updateScoreboard() {
   if (localStorage.playerOneObjectScore) {
-    playerOneObject.score = localStorage.playerOneObjectScore
+    playerOneObject.score = localStorage.playerOneObjectScore;
   }
 
   if (localStorage.playerTwoObjectScore) {
-    playerTwoObject.score = localStorage.playerTwoObjectScore
+    playerTwoObject.score = localStorage.playerTwoObjectScore;
   }
   p1Score.textContent = playerOneObject.score;
   p2Score.textContent = playerTwoObject.score;
@@ -351,7 +350,7 @@ function pullLettersFromLetterBag() {
     if (letterBag.length > 0) {
       let randomLetterIndex = Math.floor(Math.random() * letterBag.length);
       playerOneObject.tiles.push(letterBag[randomLetterIndex]);
-      localStorage.playerOneObjectTiles = playerOneObject.tiles
+      localStorage.playerOneObjectTiles = playerOneObject.tiles;
       letterBag.splice(randomLetterIndex, 1);
     }
   }
@@ -360,7 +359,7 @@ function pullLettersFromLetterBag() {
     if (letterBag.length > 0) {
       let randomLetterIndex = Math.floor(Math.random() * letterBag.length);
       playerTwoObject.tiles.push(letterBag[randomLetterIndex]);
-      localStorage.playerTwoObjectTiles = playerTwoObject.tiles
+      localStorage.playerTwoObjectTiles = playerTwoObject.tiles;
       letterBag.splice(randomLetterIndex, 1);
     }
   }
@@ -391,9 +390,34 @@ function putLettersInTheGameGridBoxes() {
     const letterPoint = document.getElementsByClassName("letterPoints")[i];
 
     // if (letter.textContent.length < 1) {
-      letter.innerText = playableLetters[i];
-      letterPoint.innerText = letterPoints[playableLetters[i]];
+    letter.innerText = playableLetters[i];
+    letterPoint.innerText = letterPoints[playableLetters[i]];
     // }
+  }
+}
+function returnLettersToThePlayerTileLetters() {
+  const playerTileLetters = document.getElementsByClassName("letter");
+  const playerTileNumbers = document.getElementsByClassName("letterPoints");
+
+  for (let i = 0; i < playerTileLetters.length; i++) {
+    if (originalPlayedTiles.length === 0) {
+      return;
+    }
+
+    const gridLocationOfLetterToReturn = originalPlayedTiles[originalPlayedTiles.length -1]
+
+    const letterToReturn = gameGrid[gridLocationOfLetterToReturn].textContent
+
+
+    if (playerTileLetters[i].textContent.length === 0) {
+      const gridLocation = originalPlayedTiles[originalPlayedTiles.length-1]
+      
+      playerTileLetters[i].textContent = letterToReturn;
+      playerTileNumbers[i].textContent = letterPoints[letterToReturn]
+      gameGrid[gridLocation].textContent = ""
+      originalPlayedTiles.pop()
+      return;
+    }
   }
 }
 
@@ -452,7 +476,7 @@ function lookForBoxesToSkip(index, letter) {
     if (activeBoxLocation.textContent.length < 1) {
       activeBoxLocation.textContent = letter;
       wordInPlayArray.push(activeBox);
-    } 
+    }
   }
 }
 
@@ -460,25 +484,26 @@ function addPlayerTileEventListeners() {
   for (let i = 0; i < playerTiles.length; i++) {
     wordInPlayArray = [];
 
-    playerTiles[i].addEventListener("click", handlePlayerTileClick);
+    playerTiles[i].addEventListener("click", () => handlePlayerTileClick(i));
 
-    function handlePlayerTileClick() {
-      if (gameGrid[activeBox].textContent.length >0 && activeBox % 15 === 14) {
-        return;
-      }
 
-      let textContent =
-        document.getElementsByClassName("letter")[i].textContent;
-      console.log(textContent);
-      if (textContent.length === 1) {
-        lookForBoxesToSkip(i, textContent);
-        originalPlayedTiles.push(activeBox);
-        playableLetters.splice(playableLetters.indexOf(textContent), 1);
+  }
+}
 
-        document.getElementsByClassName("letter")[i].textContent = "";
-        document.getElementsByClassName("letterPoints")[i].textContent = "";
-      }
-    }
+function handlePlayerTileClick(index) {
+  if (gameGrid[activeBox].textContent.length > 0 && activeBox % 15 === 14) {
+    return;
+  }
+
+  let textContent =
+    document.getElementsByClassName("letter")[index].textContent;
+  if (textContent.length === 1) {
+    lookForBoxesToSkip(index, textContent);
+    originalPlayedTiles.push(activeBox);
+    playableLetters.splice(playableLetters.indexOf(textContent), 1);
+
+    document.getElementsByClassName("letter")[index].textContent = "";
+    document.getElementsByClassName("letterPoints")[index].textContent = "";
   }
 }
 
@@ -497,26 +522,21 @@ function cancelTilePlacement() {
   addPlayerTileEventListeners();
 }
 
-//todo Get this working correctly. Tiles not being returned to available tiles list correctly when not all tiles are used
 function backspaceTilePlacement() {
-  console.log("playableLetters: ",playableLetters)
 
   originalPlayedTiles = Array.from(originalPlayedTiles);
   if (originalPlayedTiles.length === 0) {
     return;
   }
 
-  playableLetters.push(gameGrid[originalPlayedTiles[originalPlayedTiles.length -1]].textContent);
-  gameGrid[originalPlayedTiles[originalPlayedTiles.length -1]].textContent = "";
-  
-  originalPlayedTiles.pop()
-  console.log(originalPlayedTiles,  typeof originalPlayedTiles)
-    
+  playableLetters.push(
+    gameGrid[originalPlayedTiles[originalPlayedTiles.length - 1]].textContent
+  );
+
   wordInPlayArray = [];
 
+  returnLettersToThePlayerTileLetters();
 
-  console.log("playableLetters: ",playableLetters)
-  putLettersInTheGameGridBoxes();
   activeBox = startingBox;
   skippedDirection = undefined;
   addPlayerTileEventListeners();
@@ -955,7 +975,6 @@ document.addEventListener("keydown", function (event) {
   let key = event.key || event.keyCode;
 
   if (event.key === "Backspace") {
-    console.log('backspace')
     backspaceTilePlacement();
   }
 
@@ -974,7 +993,7 @@ document.addEventListener("keydown", function (event) {
   if (key === "ArrowDown") {
     moveActiveBoxDown();
   }
-})
+});
 
 document.addEventListener("keypress", function (event) {
   let playerTiles = document.getElementsByClassName("letter");
@@ -982,14 +1001,12 @@ document.addEventListener("keypress", function (event) {
 
   let tiles = [];
 
-  if (event.key === "Backspace") {
-    console.log("backspace key pressed")
-  }
   for (let i = 0; i < playerTiles.length; i++) {
     tiles.push(playerTiles[i].textContent);
   }
+
   if (tiles.includes(key.toLowerCase())) {
-    if (gameGrid[activeBox].textContent.length >0 && activeBox % 15 === 14) {
+    if (gameGrid[activeBox].textContent.length > 0 && activeBox % 15 === 14) {
       return;
     }
     lookForBoxesToSkip(tiles.indexOf(key.toLowerCase()), key);
@@ -1006,17 +1023,16 @@ document.addEventListener("keypress", function (event) {
       tiles.push(playerTiles[i].textContent);
     }
   }
+
   if (key === "Enter") {
     clickedSubmitBtn();
   }
+
   if (key === " ") {
     switchDirections();
     setDirectionalBtnStyling();
   }
-
 });
-
-
 
 //!------------------------------------------------------------------------------
 
