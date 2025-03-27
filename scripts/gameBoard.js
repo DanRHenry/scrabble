@@ -96,7 +96,7 @@ let activePlayer = Math.floor(Math.random() * 2);
 let playerOnePossessiveName;
 let playerTwoPossessiveName;
 let skippedDirection;
-
+let wildcards = [];
 let direction = "horizontal";
 // let direction = "vertical";
 
@@ -399,24 +399,16 @@ function returnLettersToThePlayerTileLetters() {
   const playerTileLetters = document.getElementsByClassName("letter");
   const playerTileNumbers = document.getElementsByClassName("letterPoints");
 
-  for (let i = 0; i < playerTileLetters.length; i++) {
-    if (originalPlayedTiles.length === 0) {
-      return;
-    }
+  for (let i = 0; i < playableLetters.length; i++) {
+    let letterToReturn = playableLetters[playableLetters.length - 1];
 
-    const gridLocationOfLetterToReturn = originalPlayedTiles[originalPlayedTiles.length -1]
-
-    const letterToReturn = gameGrid[gridLocationOfLetterToReturn].textContent
-
-
-    if (playerTileLetters[i].textContent.length === 0) {
-      const gridLocation = originalPlayedTiles[originalPlayedTiles.length-1]
-      
-      playerTileLetters[i].textContent = letterToReturn;
-      playerTileNumbers[i].textContent = letterPoints[letterToReturn]
-      gameGrid[gridLocation].textContent = ""
-      originalPlayedTiles.pop()
-      return;
+    for (let i = 0; i < playerTileLetters.length; i++) {
+      if (playerTileLetters[i].textContent.length === 0) {
+        playerTileLetters[i].textContent = letterToReturn;
+        playerTileNumbers[i].textContent = letterPoints[letterToReturn];
+        playableLetters.pop();
+        return;
+      }
     }
   }
 }
@@ -442,6 +434,7 @@ function lookForBoxesToSkip(index, letter) {
   if (letter === "*") {
     //todo add logic to save the wildcard property
     letter = prompt("Pick a Letter")[0].toLowerCase();
+    wildcards.push(letter);
   }
   let activeBoxLocation =
     document.getElementsByClassName("gameGridBox")[activeBox];
@@ -485,8 +478,6 @@ function addPlayerTileEventListeners() {
     wordInPlayArray = [];
 
     playerTiles[i].addEventListener("click", () => handlePlayerTileClick(i));
-
-
   }
 }
 
@@ -511,7 +502,13 @@ function cancelTilePlacement() {
   originalPlayedTiles = Array.from(originalPlayedTiles);
 
   for (let i = 0; i < originalPlayedTiles.length; i++) {
-    playableLetters.push(gameGrid[originalPlayedTiles[i]].textContent);
+    if (wildcards.includes(gameGrid[originalPlayedTiles[i]].textContent)) {
+      playableLetters.push("*");
+      wildcards.splice(gameGrid[originalPlayedTiles[i]].textContent, 1);
+      console.log(wildcards);
+    } else {
+      playableLetters.push(gameGrid[originalPlayedTiles[i]].textContent);
+    }
     gameGrid[originalPlayedTiles[i]].textContent = "";
   }
   wordInPlayArray = [];
@@ -523,19 +520,27 @@ function cancelTilePlacement() {
 }
 
 function backspaceTilePlacement() {
-
   originalPlayedTiles = Array.from(originalPlayedTiles);
   if (originalPlayedTiles.length === 0) {
     return;
   }
 
-  playableLetters.push(
-    gameGrid[originalPlayedTiles[originalPlayedTiles.length - 1]].textContent
-  );
+  const letterToReturn =
+    gameGrid[originalPlayedTiles[originalPlayedTiles.length - 1]].textContent;
+
+  if (wildcards.includes(letterToReturn)) {
+    playableLetters.push("*");
+    wildcards.splice(letterToReturn, 1);
+  } else {
+    playableLetters.push(letterToReturn);
+  }
 
   wordInPlayArray = [];
-
   returnLettersToThePlayerTileLetters();
+
+  gameGrid[originalPlayedTiles[originalPlayedTiles.length - 1]].textContent =
+    "";
+  originalPlayedTiles.pop();
 
   activeBox = startingBox;
   skippedDirection = undefined;
