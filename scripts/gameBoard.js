@@ -371,7 +371,13 @@ function pullLettersFromLetterBag() {
 }
 
 function tradeInLetters() {
-  letterBag.push(...playableLetters);
+  if (originalPlayedTiles.length > 0) {
+    console.log("First remove your played tiles.");
+    return;
+  }
+  if (letterBag.length !== 100) {
+    letterBag.push(...playableLetters);
+  }
   if (activePlayer === 0) {
     playerOneObject.tiles = [];
   }
@@ -406,7 +412,6 @@ function returnLettersToThePlayerTileLetters() {
       if (playerTileLetters[i].textContent.length === 0) {
         playerTileLetters[i].textContent = letterToReturn;
         playerTileNumbers[i].textContent = letterPoints[letterToReturn];
-        playableLetters.pop();
         return;
       }
     }
