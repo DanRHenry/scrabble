@@ -1,5 +1,9 @@
 export const dictionary = 
     [
+      "snarf",
+      "snarfs",
+      "snarfing",
+      "snarfed",
       "aa",
       "aah",
       "aahed",
