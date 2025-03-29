@@ -1017,11 +1017,23 @@ document.addEventListener("keypress", function (event) {
 
   if (tiles.includes(key.toLowerCase())) {
     if (gameGrid[activeBox].textContent.length > 0 && activeBox % 15 === 14) {
+      if (direction === "horizontal") {
+        return;
+      }
+    }
+
+    if (
+      direction === "vertical" &&
+      gameGrid[activeBox].textContent.length > 0 &&
+      activeBox > 209
+    ) {
       return;
     }
+
     lookForBoxesToSkip(tiles.indexOf(key.toLowerCase()), key);
 
     originalPlayedTiles.push(activeBox);
+
     playerTiles[tiles.indexOf(key)].textContent = "";
     document.getElementsByClassName("letterPoints")[
       tiles.indexOf(key)
